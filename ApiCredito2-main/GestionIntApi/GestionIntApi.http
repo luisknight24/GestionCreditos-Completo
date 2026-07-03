@@ -1,0 +1,6 @@
+@GestionIntApi_HostAddress = http://localhost:5009
+
+GET {{GestionIntApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,26 @@
+# Folder-specific ignores
+
+# Frontend / Angular
+**/node_modules/
+**/dist/
+**/.angular/
+
+# Backend / .NET
+**/bin/
+**/obj/
+**/.vs/
+**/appsettings.Development.json
+**/*.user
+
+# Mobile / Flutter
+**/.dart_tool/
+**/build/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/*.ipa
+**/*.apk
+**/*.ap_
+
+# System / OS
+.DS_Store
+Thumbs.db

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "327098390506",
+    "project_id": "cellcompay-app",
+    "storage_bucket": "cellcompay-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:327098390506:android:fe3b892b773e85aa554493",
+        "android_client_info": {
+          "package_name": "com.example.trabajo1"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSRibWkAidQgdFpmRQmh_GlsnSTfAheRI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

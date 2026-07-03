@@ -1,0 +1,568 @@
+/* layout.component.css */
+
+/* Toolbar Styles */
+
+/* .custom-toolbar {
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.toolbar-content {
+  padding: 0 24px;
+  height: 64px;
+}
+
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.logo-icon {
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+  color: #ffffff;
+}
+
+.app-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 500;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+}
+
+.toolbar-spacer {
+  flex: 1 1 auto;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-right: 16px;
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  backdrop-filter: blur(10px);
+}
+
+.user-icon {
+  color: #ffffff;
+  font-size: 24px;
+  width: 24px;
+  height: 24px;
+}
+
+.user-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.user-email {
+  font-size: 13px;
+  color: #ffffff;
+  font-weight: 500;
+}
+
+.user-role {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.menu-toggle {
+  color: #ffffff;
+} */
+
+/* Sidenav Container */
+/* .sidenav-container {
+  height: calc(100vh - 64px);
+  background: #f5f7fa;
+} */
+
+/* Sidenav Styles */
+/* .sidenav {
+  width: 280px;background: #f8f9fa; 
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.08);
+  border-right: 1px solid #e0e0e0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidenav-header {
+  padding: 32px 24px 24px;
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.company-logo {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.company-icon {
+  font-size: 36px;
+  width: 36px;
+  height: 36px;
+  color: #ffffff;
+}
+
+.company-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+} */
+
+/* Menu List */
+/* .menu-list {
+  padding: 16px 8px 80px 8px;
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.menu-list::-webkit-scrollbar {
+  display: none;
+}
+
+.menu-item {
+  margin: 4px 0;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  color: #424242;
+}
+
+.menu-item:hover {
+  background: #ecf0f1;
+  color: #2c3e50;
+}
+
+.menu-item.active-link {
+  background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+  color: #ffffff;
+  box-shadow: 0 2px 8px rgba(52, 152, 219, 0.3);
+}
+
+.menu-icon {
+  color: inherit;
+  margin-right: 16px;
+}
+
+.menu-text {
+  font-size: 14px;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+} */
+
+/* Sidenav Footer */
+/* .sidenav-footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  padding: 16px 8px;
+  background: #f1f8f6;
+  border-top: 1px solid #e0e0e0;
+}
+
+.logout-button {
+  width: calc(100% - 16px);
+  margin: 0 8px;
+  border-radius: 8px;
+  color: #d32f2f;
+  transition: all 0.3s ease;
+}
+
+.logout-button:hover {
+  background: #ffebee;
+  color: #c62828;
+}
+
+.logout-icon {
+  color: inherit;
+  margin-right: 16px;
+}
+
+.logout-text {
+  font-size: 14px;
+  font-weight: 500;
+} */
+
+/* Main Content */
+/* .main-content {
+  background: #f5f7fa;
+}
+
+.content-wrapper {
+  height: 100%;
+  padding: 24px;
+  overflow-y: auto;
+} */
+
+/* Responsive Design */
+/* @media (max-width: 768px) {
+  .toolbar-content {
+    padding: 0 16px;
+  }
+
+  .app-title {
+    font-size: 16px;
+  }
+
+  .user-info {
+    display: none;
+  }
+
+  .sidenav {
+    width: 240px;
+  }
+
+  .content-wrapper {
+    padding: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .logo-section {
+    gap: 8px;
+  }
+
+  .logo-icon {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+  }
+
+  .app-title {
+    font-size: 14px;
+  }
+} */
+
+/* Scrollbar Styles para el menu */
+/* .menu-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.menu-list::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.menu-list::-webkit-scrollbar-thumb {
+  background: #3498db;
+  border-radius: 3px;
+}
+
+.menu-list::-webkit-scrollbar-thumb:hover {
+  background: #2980b9;
+} */
+
+/* Scrollbar Styles */
+/* .content-wrapper::-webkit-scrollbar {
+  width: 8px;
+}
+
+.content-wrapper::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.content-wrapper::-webkit-scrollbar-thumb {
+  background: #3498db;
+  border-radius: 4px;
+}
+
+.content-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #2980b9;
+} */
+/* El contenedor debe ocupar todo el alto restante */
+/* .sidenav-container {
+  height: calc(100vh - 64px);
+} */
+
+/* Evita que el contenido principal genere un segundo scroll externo */
+/* .main-content {
+  overflow: auto;
+  background-color: #f5f5f5;
+} */
+
+/* Elimina márgenes extra que puedan causar scroll en el wrapper */
+/* .content-wrapper {
+  padding: 20px;
+  min-height: 100%;
+  box-sizing: border-box;
+} */
+
+/* --- CONFIGURACIÓN GENERAL --- */
+.fullscreen-container {
+  height: 100vh;
+  /* Ocupa toda la altura visible */
+  background-color: #f4f6f9;
+  /* Fondo gris ejecutivo muy suave */
+}
+
+/* --- SIDEBAR (BARRA LATERAL) --- */
+.app-sidenav {
+  border-radius: 0 !important;
+  width: 260px;
+  /* Un poco más ancho para mejor lectura */
+  background: #1a233a;
+  /* Azul oscuro corporativo (Dark Navy) */
+  color: #ffffff;
+  border-right: none;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Contenedor de la marca en el menú */
+.sidenav-brand {
+  display: flex;
+  align-items: center;
+  padding: 24px 16px;
+  /* Espaciado generoso */
+  background: rgba(255, 255, 255, 0.05);
+  /* Fondo sutil para destacar la cabecera */
+  margin-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.brand-logo-container {
+  margin-right: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ESTILO DEL LOGO */
+.company-logo {
+  width: 50px;
+  /* Tamaño ideal para sidebar */
+  height: 50px;
+  border-radius: 50%;
+  /* Lo hace circular */
+  object-fit: cover;
+  /* Asegura que la imagen cubra el círculo sin deformarse */
+  border: 2px solid #ffffff;
+  /* Borde blanco fino para resaltar sobre fondo oscuro */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+  /* Sombra suave para dar profundidad */
+  background-color: white;
+  /* Fondo blanco por si la imagen tiene transparencia */
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-text h1 {
+  margin: 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #ffffff;
+  letter-spacing: 0.5px;
+  line-height: 1.2;
+}
+
+.brand-text small {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 0.8rem;
+  font-weight: 400;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+/* Lista de Navegación */
+.menu-label {
+  padding: 20px 24px 10px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #5c6b85;
+  /* Etiqueta discreta */
+  letter-spacing: 1px;
+  margin: 0;
+}
+
+.nav-list {
+  padding-top: 0;
+}
+
+.nav-item {
+  color: #aeb9cc;
+  margin: 4px 12px;
+  border-radius: 6px;
+  height: 48px !important;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.nav-item:hover {
+  background-color: rgba(255, 255, 255, 0.05);
+  color: #ffffff;
+}
+
+.nav-item mat-icon {
+  margin-right: 12px;
+  color: inherit;
+}
+
+/* Estado Activo */
+.active-link {
+  background: linear-gradient(90deg, rgba(79, 172, 254, 0.15) 0%, rgba(79, 172, 254, 0) 100%);
+  color: #4facfe !important;
+  /* Color Cian activo */
+  font-weight: 500;
+}
+
+.active-link mat-icon {
+  color: #4facfe;
+}
+
+/* Indicador lateral activo */
+.active-indicator {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background-color: #4facfe;
+  display: none;
+}
+
+.active-link .active-indicator {
+  display: block;
+}
+
+/* Footer del Sidebar */
+.sidenav-footer {
+  margin-top: auto;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 10px 0;
+  background-color: #151c2f;
+}
+
+.logout-item {
+  color: #ff6b6b !important;
+}
+
+.logout-item:hover {
+  background-color: rgba(255, 107, 107, 0.1);
+}
+
+/* --- HEADER (BARRA SUPERIOR) --- */
+.app-header {
+  height: 80px;
+  background: #1a233a;
+  color: #333;
+  padding: 0 30px;
+  /* Más padding lateral */
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.03);
+  /* Sombra muy sutil */
+  display: flex;
+  align-items: center;
+  z-index: 999;
+}
+
+.header-breadcrumbs .current-section {
+  font-size: 18px;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
+
+/* Perfil de Usuario PRO */
+.user-profile-section {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  padding: 5px;
+  border-radius: 8px;
+  transition: background 0.2s;
+}
+
+
+
+.user-text-info {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  /* Alineado a la derecha */
+  margin-right: 15px;
+}
+
+.user-name {
+  font-size: 14px;
+  font-weight: 700;
+  color: #2d3748;
+  line-height: 1.2;
+}
+
+.user-role {
+  font-size: 12px;
+  color: #718096;
+  font-weight: 500;
+  text-transform: capitalize;
+}
+
+.user-avatar-container {
+  width: 42px;
+  height: 42px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 10px;
+  /* Cuadrado redondeado moderno */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  color: #fff;
+}
+
+.avatar-initial {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+/* --- CONTENIDO PRINCIPAL --- */
+.app-content {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  /* Controlar el scroll internamente */
+}
+
+.main-wrapper {
+  flex: 1;
+  padding: 30px;
+  /* Espacio generoso para que respiren los componentes */
+  overflow-y: auto;
+  /* Scroll aquí */
+  background-color: #f4f6f9;
+}
+
+/* Ajustes Responsive */
+@media (max-width: 768px) {
+  .app-header {
+    padding: 0 15px;
+  }
+
+  .user-text-info {
+    display: none;
+    /* Ocultar texto en móviles */
+  }
+
+  .main-wrapper {
+    padding: 15px;
+  }
+
+}
