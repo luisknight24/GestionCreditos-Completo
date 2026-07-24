@@ -72,6 +72,31 @@ namespace GestionIntApi.Controllers
             Console.WriteLine($"Correo: {usuario.Correo}");
 
             var correo = usuario.Correo.Trim().ToLower();
+            var cedula = usuario.Cliente?.DetalleCliente?.NumeroCedula;
+
+            // 1. Verificar si el correo ya existe en BD
+            var usuarioExistente = await _context.Usuarios
+                .FirstOrDefaultAsync(u => u.Correo.ToLower() == correo);
+
+            if (usuarioExistente != null)
+            {
+                Console.WriteLine($"⚠️ El correo '{correo}' ya existe en BD. Cancelando envío de OTP.");
+                return BadRequest(new { status = false, msg = $"El correo '{correo}' ya se encuentra registrado y asociado a una cuenta de crédito." });
+            }
+
+            // 2. Verificar si la cédula ya existe en BD
+            if (!string.IsNullOrWhiteSpace(cedula))
+            {
+                var cedulaExistente = await _context.DetallesCliente
+                    .FirstOrDefaultAsync(d => d.NumeroCedula == cedula);
+
+                if (cedulaExistente != null)
+                {
+                    Console.WriteLine($"⚠️ La cédula '{cedula}' ya existe en BD. Cancelando envío de OTP.");
+                    return BadRequest(new { status = false, msg = $"La cédula '{cedula}' ya se encuentra registrada y asociada a una cuenta de crédito." });
+                }
+            }
+
             var codigo = new Random().Next(100000, 999999).ToString();
 
             // Guardar solo el código si quieres
