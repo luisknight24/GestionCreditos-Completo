@@ -111,7 +111,7 @@ Future<EnviarCodigoDTO?> enviarCodigo(EnviarCodigoDTO dto) async {
   }
 
 
-Future<bool?> enviarCodigoCompleto(UsuarioDTO dto) async {
+Future<Map<String, dynamic>> enviarCodigoCompleto(UsuarioDTO dto) async {
   final url = Uri.parse('$baseUrl/EmailValidation/EnviarCodigo1');
   print('--- ENVIAR CÓDIGO COMPLETO ---');
   print('URL: $url');
@@ -121,31 +121,29 @@ Future<bool?> enviarCodigoCompleto(UsuarioDTO dto) async {
     final response = await http.post(
       url,
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode(dto.toJson()), // <-- enviamos TODO el usuario
+      body: jsonEncode(dto.toJson()),
     ).timeout(const Duration(seconds: 60));
 
     print('Código de respuesta: ${response.statusCode}');
     print('Cuerpo de respuesta: ${response.body}');
 
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-      if (data['status'] == true) {
-        print('Solicitud de recuperación exitosa: ${data['msg']}');
-        if (data['codigo'] != null) {
-          print('🔑 [DEBUG OTP CÓDIGO GENERADO]: ${data['codigo']}');
-        }
-        return true;
-      } else {
-        print('Error al enviar correo: ${data['msg']}');
-        return null;
+    Map<String, dynamic> data = {};
+    try {
+      data = jsonDecode(response.body);
+    } catch (_) {}
+
+    if (response.statusCode == 200 && data['status'] == true) {
+      if (data['codigo'] != null) {
+        print('🔑 [DEBUG OTP CÓDIGO GENERADO]: ${data['codigo']}');
       }
+      return {'exito': true, 'msg': data['msg'] ?? 'Código enviado'};
     } else {
-      print('Error HTTP: ${response.statusCode}');
-      return null;
+      final msg = data['msg'] ?? 'El correo o número de cédula ya se encuentra registrado.';
+      return {'exito': false, 'msg': msg};
     }
   } catch (e) {
     print('Excepción en enviarCodigoCompleto: $e');
-    return null;
+    return {'exito': false, 'msg': 'Error de conexión con el servidor.'};
   }
 }
 

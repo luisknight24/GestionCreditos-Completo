@@ -241,19 +241,23 @@ class _CreditDataScreenState extends State<CreditDataScreen> {
         return;
       }
 
-      final validarCuenta = ValidarCuenta();
-      // ESTO TARDARÁ UNOS SEGUNDOS Y EL DIÁLOGO SEGUIRÁ ABIERTO
-      final enviado = await validarCuenta.enviarCodigoCompleto(usuarioFinal);
+      final resultado = await validarCuenta.enviarCodigoCompleto(usuarioFinal);
 
       // ✅ CAMBIO: AHORA SÍ CERRAMOS EL DIALOGO, JUSTO ANTES DE CAMBIAR DE PANTALLA
       if (mounted) Navigator.pop(context);
 
       setState(() => _isUploading = false);
 
-      if (enviado != null) {
+      if (resultado['exito'] == true) {
         context.push('/verify-otp', extra: correoUser);
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Error al enviar correo.'), backgroundColor: Colors.red));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(resultado['msg'] ?? 'El correo o número de cédula ya se encuentra registrado.'),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 5),
+          ),
+        );
       }
 
     } catch (e) {
@@ -711,17 +715,22 @@ class _CreditDataScreenState extends State<CreditDataScreen> {
         return;
       }
 
-      final validarCuenta = ValidarCuenta();
-      final enviado = await validarCuenta.enviarCodigoCompleto(usuarioFinal);
+      final resultado = await validarCuenta.enviarCodigoCompleto(usuarioFinal);
 
       if (mounted) Navigator.pop(context); // Cerrar dialogo
 
       setState(() => _isUploading = false);
 
-      if (enviado != null) {
+      if (resultado['exito'] == true) {
         context.push('/verify-otp', extra: correoUser);
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Error al enviar correo.'), backgroundColor: Colors.red));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(resultado['msg'] ?? 'El correo o número de cédula ya se encuentra registrado.'),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 5),
+          ),
+        );
       }
 
     } catch (e) {
