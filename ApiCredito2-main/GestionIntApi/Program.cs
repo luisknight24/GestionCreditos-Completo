@@ -137,12 +137,19 @@ var connString = Environment.GetEnvironmentVariable("ConnectionStrings__sqlConec
 
 if (string.IsNullOrWhiteSpace(connString) || connString.Contains("YOUR_DATABASE_HOST"))
 {
-    connString = "Host=ep-little-rice-atkzhfqx.c-9.us-east-1.aws.neon.tech;Port=5432;Database=neondb;Username=neondb_owner;Password=npg_YQl5Bvzgu9ja;SSL Mode=Require;Trust Server Certificate=true;Pooling=true";
+    connString = "Host=ep-little-rice-atkzhfqx.c-9.us-east-1.aws.neon.tech;Port=5432;Database=neondb;Username=neondb_owner;Password=npg_YQl5Bvzgu9ja;SSL Mode=Require;Trust Server Certificate=true;Pooling=true;Timeout=30;Command Timeout=30;Keepalive=30;";
 }
 
 builder.Services.AddDbContext<SistemaGestionDBcontext>(options =>
 {
-    options.UseNpgsql(connString, npgsqlOptions => npgsqlOptions.EnableRetryOnFailure());
+    options.UseNpgsql(connString, npgsqlOptions => 
+    {
+        npgsqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorCodesToAdd: null
+        );
+    });
 });
 
 
