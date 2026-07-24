@@ -3,10 +3,18 @@ import 'package:provider/provider.dart';
 import 'config/theme/app_theme.dart';
 import 'config/router/app_router.dart';
 import 'providers/register_provider.dart';
+import 'package:flutter/foundation.dart';
 import 'package:firebase_core/firebase_core.dart';
-void main() async { // <--- Convertir a async
-  WidgetsFlutterBinding.ensureInitialized(); // <--- Necesario para async en main
-  await Firebase.initializeApp(); // <--- Iniciamos Firebase
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  try {
+    if (!kIsWeb) {
+      await Firebase.initializeApp();
+    }
+  } catch (e) {
+    debugPrint("Firebase init skipped: $e");
+  }
 
   runApp(const MyApp());
 }
