@@ -57,38 +57,21 @@ namespace GestionIntApi.Controllers
         }
 
         [HttpPost("EnviarCodigo1")]
-        public async Task<IActionResult> EnviarCodigo([FromBody] UsuarioDTO usuario)
+        public async Task<IActionResult> EnviarCodigo([FromBody] System.Text.Json.JsonElement rawJson)
         {
+            var options = new System.Text.Json.JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+            var usuario = System.Text.Json.JsonSerializer.Deserialize<UsuarioDTO>(rawJson.GetRawText(), options);
 
-            // --- LOGS ---
+            if (usuario == null || string.IsNullOrWhiteSpace(usuario.Correo))
+            {
+                return BadRequest(new { status = false, msg = "Correo de usuario obligatorio" });
+            }
+
             Console.WriteLine("===== USUARIO RECIBIDO =====");
             Console.WriteLine($"Nombre: {usuario.NombreApellidos}");
             Console.WriteLine($"Correo: {usuario.Correo}");
-            if (usuario.Cliente != null)
-            {
-                Console.WriteLine("Cliente existe");
-                if (usuario.Cliente.Creditos != null)
-                {
-                    foreach (var c in usuario.Cliente.Creditos)
-                    {
-                        Console.WriteLine("----- Credito -----");
-                        Console.WriteLine($"MontoTotal: {c.MontoTotal}");
-                       // Console.WriteLine($"FotoContrato: {c.FotoContrato}");
-                        //Console.WriteLine($"FotoCelularEntregadoUrl: {c.FotoCelularEntregadoUrl}");
-                    }
-                }
-                else
-                {
-                    Console.WriteLine("No hay créditos");
-                }
-            }
-            else
-            {
-                Console.WriteLine("Cliente es null");
-            }
 
-            var correo = usuario.Correo;
-
+            var correo = usuario.Correo.Trim().ToLower();
             var codigo = new Random().Next(100000, 999999).ToString();
 
             // Guardar solo el código si quieres
@@ -282,7 +265,8 @@ namespace GestionIntApi.Controllers
 
             try
             {
-                var registro = _registroTemporal.ObtenerRegistro(req.Correo);
+                var correo = (req.Correo ?? "").Trim().ToLower();
+                var registro = _registroTemporal.ObtenerRegistro(correo);
 
                 if (registro == null)
                 {
