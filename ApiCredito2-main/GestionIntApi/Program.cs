@@ -134,9 +134,9 @@ builder.Configuration["SendGrid:ApiKey"] = Environment.GetEnvironmentVariable("S
 
 var connString = Environment.GetEnvironmentVariable("ConnectionStrings__sqlConection");
 
-if (string.IsNullOrWhiteSpace(connString) || connString.Contains("YOUR_DATABASE_HOST") || !connString.Contains("neon.tech"))
+if (string.IsNullOrWhiteSpace(connString))
 {
-    connString = "Host=ep-little-rice-atkzhfqx.c-9.us-east-1.aws.neon.tech;Port=5432;Database=neondb;Username=neondb_owner;Password=npg_YQl5Bvzgu9ja;SSL Mode=Require;Trust Server Certificate=true;Pooling=true;Timeout=30;Command Timeout=30;Keepalive=30;";
+    connString = builder.Configuration.GetConnectionString("sqlConection");
 }
 
 builder.Services.AddDbContext<SistemaGestionDBcontext>(options =>
