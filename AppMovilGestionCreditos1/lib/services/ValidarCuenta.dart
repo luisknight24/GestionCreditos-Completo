@@ -1,14 +1,14 @@
-﻿import 'dart:convert';
+import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:trabajo1/models/verificar_dto.dart';
 import '../models/enviar_codigo_dto.dart';
 import '../models/usuario_dto.dart';
 
 class ValidarCuenta {
-  final String baseUrl111 = "http://10.0.2.2:7166/api";
-   final String baseUrl1 = "http://10.0.2.2:7166/api";
-   final String baseUrl11 = "http://10.0.2.2:7166/api";
-    final String baseUrl = "http://10.0.2.2:7166/api";
+  final String baseUrl111 = "https://gestioncreditos-backend.onrender.com/api";
+   final String baseUrl1 = "https://gestioncreditos-backend.onrender.com/api";
+   final String baseUrl11 = "https://gestioncreditos-backend.onrender.com/api";
+    final String baseUrl = "https://gestioncreditos-backend.onrender.com/api";
 Future<VerificarDTO?> verificarCuenta(VerificarDTO dto) async {
   final url = Uri.parse('$baseUrl/EmailValidation/ValidarCodigo');
   print('--- FORGOT PASSWORD ---');
@@ -22,7 +22,7 @@ Future<VerificarDTO?> verificarCuenta(VerificarDTO dto) async {
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode(dto.toJson()),
         )
-        .timeout(const Duration(seconds: 20));
+        .timeout(const Duration(seconds: 60));
 
     print('Código de respuesta: ${response.statusCode}');
     print('Cuerpo de respuesta: ${response.body}');
@@ -53,7 +53,7 @@ Future<bool> verificarCuenta1(VerificarDTO dto) async {
           headers: {'Content-Type': 'application/json'},
           body: jsonEncode(dto.toJson()),
         )
-        .timeout(const Duration(seconds: 20));
+        .timeout(const Duration(seconds: 60));
 
     print('Código de respuesta: ${response.statusCode}');
     print('Cuerpo de respuesta: ${response.body}');
@@ -122,7 +122,7 @@ Future<bool?> enviarCodigoCompleto(UsuarioDTO dto) async {
       url,
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode(dto.toJson()), // <-- enviamos TODO el usuario
-    ).timeout(const Duration(seconds: 30));
+    ).timeout(const Duration(seconds: 60));
 
     print('Código de respuesta: ${response.statusCode}');
     print('Cuerpo de respuesta: ${response.body}');

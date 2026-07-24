@@ -7,7 +7,7 @@ import '../../models/forgot_password_dto.dart';
 import '../../models/reset_password_dto.dart';
 
 class AuthService {
-  final String baseUrl = 'http://10.0.2.2:5000/api';
+  final String baseUrl = 'https://gestioncreditos-backend.onrender.com/api';
 
   // VARIABLE DE CONTROL: Pon esto en false cuando ya tengas la API corriendo
   final bool _modoSimulacion = true;

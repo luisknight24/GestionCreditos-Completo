@@ -4,7 +4,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
 class LocationService {
   // Usamos la misma base URL que tus otros servicios
-  final String baseUrl = "http://10.0.2.2:7166/api";
+  final String baseUrl = "https://gestioncreditos-backend.onrender.com/api";
   final storage = const FlutterSecureStorage();
 
   /// 1. Método principal: Obtiene la ubicación y la envía al backend

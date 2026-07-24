@@ -9,7 +9,7 @@ import '../models/reset_password_dto.dart';
 
 class Verificacion {
 
-final String baseUrl = "http://10.0.2.2:7166/api";
+final String baseUrl = "https://gestioncreditos-backend.onrender.com/api";
 // =============== FORGOT PASSWORD ===============
 Future<ForgotPasswordDTO?> forgotPassword(ForgotPasswordDTO dto) async {
   final url = Uri.parse('$baseUrl/Password/forgot-password');
@@ -46,7 +46,7 @@ Future<ForgotPasswordDTO?> forgotPassword(ForgotPasswordDTO dto) async {
   // =============== RESET PASSWORD ===============
 
   Future<String?> resetPassword(ResetPasswordDTO dto) async {
-  final url = Uri.parse('http://10.0.2.2:7166/api/Password/reset-password');
+  final url = Uri.parse('https://gestioncreditos-backend.onrender.com/api/Password/reset-password');
   print('--- RESET PASSWORD ---');
   print('URL: $url');
   print('Datos enviados: ${dto.toJson()}');

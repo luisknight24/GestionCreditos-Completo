@@ -6,9 +6,9 @@ import 'package:trabajo1/models/notificacion_dto.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:signalr_core/signalr_core.dart';
 class NotificacionService {
-  final String baseUrl1 ="http://10.0.2.2:7166/api";
-  final String baseUrl= "http://10.0.2.2:7166/api";
-   final String baseUrl11="http://10.0.2.2:7166/api";
+  final String baseUrl1 ="https://gestioncreditos-backend.onrender.com/api";
+  final String baseUrl= "https://gestioncreditos-backend.onrender.com/api";
+   final String baseUrl11="https://gestioncreditos-backend.onrender.com/api";
  final storage = const FlutterSecureStorage();
 
   late HubConnection _connection;

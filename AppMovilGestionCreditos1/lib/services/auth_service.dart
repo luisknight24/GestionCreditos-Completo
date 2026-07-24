@@ -4,7 +4,7 @@ import '../models/login_dto.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 class AuthService {
   // URL de la API: usa HTTP y el puerto correcto
-  final String baseUrl = "http://10.0.2.2:7166/api";
+  final String baseUrl = "https://gestioncreditos-backend.onrender.com/api";
   final storage = const FlutterSecureStorage();
   Future<bool> login1(LoginDTO loginDTO) async {
     final url = Uri.parse('$baseUrl/Usuario/IniciarSesion');

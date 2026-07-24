@@ -12,8 +12,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class UsuarioService {
-  final String baseUrl1 = "http://10.0.2.2:7166/api";
- final String baseUrl = "http://10.0.2.2:7166/api";
+  final String baseUrl1 = "https://gestioncreditos-backend.onrender.com/api";
+ final String baseUrl = "https://gestioncreditos-backend.onrender.com/api";
  
  final storage = const FlutterSecureStorage();
  ClienteMostrarDTO? _cacheCliente;

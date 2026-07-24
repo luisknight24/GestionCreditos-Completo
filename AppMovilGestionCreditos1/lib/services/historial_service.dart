@@ -5,9 +5,9 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import '../models/HistoriaAppDTO.dart';
 import 'package:signalr_core/signalr_core.dart';
 class HistorialService {
-  final String baseUrl11 = "http://10.0.2.2:7166/api";
-  final String baseUrl1 = "http://10.0.2.2:7166";
-   final String baseUrl = "http://10.0.2.2:7166/api";
+  final String baseUrl11 = "https://gestioncreditos-backend.onrender.com/api";
+  final String baseUrl1 = "https://gestioncreditos-backend.onrender.com";
+   final String baseUrl = "https://gestioncreditos-backend.onrender.com/api";
    // Tu URL
   final storage = const FlutterSecureStorage();
 // 🔔 NOTIFICADORES UNIFICADOS
@@ -238,9 +238,9 @@ import '../models/HistoriaAppDTO.dart';
 import 'package:signalr_core/signalr_core.dart';
 
 class HistorialService {
-  final String baseUrl11 = "http://10.0.2.2:7166/api";
-  final String baseUrl1 = "http://10.0.2.2:7166";
-  final String baseUrl = "http://10.0.2.2:7166/api";
+  final String baseUrl11 = "https://gestioncreditos-backend.onrender.com/api";
+  final String baseUrl1 = "https://gestioncreditos-backend.onrender.com";
+  final String baseUrl = "https://gestioncreditos-backend.onrender.com/api";
   final storage = const FlutterSecureStorage();
 
   // 🔔 NOTIFICADORES UNIFICADOS

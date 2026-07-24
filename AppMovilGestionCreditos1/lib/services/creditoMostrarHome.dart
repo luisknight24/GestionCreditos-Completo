@@ -10,10 +10,10 @@ import 'package:flutter/material.dart';
 
 class creditoMostrarHome {
 
-  final String baseUrl = "http://10.0.2.2:7166/api";
-  final String baseUrl3 = "http://10.0.2.2:7166/api";
-  final String baseUrl2 = "http://10.0.2.2:7166/api";
-  final String baseUrl1 = "http://10.0.2.2:7166";
+  final String baseUrl = "https://gestioncreditos-backend.onrender.com/api";
+  final String baseUrl3 = "https://gestioncreditos-backend.onrender.com/api";
+  final String baseUrl2 = "https://gestioncreditos-backend.onrender.com/api";
+  final String baseUrl1 = "https://gestioncreditos-backend.onrender.com";
   final storage = const FlutterSecureStorage();
   // WebSocket
   late HubConnection _connection;
