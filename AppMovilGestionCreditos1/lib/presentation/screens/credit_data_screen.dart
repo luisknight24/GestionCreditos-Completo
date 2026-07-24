@@ -715,6 +715,7 @@ class _CreditDataScreenState extends State<CreditDataScreen> {
         return;
       }
 
+      final validarCuenta = ValidarCuenta();
       final resultado = await validarCuenta.enviarCodigoCompleto(usuarioFinal);
 
       if (mounted) Navigator.pop(context); // Cerrar dialogo
