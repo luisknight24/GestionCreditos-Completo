@@ -315,9 +315,8 @@ namespace GestionIntApi.Controllers
             }
             catch (Exception ex)
             {
-                var errDetail = $"{ex.GetType().Name}: {ex.Message} (Inner: {ex.InnerException?.Message})";
+                var errDetail = $"{ex.GetType().Name}: {ex.Message} | StackTrace: {ex.StackTrace}";
                 Console.WriteLine($"❌ ERROR GENERAL: {errDetail}");
-                Console.WriteLine($"StackTrace: {ex.StackTrace}");
 
                 rsp.status = false;
                 rsp.msg = ex is TaskCanceledException ? ex.Message : $"Error en servidor: {errDetail}";
