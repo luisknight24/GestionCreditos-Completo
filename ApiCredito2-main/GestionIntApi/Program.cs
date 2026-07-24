@@ -227,17 +227,18 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 app.UseCors("NuevaPolitica");
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
+
+// Enable Swagger in all environments for testing endpoints
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "GestionIntApi v1");
+    c.RoutePrefix = "swagger";
+});
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller}/{action=Index}/{id?}");
-//app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
@@ -247,82 +248,61 @@ app.MapHub<AdminHub>("/adminhub");
 
 using (var scope = app.Services.CreateScope())
 {
-    var context = scope.ServiceProvider.GetRequiredService<SistemaGestionDBcontext>();
-    
     try
     {
-        Console.WriteLine("=== DEBUG DATABASE CONTENT ===");
-        var usuarios = await context.Usuarios.ToListAsync();
-        Console.WriteLine($"Total Usuarios: {usuarios.Count}");
-        foreach (var u in usuarios)
+        var context = scope.ServiceProvider.GetRequiredService<SistemaGestionDBcontext>();
+        
+        if (!context.Usuarios.Any())
         {
-            Console.WriteLine($"- ID: {u.Id}, Correo: {u.Correo}, Nombre: {u.NombreApellidos}");
+            var adminPassword = BCrypt.Net.BCrypt.HashPassword("admin123");
+            var adminUser = new Usuario
+            {
+                NombreApellidos = "Admin Principal",
+                Correo = "admin@correo.com",
+                RolId = 1,
+                Clave = adminPassword,
+                EsActivo = true,
+                FechaRegistro = DateTime.UtcNow
+            };
+            context.Usuarios.Add(adminUser);
         }
-        var detalles = await context.DetallesCliente.ToListAsync();
-        Console.WriteLine($"Total DetallesCliente: {detalles.Count}");
-        foreach (var d in detalles)
+        
+        if (!context.UsuariosAdmin.Any())
         {
-            Console.WriteLine($"- ID: {d.Id}, Cedula: {d.NumeroCedula}, Nombre: {d.NombreApellidos}");
+            var adminPassword = BCrypt.Net.BCrypt.HashPassword("admin123");
+            var adminUserAdmin = new UsuarioAdmin
+            {
+                NombreApellidos = "Admin Principal",
+                Correo = "admin@correo.com",
+                RolAdminId = 1,
+                Clave = adminPassword,
+                EsActivo = true,
+                FechaRegistro = DateTime.UtcNow
+            };
+            context.UsuariosAdmin.Add(adminUserAdmin);
         }
-        var tiendas = await context.Tiendas.ToListAsync();
-        Console.WriteLine($"Total Tiendas: {tiendas.Count}");
-        foreach (var t in tiendas)
+
+        if (!context.Tiendas.Any(t => t.CedulaEncargado == "0942997305"))
         {
-            Console.WriteLine($"- ID: {t.Id}, Cedula: {t.CedulaEncargado}, Nombre: {t.NombreTienda}");
+            var tiendaDemo = new Tienda
+            {
+                NombreTienda = "Tienda Demo Central",
+                Direccion = "Av. Principal 123",
+                NombreEncargado = "Encargado Demo",
+                CedulaEncargado = "0942997305",
+                Telefono = "0942997305",
+                ValorComision = 10.00m,
+                FechaRegistro = DateTime.UtcNow
+            };
+            context.Tiendas.Add(tiendaDemo);
         }
-        Console.WriteLine("==============================");
+
+        context.SaveChanges();
     }
     catch (Exception ex)
     {
-        Console.WriteLine($"⚠️ Error reading debug database content: {ex.Message}");
+        Console.WriteLine($"Startup seeding notice: {ex.Message}");
     }
-    
-    if (!await context.Usuarios.AnyAsync())
-    {
-        var adminPassword = BCrypt.Net.BCrypt.HashPassword("admin123");
-        var adminUser = new Usuario
-        {
-            NombreApellidos = "Admin Principal",
-            Correo = "admin@correo.com",
-            RolId = 1,
-            Clave = adminPassword,
-            EsActivo = true,
-            FechaRegistro = DateTime.UtcNow
-        };
-        await context.Usuarios.AddAsync(adminUser);
-    }
-    
-    if (!await context.UsuariosAdmin.AnyAsync())
-    {
-        var adminPassword = BCrypt.Net.BCrypt.HashPassword("admin123");
-        var adminUserAdmin = new UsuarioAdmin
-        {
-            NombreApellidos = "Admin Principal",
-            Correo = "admin@correo.com",
-            RolAdminId = 1,
-            Clave = adminPassword,
-            EsActivo = true,
-            FechaRegistro = DateTime.UtcNow
-        };
-        await context.UsuariosAdmin.AddAsync(adminUserAdmin);
-    }
-
-    if (!await context.Tiendas.AnyAsync(t => t.CedulaEncargado == "0942997305"))
-    {
-        var tiendaDemo = new Tienda
-        {
-            NombreTienda = "Tienda Demo Central",
-            Direccion = "Av. Principal 123",
-            NombreEncargado = "Encargado Demo",
-            CedulaEncargado = "0942997305",
-            Telefono = "0942997305",
-            ValorComision = 10.00m,
-            FechaRegistro = DateTime.UtcNow
-        };
-        await context.Tiendas.AddAsync(tiendaDemo);
-    }
-
-    await context.SaveChangesAsync();
 }
 
 app.Run();
