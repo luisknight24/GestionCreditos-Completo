@@ -281,16 +281,27 @@ namespace GestionIntApi.Repositorios.Implementacion
             try
             {
                 var correo = (modelo.Correo ?? "").Trim().ToLower();
+                var cedula = modelo.Cliente?.DetalleCliente?.NumeroCedula;
 
-                // Verificar si el usuario ya existe en la base de datos para no causar DbUpdateException
+                // 1. Verificar si el correo ya existe en BD
                 var usuarioExistente = await _context.Usuarios
-                    .Include(u => u.Rol)
                     .FirstOrDefaultAsync(u => u.Correo.ToLower() == correo);
 
                 if (usuarioExistente != null)
                 {
-                    Console.WriteLine($"ℹ️ El usuario {correo} ya existe en la base de datos. Retornando usuario existente.");
-                    return _mapper.Map<UsuarioDTO>(usuarioExistente);
+                    throw new TaskCanceledException($"El correo '{correo}' ya se encuentra registrado y asociado a una cuenta de crédito.");
+                }
+
+                // 2. Verificar si la cédula ya existe en BD
+                if (!string.IsNullOrWhiteSpace(cedula))
+                {
+                    var cedulaExistente = await _context.DetallesCliente
+                        .FirstOrDefaultAsync(d => d.NumeroCedula == cedula);
+
+                    if (cedulaExistente != null)
+                    {
+                        throw new TaskCanceledException($"La cédula '{cedula}' ya se encuentra registrada y asociada a una cuenta de crédito.");
+                    }
                 }
 
                 // 🔥 PASO 1: VALIDAR / REGISTRAR TIENDAS DINÁMICAMENTE

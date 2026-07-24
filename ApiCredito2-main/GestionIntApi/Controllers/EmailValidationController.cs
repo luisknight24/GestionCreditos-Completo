@@ -325,8 +325,8 @@ namespace GestionIntApi.Controllers
                 // Si falla al guardar en BD, NO se elimina el registro temporal
                 // para que el usuario pueda reintentar
                 rsp.status = false;
-                rsp.msg = $"Error al procesar la solicitud: {ex.InnerException?.Message ?? ex.Message}";
-                return StatusCode(500, rsp);
+                rsp.msg = ex is TaskCanceledException ? ex.Message : $"Error al procesar la solicitud: {ex.InnerException?.Message ?? ex.Message}";
+                return BadRequest(rsp);
             }
         }
 
