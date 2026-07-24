@@ -34,6 +34,20 @@ class MyApp extends StatelessWidget {
         title: 'CellCompay',
         theme: AppTheme().getTheme(),
         routerConfig: appRouter,
+        builder: (context, child) {
+          if (kIsWeb) {
+            return Container(
+              color: const Color(0xFF0F172A),
+              child: Center(
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 500),
+                  child: child ?? const SizedBox(),
+                ),
+              ),
+            );
+          }
+          return child ?? const SizedBox();
+        },
       ),
     );
   }
