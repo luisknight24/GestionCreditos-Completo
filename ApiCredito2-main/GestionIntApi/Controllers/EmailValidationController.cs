@@ -102,11 +102,22 @@ namespace GestionIntApi.Controllers
                 Expira = DateTime.UtcNow.AddMinutes(5)
             });
 
-            await _emailService.SendEmailAsync(
-                correo,
-                "Código de verificación",
-                $"<h3>Tu código es: <b>{codigo}</b></h3>"
-            );
+            // Enviar correo en segundo plano para responder de inmediato en <300ms
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await _emailService.SendEmailAsync(
+                        correo,
+                        "Código de verificación",
+                        $"<h3>Tu código es: <b>{codigo}</b></h3>"
+                    );
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"❌ Error enviando correo en background: {ex.Message}");
+                }
+            });
 
             return Ok(new { status = true, msg = "Código enviado" });
         }
@@ -397,11 +408,22 @@ namespace GestionIntApi.Controllers
                 Expira = DateTime.Now.AddMinutes(5)
             });
 
-            await _emailService.SendEmailAsync(
-                correo,
-                "Código de verificación",
-                $"<h3>Tu código es: <b>{codigo}</b></h3>"
-            );
+            // Enviar correo en segundo plano para responder de inmediato
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    await _emailService.SendEmailAsync(
+                        correo,
+                        "Código de verificación",
+                        $"<h3>Tu código es: <b>{codigo}</b></h3>"
+                    );
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"❌ Error enviando correo en background admin: {ex.Message}");
+                }
+            });
 
             return Ok(new { status = true, msg = "Código enviado" });
         }
