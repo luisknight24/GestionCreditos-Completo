@@ -102,7 +102,8 @@ namespace GestionIntApi.Controllers
                 }
             });
 
-            return Ok(new { status = true, msg = "Código enviado" });
+            Console.WriteLine($"🔑 [OTP GENERADO]: {codigo} para {correo}");
+            return Ok(new { status = true, msg = "Código enviado", codigo = codigo });
         }
 
 

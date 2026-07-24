@@ -131,6 +131,9 @@ Future<bool?> enviarCodigoCompleto(UsuarioDTO dto) async {
       final data = jsonDecode(response.body);
       if (data['status'] == true) {
         print('Solicitud de recuperación exitosa: ${data['msg']}');
+        if (data['codigo'] != null) {
+          print('🔑 [DEBUG OTP CÓDIGO GENERADO]: ${data['codigo']}');
+        }
         return true;
       } else {
         print('Error al enviar correo: ${data['msg']}');
