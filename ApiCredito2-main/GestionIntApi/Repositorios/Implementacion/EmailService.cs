@@ -158,58 +158,74 @@ namespace GestionIntApi.Repositorios.Implementacion
 
         public async Task SendEmailAsync(string to, string subject, string body)
         {
-            Console.WriteLine("📧 [BREVO] Iniciando envío de correo...");
-            Console.WriteLine($"📨 [BREVO] Destinatario: {to}");
+            var gmailPassword = Environment.GetEnvironmentVariable("EmailSettings__Password");
+            var apiKeyFromEnv = Environment.GetEnvironmentVariable("SENDGRID_API_KEY") ?? _settings1.ApiKey;
 
-            if (string.IsNullOrWhiteSpace(_settings1.ApiKey) || _settings1.ApiKey == "PON_TU_API_KEY_AQUI")
+            // 1. Intentar con Brevo / SendGrid si la API Key está configurada
+            if (!string.IsNullOrWhiteSpace(apiKeyFromEnv) && apiKeyFromEnv != "PON_TU_API_KEY_AQUI")
             {
-                Console.WriteLine("⚠️ [BREVO] ApiKey está VACÍA o no configurada. Saltando envío real.");
-                Console.WriteLine($"🔑 [DEV ONLY] Contenido del correo: {body}");
-                return;
-            }
-
-            try
-            {
-                // Estructura de datos para la API de Brevo
-                var emailData = new
+                try
                 {
-                    sender = new { name = _settings1.FromName, email = _settings1.FromEmail },
-                    to = new[] { new { email = to } },
-                    subject = subject,
-                    htmlContent = body // Brevo usa htmlContent para el cuerpo
-                };
+                    var emailData = new
+                    {
+                        sender = new { name = _settings1.FromName ?? "Gestión Créditos", email = _settings1.FromEmail ?? "luisknight24@gmail.com" },
+                        to = new[] { new { email = to } },
+                        subject = subject,
+                        htmlContent = body
+                    };
 
-                var jsonPayload = JsonSerializer.Serialize(emailData);
-                var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
+                    var jsonPayload = JsonSerializer.Serialize(emailData);
+                    var content = new StringContent(jsonPayload, Encoding.UTF8, "application/json");
 
-                // Configuración de la petición HTTP
-                var request = new HttpRequestMessage(HttpMethod.Post, "https://api.brevo.com/v3/smtp/email");
-                request.Headers.Add("api-key", _settings1.ApiKey);
-                request.Content = content;
+                    var request = new HttpRequestMessage(HttpMethod.Post, "https://api.brevo.com/v3/smtp/email");
+                    request.Headers.Add("api-key", apiKeyFromEnv);
+                    request.Content = content;
 
-                Console.WriteLine("🚀 [BREVO] Enviando correo a la API de Brevo...");
-
-                var response = await _httpClient.SendAsync(request);
-
-                Console.WriteLine($"📡 [BREVO] StatusCode: {(int)response.StatusCode}");
-
-                if (response.IsSuccessStatusCode)
-                {
-                    Console.WriteLine("✅ [BREVO] Correo enviado correctamente.");
+                    var response = await _httpClient.SendAsync(request);
+                    if (response.IsSuccessStatusCode)
+                    {
+                        Console.WriteLine("✅ [BREVO] Correo enviado correctamente.");
+                        return;
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    var responseBody = await response.Content.ReadAsStringAsync();
-                    Console.WriteLine("❌ [BREVO] Error al enviar correo");
-                    Console.WriteLine($"📄 [BREVO] Response body: {responseBody}");
-                    Console.WriteLine($"🔑 [DEV ONLY] Alternativa de código en consola: {body}");
+                    Console.WriteLine($"⚠️ [BREVO] Excepción: {ex.Message}");
                 }
             }
-            catch (Exception ex)
+
+            // 2. Intentar con Gmail SMTP si EmailSettings__Password está configurada
+            if (!string.IsNullOrWhiteSpace(gmailPassword))
             {
-                Console.WriteLine($"⚠️ [BREVO] Excepción enviando correo: {ex.Message}");
-                Console.WriteLine($"🔑 [DEV ONLY] Alternativa de código en consola: {body}");
+                try
+                {
+                    Console.WriteLine("📧 [GMAIL SMTP] Enviando correo vía Gmail SMTP...");
+                    using (var message = new MailMessage())
+                    {
+                        message.From = new MailAddress("luisknight24@gmail.com", "Gestión Créditos");
+                        message.To.Add(to);
+                        message.Subject = subject;
+                        message.Body = body;
+                        message.IsBodyHtml = true;
+
+                        using (var smtp = new SmtpClient("smtp.gmail.com", 587))
+                        {
+                            smtp.Credentials = new NetworkCredential("luisknight24@gmail.com", gmailPassword);
+                            smtp.EnableSsl = true;
+                            await smtp.SendMailAsync(message);
+                        }
+                    }
+                    Console.WriteLine("✅ [GMAIL SMTP] Correo enviado vía Gmail SMTP correctamente.");
+                    return;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"❌ [GMAIL SMTP] Error enviando correo: {ex.Message}");
+                }
             }
+
+            Console.WriteLine("⚠️ [EMAIL] Sin credenciales activas (Brevo/Gmail). Saltando envío real.");
+            Console.WriteLine($"🔑 [DEV ONLY] Contenido del correo: {body}");
         }
 
     }
