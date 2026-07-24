@@ -271,7 +271,7 @@ namespace GestionIntApi.Controllers
 
                 if (registro == null)
                 {
-                    Console.WriteLine("❌ No existe registro temporal para este correo.");
+                    Console.WriteLine($"❌ No existe registro temporal para el correo '{correo}'.");
                     rsp.status = false;
                     rsp.msg = "Código incorrecto o expirado.";
                     return BadRequest(rsp);
@@ -282,7 +282,7 @@ namespace GestionIntApi.Controllers
                 if (tiempoTranscurrido.TotalMinutes > 5) // Expira en 5 minutos
                 {
                     Console.WriteLine("❌ El código ha expirado por tiempo.");
-                    _registroTemporal.EliminarRegistro(req.Correo);
+                    _registroTemporal.EliminarRegistro(correo);
                     rsp.status = false;
                     rsp.msg = "El código ha expirado. Solicite uno nuevo.";
                     return BadRequest(rsp);
@@ -303,7 +303,7 @@ namespace GestionIntApi.Controllers
                 var nuevoUsuario = await _UsuarioServicios.crearUsuario(registro.Usuario);
 
                 // Eliminar registro temporal SOLO si se guardó exitosamente
-                _registroTemporal.EliminarRegistro(req.Correo);
+                _registroTemporal.EliminarRegistro(correo);
                 Console.WriteLine("🗑 Registro temporal eliminado.");
 
                 rsp.status = true;
@@ -315,12 +315,12 @@ namespace GestionIntApi.Controllers
             }
             catch (Exception ex)
             {
-                var errDetail = $"{ex.Message} (Inner: {ex.InnerException?.Message})";
+                var errDetail = $"{ex.GetType().Name}: {ex.Message} (Inner: {ex.InnerException?.Message})";
                 Console.WriteLine($"❌ ERROR GENERAL: {errDetail}");
                 Console.WriteLine($"StackTrace: {ex.StackTrace}");
 
                 rsp.status = false;
-                rsp.msg = ex is TaskCanceledException ? ex.Message : $"Error al procesar la solicitud: {errDetail}";
+                rsp.msg = ex is TaskCanceledException ? ex.Message : $"Error en servidor: {errDetail}";
                 return BadRequest(rsp);
             }
         }
