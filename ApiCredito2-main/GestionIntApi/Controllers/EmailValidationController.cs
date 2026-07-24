@@ -315,17 +315,12 @@ namespace GestionIntApi.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ ERROR GENERAL: {ex.Message}");
-                if (ex.InnerException != null)
-                {
-                    Console.WriteLine($"🔍 INNER EXCEPTION: {ex.InnerException.Message}");
-                }
+                var errDetail = $"{ex.Message} (Inner: {ex.InnerException?.Message})";
+                Console.WriteLine($"❌ ERROR GENERAL: {errDetail}");
                 Console.WriteLine($"StackTrace: {ex.StackTrace}");
 
-                // Si falla al guardar en BD, NO se elimina el registro temporal
-                // para que el usuario pueda reintentar
                 rsp.status = false;
-                rsp.msg = ex is TaskCanceledException ? ex.Message : $"Error al procesar la solicitud: {ex.InnerException?.Message ?? ex.Message}";
+                rsp.msg = ex is TaskCanceledException ? ex.Message : $"Error al procesar la solicitud: {errDetail}";
                 return BadRequest(rsp);
             }
         }

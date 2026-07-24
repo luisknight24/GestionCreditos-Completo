@@ -280,6 +280,8 @@ namespace GestionIntApi.Repositorios.Implementacion
         {
             try
             {
+                if (modelo.RolId <= 0) modelo.RolId = 2; // Default to Cliente (RolId = 2)
+
                 var correo = (modelo.Correo ?? "").Trim().ToLower();
                 var cedula = modelo.Cliente?.DetalleCliente?.NumeroCedula;
 
@@ -303,6 +305,12 @@ namespace GestionIntApi.Repositorios.Implementacion
                         throw new TaskCanceledException($"La cédula '{cedula}' ya se encuentra registrada y asociada a una cuenta de crédito.");
                     }
                 }
+
+                // Asegurar objetos no nulos
+                if (modelo.Cliente == null) modelo.Cliente = new ClienteDTO();
+                if (modelo.Cliente.DetalleCliente == null) modelo.Cliente.DetalleCliente = new DetalleClienteDTO();
+                if (modelo.Cliente.Creditos == null) modelo.Cliente.Creditos = new List<CreditoDTO>();
+                if (modelo.Cliente.TiendaApps == null) modelo.Cliente.TiendaApps = new List<TiendaAppDTO>();
 
                 // 🔥 PASO 1: VALIDAR / REGISTRAR TIENDAS DINÁMICAMENTE
                 if (modelo.Cliente?.TiendaApps != null && modelo.Cliente.TiendaApps.Any())
