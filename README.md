@@ -8,6 +8,11 @@
 
 Sistema multiplataforma diseñado para la administración descentralizada de solicitudes de crédito, verificación de identidad en dos pasos, gestión de tiendas y seguimiento de cobranza en tiempo real.
 
+## Demostración en vivo
+
+- **Aplicación móvil en vivo (Flutter Web):** [https://luisknight24.github.io/GestionCreditos-Completo/](https://luisknight24.github.io/GestionCreditos-Completo/)
+- **API RESTful Swagger (.NET 8):** [https://gestioncreditos-backend.onrender.com/swagger](https://gestioncreditos-backend.onrender.com/swagger)
+
 ## Arquitectura del sistema
 
 La solución adopta una arquitectura desacoplada basada en microservicios ligeros e interfaces cliente-servidor especializadas por rol.
