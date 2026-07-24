@@ -254,6 +254,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapHub<AdminHub>("/adminhub");
+app.MapHub<AdminHub>("/api/adminhub");
 
 using (var scope = app.Services.CreateScope())
 {
