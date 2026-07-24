@@ -132,14 +132,17 @@ builder.Configuration["SendGrid:ApiKey"] = Environment.GetEnvironmentVariable("S
 
 
 
+var connString = Environment.GetEnvironmentVariable("ConnectionStrings__sqlConection") 
+    ?? builder.Configuration.GetConnectionString("sqlConection");
+
+if (string.IsNullOrWhiteSpace(connString) || connString.Contains("YOUR_DATABASE_HOST"))
+{
+    connString = "Host=ep-little-rice-atkzhfqx.c-9.us-east-1.aws.neon.tech;Port=5432;Database=neondb;Username=neondb_owner;Password=npg_YQl5Bvzgu9ja;SSL Mode=Require;Trust Server Certificate=true;Pooling=true";
+}
+
 builder.Services.AddDbContext<SistemaGestionDBcontext>(options =>
 {
-options.UseNpgsql(builder.Configuration.GetConnectionString("sqlConection")
-    , npgsqlOptions => npgsqlOptions.EnableRetryOnFailure());
-
-
-    
-    
+    options.UseNpgsql(connString, npgsqlOptions => npgsqlOptions.EnableRetryOnFailure());
 });
 
 
