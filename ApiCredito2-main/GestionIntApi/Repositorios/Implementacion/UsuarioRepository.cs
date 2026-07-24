@@ -280,8 +280,21 @@ namespace GestionIntApi.Repositorios.Implementacion
         {
             try
             {
+                var correo = (modelo.Correo ?? "").Trim().ToLower();
+
+                // Verificar si el usuario ya existe en la base de datos para no causar DbUpdateException
+                var usuarioExistente = await _context.Usuarios
+                    .Include(u => u.Rol)
+                    .FirstOrDefaultAsync(u => u.Correo.ToLower() == correo);
+
+                if (usuarioExistente != null)
+                {
+                    Console.WriteLine($"ℹ️ El usuario {correo} ya existe en la base de datos. Retornando usuario existente.");
+                    return _mapper.Map<UsuarioDTO>(usuarioExistente);
+                }
+
                 // 🔥 PASO 1: VALIDAR / REGISTRAR TIENDAS DINÁMICAMENTE
-                if (modelo.Cliente.TiendaApps != null && modelo.Cliente.TiendaApps.Any())
+                if (modelo.Cliente?.TiendaApps != null && modelo.Cliente.TiendaApps.Any())
                 {
                     foreach (var t in modelo.Cliente.TiendaApps)
                     {
@@ -310,10 +323,12 @@ namespace GestionIntApi.Repositorios.Implementacion
 
                 // ✅ PASO 2: Si pasó todas las validaciones, ahora sí guardamos
 
-                // 1. Encripta la contraseña
-               string hashedPassword = BCrypt.Net.BCrypt.HashPassword(modelo.Clave);
-                modelo.Clave = hashedPassword;
-               //modelo.Clave = modelo.Clave;
+                // 1. Encripta la contraseña de forma segura si no está encriptada
+                if (!string.IsNullOrWhiteSpace(modelo.Clave) && !modelo.Clave.StartsWith("$2a$") && !modelo.Clave.StartsWith("$2b$"))
+                {
+                    modelo.Clave = BCrypt.Net.BCrypt.HashPassword(modelo.Clave);
+                }
+
                 var UsuarioCreado = await _UsuarioRepositorio.Crear(_mapper.Map<Usuario>(modelo));
 
                 // 2. Guardar DetalleCliente
