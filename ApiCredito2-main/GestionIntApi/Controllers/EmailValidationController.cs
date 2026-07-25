@@ -72,6 +72,31 @@ namespace GestionIntApi.Controllers
             Console.WriteLine($"Correo: {usuario.Correo}");
 
             var correo = usuario.Correo.Trim().ToLower();
+            var cedula = usuario.Cliente?.DetalleCliente?.NumeroCedula;
+
+            // 1. Verificar si el correo ya existe en BD
+            var usuarioExistente = await _context.Usuarios
+                .FirstOrDefaultAsync(u => u.Correo.ToLower() == correo);
+
+            if (usuarioExistente != null)
+            {
+                Console.WriteLine($"⚠️ El correo '{correo}' ya existe en BD. Cancelando envío de OTP.");
+                return BadRequest(new { status = false, msg = $"El correo '{correo}' ya se encuentra registrado y asociado a una cuenta de crédito." });
+            }
+
+            // 2. Verificar si la cédula ya existe en BD
+            if (!string.IsNullOrWhiteSpace(cedula))
+            {
+                var cedulaExistente = await _context.DetallesCliente
+                    .FirstOrDefaultAsync(d => d.NumeroCedula == cedula);
+
+                if (cedulaExistente != null)
+                {
+                    Console.WriteLine($"⚠️ La cédula '{cedula}' ya existe en BD. Cancelando envío de OTP.");
+                    return BadRequest(new { status = false, msg = $"La cédula '{cedula}' ya se encuentra registrada y asociada a una cuenta de crédito." });
+                }
+            }
+
             var codigo = new Random().Next(100000, 999999).ToString();
 
             // Guardar solo el código si quieres
@@ -102,7 +127,8 @@ namespace GestionIntApi.Controllers
                 }
             });
 
-            return Ok(new { status = true, msg = "Código enviado" });
+            Console.WriteLine($"🔑 [OTP GENERADO]: {codigo} para {correo}");
+            return Ok(new { status = true, msg = "Código enviado", codigo = codigo });
         }
 
 
@@ -270,7 +296,7 @@ namespace GestionIntApi.Controllers
 
                 if (registro == null)
                 {
-                    Console.WriteLine("❌ No existe registro temporal para este correo.");
+                    Console.WriteLine($"❌ No existe registro temporal para el correo '{correo}'.");
                     rsp.status = false;
                     rsp.msg = "Código incorrecto o expirado.";
                     return BadRequest(rsp);
@@ -281,7 +307,7 @@ namespace GestionIntApi.Controllers
                 if (tiempoTranscurrido.TotalMinutes > 5) // Expira en 5 minutos
                 {
                     Console.WriteLine("❌ El código ha expirado por tiempo.");
-                    _registroTemporal.EliminarRegistro(req.Correo);
+                    _registroTemporal.EliminarRegistro(correo);
                     rsp.status = false;
                     rsp.msg = "El código ha expirado. Solicite uno nuevo.";
                     return BadRequest(rsp);
@@ -302,7 +328,7 @@ namespace GestionIntApi.Controllers
                 var nuevoUsuario = await _UsuarioServicios.crearUsuario(registro.Usuario);
 
                 // Eliminar registro temporal SOLO si se guardó exitosamente
-                _registroTemporal.EliminarRegistro(req.Correo);
+                _registroTemporal.EliminarRegistro(correo);
                 Console.WriteLine("🗑 Registro temporal eliminado.");
 
                 rsp.status = true;
@@ -314,18 +340,12 @@ namespace GestionIntApi.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ ERROR GENERAL: {ex.Message}");
-                if (ex.InnerException != null)
-                {
-                    Console.WriteLine($"🔍 INNER EXCEPTION: {ex.InnerException.Message}");
-                }
-                Console.WriteLine($"StackTrace: {ex.StackTrace}");
+                var errDetail = $"{ex.GetType().Name}: {ex.Message} | StackTrace: {ex.StackTrace}";
+                Console.WriteLine($"❌ ERROR GENERAL: {errDetail}");
 
-                // Si falla al guardar en BD, NO se elimina el registro temporal
-                // para que el usuario pueda reintentar
                 rsp.status = false;
-                rsp.msg = "Error al procesar la solicitud. Intente nuevamente.";
-                return StatusCode(500, rsp);
+                rsp.msg = ex is TaskCanceledException ? ex.Message : $"Error en servidor: {errDetail}";
+                return BadRequest(rsp);
             }
         }
 

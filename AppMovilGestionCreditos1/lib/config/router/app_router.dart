@@ -15,10 +15,34 @@ import '../../presentation/screens/credit_data_screen.dart';
 import '../../presentation/screens/forgot_password_screen.dart';
 import '../../presentation/screens/reset_password_screen.dart';
 import '../../presentation/screens/home_screen.dart';
-import '../../presentation/screens/client_data_screen.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 final appRouter = GoRouter(
   initialLocation: '/login',
+  redirect: (context, state) async {
+    final publicRoutes = [
+      '/',
+      '/login',
+      '/register',
+      '/forgot-password',
+      '/reset-password',
+      '/verify-otp',
+      '/client-data',
+      '/store-data',
+      '/credit-data',
+    ];
+
+    final isPublic = publicRoutes.contains(state.matchedLocation);
+
+    if (!isPublic) {
+      const storage = FlutterSecureStorage();
+      final token = await storage.read(key: 'jwt_token');
+      if (token == null || token.isEmpty) {
+        return '/login';
+      }
+    }
+    return null;
+  },
   routes: [
     GoRoute(
       path: '/',

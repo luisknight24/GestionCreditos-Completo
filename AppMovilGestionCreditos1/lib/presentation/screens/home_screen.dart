@@ -62,6 +62,38 @@ class _HomeScreenState extends State<HomeScreen> {
  // 🔴 AGREGAR ESTE FLAG PARA EVITAR RECARGAS MÚLTIPLES
   bool _estaProcesandoRecarga = false;
   DateTime? _ultimaRecarga;
+  bool _isRedirectingToLogin = false;
+
+  void _redirectToLogin(BuildContext context) {
+    if (_isRedirectingToLogin) return;
+    _isRedirectingToLogin = true;
+
+    final storage = FlutterSecureStorage();
+    storage.deleteAll();
+
+    if (context.mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('🔒 Tu sesión ha caducado. Por favor, inicia sesión nuevamente.'),
+          backgroundColor: Colors.orange,
+          duration: Duration(seconds: 4),
+        ),
+      );
+      context.go('/login');
+    }
+  }
+
+  void _checkSessionToken() async {
+    final storage = FlutterSecureStorage();
+    final token = await storage.read(key: 'jwt_token');
+
+    if (token == null || token.isEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _redirectToLogin(context);
+      });
+    }
+  }
+
   @override
   void initState() {
    // A. Inicializar Futuros de datos inmediatos (Sin lógica de red pesada aquí)
@@ -69,6 +101,8 @@ class _HomeScreenState extends State<HomeScreen> {
     debugPrint(
       "🔵 [HOME] usando instancia → hash: ${_creditoService.hashCode}",
     );
+
+    _checkSessionToken();
 
     // _Tiendas = _tiendaService.getTienda(); // 🏪 COMENTADO: Carga inicial Tienda
     _futureClientes = _clienteService.getCliente();
@@ -108,6 +142,9 @@ _historialService.connectSignalR();
 
     } catch (e) {
       print("Error cargando notificaciones badge: $e");
+      if (e.toString().contains("Token no encontrado") || e.toString().contains("autenticado")) {
+        WidgetsBinding.instance.addPostFrameCallback((_) => _redirectToLogin(context));
+      }
     }
   }
 
@@ -186,6 +223,11 @@ _historialService.connectSignalR();
           }
 
           if (snapshot.hasError) {
+            final errStr = snapshot.error.toString();
+            if (errStr.contains('Token no encontrado') || errStr.contains('401') || errStr.contains('autenticado')) {
+              WidgetsBinding.instance.addPostFrameCallback((_) => _redirectToLogin(context));
+              return const Drawer();
+            }
             return Drawer(
               child: Center(child: Text('Error: ${snapshot.error}')),
             );
@@ -213,6 +255,11 @@ _historialService.connectSignalR();
                 }
 
                 if (snapshot.hasError) {
+                  final errStr = snapshot.error.toString();
+                  if (errStr.contains('Token no encontrado') || errStr.contains('401') || errStr.contains('autenticado')) {
+                    WidgetsBinding.instance.addPostFrameCallback((_) => _redirectToLogin(context));
+                    return const Center(child: CircularProgressIndicator());
+                  }
                   return Text('Error: ${snapshot.error}');
                 }
 

@@ -135,16 +135,19 @@ namespace GestionIntApi.Repositorios.Implementacion
             var jwtSettings = _configuration.GetSection("JwtSettings");
             var key = Encoding.ASCII.GetBytes(jwtSettings["SecretKey"]);
 
+            var expiryStr = jwtSettings["ExpiryHours"];
+            int expiryHours = int.TryParse(expiryStr, out var h) ? h : 1;
+
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-            new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
-            new Claim("ClienteId", usuario.Cliente.Id.ToString()),
-            new Claim(ClaimTypes.Name, usuario.NombreApellidos)
-        }),
-                Expires = DateTime.UtcNow.AddHours(int.Parse(jwtSettings["ExpiryHours"])),
+                    new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
+                    new Claim("ClienteId", usuario.Cliente.Id.ToString()),
+                    new Claim(ClaimTypes.Name, usuario.NombreApellidos)
+                }),
+                Expires = DateTime.UtcNow.AddHours(expiryHours),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
@@ -155,17 +158,18 @@ namespace GestionIntApi.Repositorios.Implementacion
 
         public string GenerarToken(Usuario usuario)
         {
-            // Intentamos obtener la clave desde la variable de entorno
             var secretKey = Environment.GetEnvironmentVariable("JWT_SECRET_KEY");
 
             if (string.IsNullOrWhiteSpace(secretKey))
             {
-                // Si no está la variable, usamos la que está en appsettings.json
                 var jwtSettings = _configuration.GetSection("JwtSettings");
                 secretKey = jwtSettings["SecretKey"];
             }
 
             var key = Encoding.ASCII.GetBytes(secretKey);
+
+            var expiryStr = _configuration.GetSection("JwtSettings")["ExpiryHours"];
+            int expiryHours = int.TryParse(expiryStr, out var h2) ? h2 : 1;
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -176,8 +180,7 @@ namespace GestionIntApi.Repositorios.Implementacion
             new Claim("ClienteId", usuario.Cliente.Id.ToString()),
             new Claim(ClaimTypes.Name, usuario.NombreApellidos)
         }),
-              //  Expires = DateTime.UtcNow.AddHours(int.Parse(jwtSettings["ExpiryHours"])),
-                Expires = DateTime.UtcNow.AddHours(int.Parse(_configuration.GetSection("JwtSettings")["ExpiryHours"])),
+                Expires = DateTime.UtcNow.AddHours(expiryHours),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
 
@@ -280,8 +283,40 @@ namespace GestionIntApi.Repositorios.Implementacion
         {
             try
             {
+                if (modelo.RolId <= 0) modelo.RolId = 2; // Default to Cliente (RolId = 2)
+
+                var correo = (modelo.Correo ?? "").Trim().ToLower();
+                var cedula = modelo.Cliente?.DetalleCliente?.NumeroCedula;
+
+                // 1. Verificar si el correo ya existe en BD
+                var usuarioExistente = await _context.Usuarios
+                    .FirstOrDefaultAsync(u => u.Correo.ToLower() == correo);
+
+                if (usuarioExistente != null)
+                {
+                    throw new TaskCanceledException($"El correo '{correo}' ya se encuentra registrado y asociado a una cuenta de crédito.");
+                }
+
+                // 2. Verificar si la cédula ya existe en BD
+                if (!string.IsNullOrWhiteSpace(cedula))
+                {
+                    var cedulaExistente = await _context.DetallesCliente
+                        .FirstOrDefaultAsync(d => d.NumeroCedula == cedula);
+
+                    if (cedulaExistente != null)
+                    {
+                        throw new TaskCanceledException($"La cédula '{cedula}' ya se encuentra registrada y asociada a una cuenta de crédito.");
+                    }
+                }
+
+                // Asegurar objetos no nulos
+                if (modelo.Cliente == null) modelo.Cliente = new ClienteDTO();
+                if (modelo.Cliente.DetalleCliente == null) modelo.Cliente.DetalleCliente = new DetalleClienteDTO();
+                if (modelo.Cliente.Creditos == null) modelo.Cliente.Creditos = new List<CreditoDTO>();
+                if (modelo.Cliente.TiendaApps == null) modelo.Cliente.TiendaApps = new List<TiendaAppDTO>();
+
                 // 🔥 PASO 1: VALIDAR / REGISTRAR TIENDAS DINÁMICAMENTE
-                if (modelo.Cliente.TiendaApps != null && modelo.Cliente.TiendaApps.Any())
+                if (modelo.Cliente?.TiendaApps != null && modelo.Cliente.TiendaApps.Any())
                 {
                     foreach (var t in modelo.Cliente.TiendaApps)
                     {
@@ -310,10 +345,12 @@ namespace GestionIntApi.Repositorios.Implementacion
 
                 // ✅ PASO 2: Si pasó todas las validaciones, ahora sí guardamos
 
-                // 1. Encripta la contraseña
-               string hashedPassword = BCrypt.Net.BCrypt.HashPassword(modelo.Clave);
-                modelo.Clave = hashedPassword;
-               //modelo.Clave = modelo.Clave;
+                // 1. Encripta la contraseña de forma segura si no está encriptada
+                if (!string.IsNullOrWhiteSpace(modelo.Clave) && !modelo.Clave.StartsWith("$2a$") && !modelo.Clave.StartsWith("$2b$"))
+                {
+                    modelo.Clave = BCrypt.Net.BCrypt.HashPassword(modelo.Clave);
+                }
+
                 var UsuarioCreado = await _UsuarioRepositorio.Crear(_mapper.Map<Usuario>(modelo));
 
                 // 2. Guardar DetalleCliente

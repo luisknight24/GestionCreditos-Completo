@@ -35,6 +35,7 @@ export class Navegacion implements OnInit {
   
  listaMenu:Menu[]=[];
 correoUsuario:string="";
+nombreUsuario:string="";
 rolUsuario:string="";
   isHandset$!: Observable<boolean>; // Usa el operador '!' para indicar que se inicializará después
 
@@ -63,7 +64,8 @@ ngOnInit(): void {
       console.log("Usuario recuperado de la sesión:", usuario);
       
       this.correoUsuario = usuario.correo;
-      this.rolUsuario = usuario.rolDescripcion;
+      this.nombreUsuario = usuario.nombreApellidos || 'Luis Balladares Ruiz';
+      this.rolUsuario = usuario.rolDescripcion || 'Administrador';
 
       // Llamada al servicio de menú
       this._menuServicio.getRoles(usuario.id).subscribe({

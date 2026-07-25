@@ -132,14 +132,23 @@ builder.Configuration["SendGrid:ApiKey"] = Environment.GetEnvironmentVariable("S
 
 
 
+var connString = Environment.GetEnvironmentVariable("ConnectionStrings__sqlConection");
+
+if (string.IsNullOrWhiteSpace(connString))
+{
+    connString = builder.Configuration.GetConnectionString("sqlConection");
+}
+
 builder.Services.AddDbContext<SistemaGestionDBcontext>(options =>
 {
-options.UseNpgsql(builder.Configuration.GetConnectionString("sqlConection")
-    , npgsqlOptions => npgsqlOptions.EnableRetryOnFailure());
-
-
-    
-    
+    options.UseNpgsql(connString, npgsqlOptions => 
+    {
+        npgsqlOptions.EnableRetryOnFailure(
+            maxRetryCount: 5,
+            maxRetryDelay: TimeSpan.FromSeconds(10),
+            errorCodesToAdd: null
+        );
+    });
 });
 
 
@@ -245,6 +254,7 @@ app.UseAuthorization();
 
 app.MapControllers();
 app.MapHub<AdminHub>("/adminhub");
+app.MapHub<AdminHub>("/api/adminhub");
 
 using (var scope = app.Services.CreateScope())
 {

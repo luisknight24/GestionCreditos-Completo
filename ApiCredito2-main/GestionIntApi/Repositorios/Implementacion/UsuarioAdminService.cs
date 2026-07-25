@@ -1,4 +1,7 @@
-﻿using AutoMapper;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using AutoMapper;
 using GestionIntApi.DTO;
 using GestionIntApi.DTO.Admin;
 using GestionIntApi.Models;
@@ -6,6 +9,8 @@ using GestionIntApi.Models.Admin;
 using GestionIntApi.Repositorios.Contrato;
 using GestionIntApi.Repositorios.Interfaces.Admin;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 
 namespace GestionIntApi.Repositorios.Implementacion
 {
@@ -15,12 +20,43 @@ namespace GestionIntApi.Repositorios.Implementacion
         private readonly IGenericRepository<UsuarioAdmin> _UsuarioRepositorio;
         private readonly IMapper _mapper;
         private readonly SistemaGestionDBcontext _context;
+        private readonly IConfiguration _configuration;
 
-        public UsuarioAdminService(SistemaGestionDBcontext context,IGenericRepository<UsuarioAdmin> usuarioRepositorio, IMapper mapper)
+        public UsuarioAdminService(SistemaGestionDBcontext context, IGenericRepository<UsuarioAdmin> usuarioRepositorio, IMapper mapper, IConfiguration configuration)
         {
             _UsuarioRepositorio = usuarioRepositorio;
             _mapper = mapper;
             _context = context;
+            _configuration = configuration;
+        }
+
+        private string GenerarTokenAdmin(UsuarioAdmin usuario)
+        {
+            var secretKey = Environment.GetEnvironmentVariable("JWT_SECRET_KEY");
+            if (string.IsNullOrWhiteSpace(secretKey))
+            {
+                secretKey = _configuration.GetSection("JwtSettings")["SecretKey"];
+            }
+
+            var key = Encoding.ASCII.GetBytes(secretKey!);
+            var expiryStr = _configuration.GetSection("JwtSettings")["ExpiryHours"];
+            int expiryHours = int.TryParse(expiryStr, out var h) ? h : 1;
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            var tokenDescriptor = new SecurityTokenDescriptor
+            {
+                Subject = new ClaimsIdentity(new[]
+                {
+                    new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
+                    new Claim(ClaimTypes.Name, usuario.NombreApellidos ?? ""),
+                    new Claim(ClaimTypes.Role, usuario.RolAdmin?.Descripcion ?? "Admin")
+                }),
+                Expires = DateTime.UtcNow.AddHours(expiryHours),
+                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+            };
+
+            var token = tokenHandler.CreateToken(tokenDescriptor);
+            return tokenHandler.WriteToken(token);
         }
 
         public async Task<List<UsuarioAdminDTO>> listaUsuarios()
@@ -29,12 +65,10 @@ namespace GestionIntApi.Repositorios.Implementacion
             {
                 var queryUsuario = await _UsuarioRepositorio.Consultar();
                 var listaUsuario = queryUsuario.Include(rol => rol.RolAdmin).ToList();
-                // Recorremos la lista de usuarios y reemplazamos el hash de la contraseña por el texto plano
                 return _mapper.Map<List<UsuarioAdminDTO>>(listaUsuario);
             }
             catch
             {
-
                 throw;
             }
         }
@@ -67,11 +101,14 @@ namespace GestionIntApi.Repositorios.Implementacion
                 if (queryUsuario.FirstOrDefault() == null)
                     throw new TaskCanceledException("El usuario no existe");
                 UsuarioAdmin devolverUsuario = queryUsuario.Include(rol => rol.RolAdmin).First();
-                if (devolverUsuario.EsActivo == false) // Verificar el estado del usuario
+                if (devolverUsuario.EsActivo == false)
                     throw new TaskCanceledException("El usuario está inactivo");
                 if (!BCrypt.Net.BCrypt.Verify(clave, devolverUsuario.Clave))
                     throw new TaskCanceledException("La contraseña es incorrecta");
-                return _mapper.Map<SesionDTOAdmin>(devolverUsuario);
+                
+                var sesionDto = _mapper.Map<SesionDTOAdmin>(devolverUsuario);
+                sesionDto.Token = GenerarTokenAdmin(devolverUsuario);
+                return sesionDto;
             }
             catch
             {

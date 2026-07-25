@@ -1,4 +1,4 @@
-﻿import 'package:geolocator/geolocator.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'dart:convert';
@@ -22,34 +22,39 @@ class LocationService {
 
   /// 2. Lógica estándar de Geolocator para pedir permisos
   Future<Position?> _determinePosition() async {
-    bool serviceEnabled;
-    LocationPermission permission;
+    try {
+      bool serviceEnabled;
+      LocationPermission permission;
 
-    // Verificar si el GPS está prendido
-    serviceEnabled = await Geolocator.isLocationServiceEnabled();
-    if (!serviceEnabled) {
-      print('El GPS está desactivado.');
-      return null;
-    }
-
-    permission = await Geolocator.checkPermission();
-    if (permission == LocationPermission.denied) {
-      permission = await Geolocator.requestPermission();
-      if (permission == LocationPermission.denied) {
-        print('Permisos de ubicación denegados.');
+      // Verificar si el GPS está prendido
+      serviceEnabled = await Geolocator.isLocationServiceEnabled();
+      if (!serviceEnabled) {
+        print('El GPS está desactivado.');
         return null;
       }
-    }
 
-    if (permission == LocationPermission.deniedForever) {
-      print('Permisos de ubicación denegados permanentemente.');
+      permission = await Geolocator.checkPermission();
+      if (permission == LocationPermission.denied) {
+        permission = await Geolocator.requestPermission();
+        if (permission == LocationPermission.denied) {
+          print('Permisos de ubicación denegados.');
+          return null;
+        }
+      }
+
+      if (permission == LocationPermission.deniedForever) {
+        print('Permisos de ubicación denegados permanentemente.');
+        return null;
+      }
+
+      // Obtener posición actual (alta precisión)
+      return await Geolocator.getCurrentPosition(
+        desiredAccuracy: LocationAccuracy.high,
+      );
+    } catch (e) {
+      print('⚠️ Excepción capturada en servicio de ubicación: $e');
       return null;
     }
-
-    // Obtener posición actual (alta precisión)
-    return await Geolocator.getCurrentPosition(
-      desiredAccuracy: LocationAccuracy.high,
-    );
   }
 
   /// 3. Enviar al Backend (Método GET con Query Parameters)

@@ -105,12 +105,10 @@
       <span class="spacer"></span>
 
       <div class="user-profile-section">
-        <div class="user-text-info">
-          <span style="color: #ffffff;" class="user-name">{{ correoUsuario }}</span>
-          <span style="color: #ffffff;" class="user-role">{{ rolUsuario }}</span>
-        </div>
-        <div class="user-avatar-container">
-          <span class="avatar-initial">{{ correoUsuario.charAt(0).toUpperCase() }}</span>
+        <div class="user-text-info-inline">
+          <span style="color: #ffffff; font-weight: 600; font-size: 14px;" class="user-name">{{ nombreUsuario || 'Luis Balladares Ruiz' }}</span>
+          <span style="color: rgba(255, 255, 255, 0.6); margin: 0 6px;" class="user-role-separator">|</span>
+          <span style="color: #ffffff; font-weight: 500; font-size: 14px;" class="user-role">{{ rolUsuario || 'Administrador' }}</span>
         </div>
       </div>
 

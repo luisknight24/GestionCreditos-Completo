@@ -71,6 +71,34 @@ void _verificarCodigo() async {
   }
 }
 
+  Future<void> _reenviarCodigo() async {
+    setState(() => _isLoading = true);
+    try {
+      final usuarioFinal = context.read<RegisterProvider>().getUsuarioFinal();
+      final validarCuenta = ValidarCuenta();
+      final enviado = await validarCuenta.enviarCodigoCompleto(usuarioFinal);
+
+      if (mounted) {
+        if (enviado == true) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Nuevo código de verificación enviado al correo.'), backgroundColor: Colors.green),
+          );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('No se pudo reenviar el código. Inténtalo de nuevo.'), backgroundColor: Colors.red),
+          );
+        }
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error al reenviar: $e'), backgroundColor: Colors.red),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
+    }
+  }
 
   void _showSuccessDialog() {
     showDialog(
@@ -193,9 +221,7 @@ void _verificarCodigo() async {
               const SizedBox(height: 20),
               // Botón de reenvío (Por ahora solo visual o simulado)
               TextButton(
-                onPressed: () {
-                  ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Solicitud de reenvío enviada')));
-                },
+                onPressed: _isLoading ? null : _reenviarCodigo,
                 child: const Text("¿No recibiste el código? Reenviar"),
               )
             ],

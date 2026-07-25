@@ -21,6 +21,19 @@
 **/*.apk
 **/*.ap_
 
+# Environment variables
+.env
+*.env
+*.env.*
+
+# AI Agent Config
+.agents/
+.gemini/
+.claude/
+.cursorrules
+.cursorignore
+*.prompt
+
 # System / OS
 .DS_Store
 Thumbs.db

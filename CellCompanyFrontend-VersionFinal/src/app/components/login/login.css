@@ -196,7 +196,12 @@
     }
 } */
 
-/* --- Fondo y Contenedor Principal --- */
+/* ==========================================
+   CELLCOMPAY HIGH-END LOGIN STYLES
+   Designed using Anti-Slop Frontend Taste-Skill
+   ========================================== */
+
+/* --- Page Canvas & Background --- */
 .login-bg {
     min-height: 100vh;
     width: 100%;
@@ -204,33 +209,71 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    /* Degradado moderno azul oscuro profesional */
-    background: radial-gradient(circle at top left, #2b32b2, #1488cc);
+    background: #090d16;
+    background-image: 
+        radial-gradient(at 5% 5%, rgba(2, 132, 199, 0.40) 0px, transparent 40%),
+        radial-gradient(at 10% 55%, rgba(225, 29, 72, 0.35) 0px, transparent 55%),
+        radial-gradient(at 95% 50%, rgba(234, 179, 8, 0.32) 0px, transparent 60%),
+        radial-gradient(at 50% 50%, rgba(15, 23, 42, 0.95) 0px, transparent 100%);
     position: relative;
     overflow: hidden;
+    font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
-/* Círculos decorativos flotantes (Glassmorphism vibes) */
-.circle {
+/* Subtle Grid Mesh Line Overlay */
+.bg-grid-pattern {
     position: absolute;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(5px);
+    inset: 0;
+    background-image: linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+                      linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+    background-size: 44px 44px;
+    mask-image: radial-gradient(ellipse 75% 75% at 50% 50%, #000 35%, transparent 100%);
+    pointer-events: none;
     z-index: 0;
 }
 
-.circle-1 {
-    width: 300px;
-    height: 300px;
-    top: -50px;
-    left: -100px;
+/* Ambient Glow Orbs - Exact Logo Proportions */
+.ambient-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(110px);
+    pointer-events: none;
+    z-index: 0;
 }
 
-.circle-2 {
-    width: 200px;
-    height: 200px;
-    bottom: -50px;
-    right: -50px;
+/* Azul: Esquina Superior Izquierda */
+.glow-blue-topleft {
+    width: 480px;
+    height: 480px;
+    top: -140px;
+    left: -100px;
+    background: rgba(2, 132, 199, 0.42);
+    animation: floatGlow 12s infinite alternate ease-in-out;
+}
+
+/* Rojo: Lado Izquierdo (85% del espacio lateral) */
+.glow-red-left {
+    width: 580px;
+    height: 700px;
+    top: 15%;
+    left: -150px;
+    background: rgba(225, 29, 72, 0.38);
+    animation: floatGlow 15s infinite alternate-reverse ease-in-out;
+}
+
+/* Amarillo: Lado Derecho (50% del espacio derecho) */
+.glow-yellow-right {
+    width: 650px;
+    height: 85%;
+    top: 5%;
+    right: -120px;
+    background: rgba(234, 179, 8, 0.35);
+    animation: floatGlow 14s infinite alternate ease-in-out;
+}
+
+@keyframes floatGlow {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(30px, 30px) scale(1.1); }
 }
 
 .login-container {
@@ -239,59 +282,95 @@
     flex-direction: column;
     align-items: center;
     width: 100%;
-    padding: 20px;
+    max-width: 440px;
+    padding: 24px 20px;
 }
 
-/* --- Tarjeta del Login --- */
+/* --- Modern Glassmorphic Card --- */
 .modern-card {
     width: 100%;
-    max-width: 400px;
-    padding: 40px 30px;
-    border-radius: 20px;
-    /* Bordes más redondeados */
-    background: #ffffff;
-    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.5);
+    padding: 40px 32px;
+    border-radius: 24px;
+    background: rgba(15, 23, 42, 0.78);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 
+        0 25px 50px -12px rgba(0, 0, 0, 0.65),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* --- Header y Logo --- */
+.modern-card:hover {
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 
+        0 30px 60px -12px rgba(0, 0, 0, 0.75),
+        0 0 30px rgba(16, 185, 129, 0.15),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* --- Header Section --- */
 .header-section {
     text-align: center;
-    margin-bottom: 30px;
+    margin-bottom: 32px;
 }
 
-.logo-container {
-    height: 140px;
-    margin-bottom: 20px;
-    display: flex;
+.logo-wrapper {
+    position: relative;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
+    width: 100px;
+    height: 100px;
+    padding: 3px;
+    border-radius: 50%;
+    background: #ffffff;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    margin-bottom: 20px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(250, 204, 21, 0.25);
+    overflow: hidden;
+}
+
+.logo-glow {
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: conic-gradient(from 0deg, #e11d48, #facc15, #10b981, #0284c7, #e11d48);
+    filter: blur(14px);
+    opacity: 0.75;
+    z-index: -1;
+    animation: rotateGlow 10s linear infinite;
+}
+
+@keyframes rotateGlow {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
 }
 
 .company-logo {
-    max-height: 100%;
-    max-width: 180px;
-    object-fit: contain;
-    /* Si no tienes logo aún, esto simula un espacio */
-    /* background: #f0f0f0; width: 100%; border-radius: 8px; */
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
 }
 
 .welcome-title {
-    margin: 0;
-    font-size: 26px;
-    font-weight: 700;
-    color: #333;
-    font-family: 'Poppins', sans-serif;
-    /* Asegúrate de importar una fuente bonita o usar sans-serif */
+    margin: 0 0 8px 0;
+    font-size: 24px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+    font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 .welcome-subtitle {
-    margin-top: 5px;
-    color: #666;
-    font-size: 14px;
+    margin: 0;
+    color: #cbd5e1;
+    font-size: 13.5px;
+    font-weight: 400;
+    line-height: 1.5;
 }
 
-/* --- Campos de Formulario --- */
+/* --- Form & Custom Inputs --- */
 .login-form {
     display: flex;
     flex-direction: column;
@@ -299,70 +378,157 @@
 
 .custom-field {
     width: 100%;
-    margin-bottom: 5px;
+    margin-bottom: 14px;
 }
 
-/* Personalización profunda de Angular Material para quitar líneas duras */
-::ng-deep .custom-field .mat-form-field-outline {
-    background-color: #f8f9fa;
-    border-radius: 8px;
+/* Angular Material Override for Dark Glass look */
+::ng-deep .custom-field .mat-mdc-text-field-wrapper {
+    background-color: rgba(30, 41, 59, 0.6) !important;
+    border-radius: 14px !important;
+    padding: 0 16px !important;
+    transition: all 0.25s ease !important;
 }
 
-::ng-deep .custom-field .mat-form-field-outline-start,
-::ng-deep .custom-field .mat-form-field-outline-end,
-::ng-deep .custom-field .mat-form-field-outline-gap {
+::ng-deep .custom-field.mat-focused .mat-mdc-text-field-wrapper {
+    box-shadow: 0 0 16px rgba(16, 185, 129, 0.3) !important;
+}
+
+::ng-deep .custom-field .mat-mdc-form-field-focus-overlay {
+    background-color: transparent !important;
+}
+
+::ng-deep .custom-field .mdc-notched-outline__leading,
+::ng-deep .custom-field .mdc-notched-outline__notch,
+::ng-deep .custom-field .mdc-notched-outline__trailing {
+    border-color: rgba(255, 255, 255, 0.15) !important;
     border-width: 1px !important;
-    border-color: #e0e0e0 !important;
+    box-shadow: none !important;
 }
 
-/* Iconos de los inputs */
+::ng-deep .custom-field.mat-focused .mdc-notched-outline__leading,
+::ng-deep .custom-field.mat-focused .mdc-notched-outline__notch,
+::ng-deep .custom-field.mat-focused .mdc-notched-outline__trailing {
+    border-color: #10b981 !important;
+    border-width: 1.5px !important;
+    box-shadow: none !important;
+}
+
+::ng-deep .custom-field input.mat-mdc-input-element {
+    color: #ffffff !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+    font-weight: 500 !important;
+    font-size: 14.5px !important;
+}
+
+::ng-deep .custom-field input.mat-mdc-input-element::placeholder {
+    color: #94a3b8 !important;
+}
+
+::ng-deep .custom-field .mat-mdc-form-field-label {
+    color: #cbd5e1 !important;
+    font-family: 'Plus Jakarta Sans', sans-serif !important;
+}
+
+::ng-deep .custom-field.mat-focused .mat-mdc-form-field-label {
+    color: #10b981 !important;
+}
+
+::ng-deep .custom-field .mat-mdc-form-field-error {
+    color: #f87171 !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    margin-top: 4px !important;
+}
+
 .field-icon {
-    color: #1488cc;
-    margin-right: 8px;
+    color: #94a3b8;
+    margin-right: 12px;
+    transition: color 0.25s ease;
 }
 
-/* --- Botones y Acciones --- */
+::ng-deep .custom-field.mat-focused .field-icon {
+    color: #10b981 !important;
+}
+
+.eye-btn {
+    color: #94a3b8 !important;
+}
+
+.eye-btn:hover {
+    color: #f8fafc !important;
+}
+
+/* --- Actions & Buttons --- */
 .actions-row {
     display: flex;
     justify-content: flex-end;
-    margin-bottom: 20px;
+    margin-top: -4px;
+    margin-bottom: 24px;
 }
 
 .forgot-btn {
-    font-size: 13px;
-    color: #1488cc;
-    font-weight: 500;
-    line-height: 1.2;
+    font-size: 13px !important;
+    color: #38bdf8 !important;
+    font-weight: 600 !important;
+    padding: 0 !important;
+    min-width: auto !important;
+    line-height: 1 !important;
+    transition: color 0.2s ease !important;
+}
+
+.forgot-btn:hover {
+    color: #facc15 !important;
+    text-decoration: underline;
 }
 
 .buttons-section {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
+    width: 100%;
 }
 
+/* Primary High-Contrast Button matching Logo Colors */
 .main-btn {
-    height: 50px;
-    border-radius: 10px;
-    font-size: 16px;
-    font-weight: 600;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    background: linear-gradient(90deg, #1488cc 0%, #2b32b2 100%);
-    /* Gradiente en el botón */
-    box-shadow: 0 4px 15px rgba(20, 136, 204, 0.3);
-    transition: transform 0.2s;
-    color: white !important;
-    /* Forza texto blanco */
+    width: 100%;
+    height: 52px;
+    border-radius: 14px !important;
+    font-size: 14.5px !important;
+    font-weight: 800 !important;
+    letter-spacing: 0.05em !important;
+    background: linear-gradient(135deg, #0284c7 0%, #10b981 50%, #059669 100%) !important;
+    color: #ffffff !important;
+    box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+    transition: all 0.25s ease !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 8px !important;
 }
 
 .main-btn:hover:not([disabled]) {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(20, 136, 204, 0.4);
+    transform: translateY(-2px) scale(1.01) !important;
+    background: linear-gradient(135deg, #0369a1 0%, #10b981 60%, #eab308 100%) !important;
+    box-shadow: 0 14px 30px -5px rgba(250, 204, 21, 0.4), 0 0 20px rgba(16, 185, 129, 0.3) !important;
+}
+
+.main-btn:active:not([disabled]) {
+    transform: translateY(0) scale(0.99) !important;
 }
 
 .main-btn:disabled {
-    background: #ccc;
+    background: rgba(51, 65, 85, 0.6) !important;
+    color: #64748b !important;
+    box-shadow: none !important;
+    opacity: 0.7;
+}
+
+.btn-arrow {
+    font-size: 18px !important;
+    width: 18px !important;
+    height: 18px !important;
+    transition: transform 0.25s ease !important;
+}
+
+.main-btn:hover:not([disabled]) .btn-arrow {
+    transform: translateX(4px) !important;
 }
 
 .loader-content {
@@ -370,52 +536,57 @@
     align-items: center;
     justify-content: center;
     gap: 10px;
+    font-size: 13.5px;
 }
 
-/* Divisor "o" */
-.divider {
+::ng-deep .custom-spinner circle {
+    stroke: #ffffff !important;
+}
+
+/* --- Card Footer Security --- */
+.card-footer-info {
+    margin-top: 28px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
     display: flex;
     align-items: center;
-    color: #999;
-    font-size: 13px;
-}
-
-.divider::before,
-.divider::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: #e0e0e0;
-}
-
-.divider span {
-    padding: 0 10px;
-}
-
-.secondary-btn {
-    height: 45px;
-    border-radius: 10px;
-    color: #555;
-    border-color: #ddd !important;
+    justify-content: center;
+    gap: 8px;
+    color: #64748b;
+    font-size: 12px;
     font-weight: 500;
 }
 
-/* --- Footer --- */
+.security-icon {
+    font-size: 16px !important;
+    width: 16px !important;
+    height: 16px !important;
+    color: #10b981;
+}
+
+/* --- Page Footer --- */
 .copyright {
-    margin-top: 30px;
-    color: rgba(255, 255, 255, 0.7);
+    margin-top: 24px;
+    color: #64748b;
     font-size: 12px;
+    font-weight: 500;
     text-align: center;
+    letter-spacing: 0.01em;
 }
 
-/* Responsive */
-@media (max-width: 500px) {
+/* --- Responsive Adaptations --- */
+@media (max-width: 480px) {
     .modern-card {
-        padding: 30px 20px;
+        padding: 32px 20px;
+        border-radius: 20px;
     }
 
-    .circle {
-        display: none;
-        /* Ocultar burbujas en móviles para rendimiento */
+    .welcome-title {
+        font-size: 21px;
     }
-}
+
+    .logo-wrapper {
+        width: 76px;
+        height: 76px;
+    }
+}

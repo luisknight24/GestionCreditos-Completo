@@ -1,6 +1,7 @@
 export interface Sesion {
-id:number,
-    nombreApellidos:string,
-    correo:string,
-    rolDescripcion:string
+    id: number;
+    nombreApellidos: string;
+    correo: string;
+    rolDescripcion: string;
+    token?: string;
 }

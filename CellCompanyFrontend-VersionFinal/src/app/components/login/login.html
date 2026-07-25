@@ -62,38 +62,43 @@
 </div> -->
 
 <div class="login-bg">
-    <div class="circle circle-1"></div>
-    <div class="circle circle-2"></div>
+    <!-- Ambient Lighting Effects (Blue top-left, Red left, Yellow right) -->
+    <div class="ambient-glow glow-blue-topleft"></div>
+    <div class="ambient-glow glow-red-left"></div>
+    <div class="ambient-glow glow-yellow-right"></div>
+    <div class="bg-grid-pattern"></div>
 
     <div class="login-container">
         <mat-card class="modern-card">
-
             <div class="header-section">
-                <div class="logo-container">
-                    <img src="cellcompay.jpg" alt="Logo Empresa" class="company-logo">
+                <div class="logo-wrapper">
+                    <div class="logo-glow"></div>
+                    <img src="cellcompay.jpg" alt="CellComPay" class="company-logo">
                 </div>
-                <h1 class="welcome-title">Bienvenido</h1>
-                <p class="welcome-subtitle">Ingresa a tu cuenta para continuar</p>
+                <h1 class="welcome-title">Bienvenido de nuevo</h1>
+                <p class="welcome-subtitle">Ingresa tu cuenta para acceder al panel de control</p>
             </div>
 
             <form [formGroup]="formLogin" (ngSubmit)="iniciarSesion()" class="login-form">
-
                 <mat-form-field appearance="outline" class="custom-field">
                     <mat-label>Correo Electrónico</mat-label>
-                    <input matInput formControlName="correo" placeholder="nombre@empresa.com" type="email">
+                    <input matInput formControlName="correo" placeholder="admin@cellcompay.com" type="email">
                     <mat-icon matPrefix class="field-icon">mail_outline</mat-icon>
-                    <mat-error *ngIf="formLogin.get('correo')?.hasError('required')">Requerido</mat-error>
-                    <mat-error *ngIf="formLogin.get('correo')?.hasError('email')">Correo inválido</mat-error>
+                    <mat-error *ngIf="formLogin.get('correo')?.hasError('required')">El correo es requerido</mat-error>
+                    <mat-error *ngIf="formLogin.get('correo')?.hasError('email')">Formato de correo inválido</mat-error>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline" class="custom-field">
                     <mat-label>Contraseña</mat-label>
-                    <input matInput [type]="ocultarPassword ? 'password' : 'text'" formControlName="clave">
+                    <input matInput [type]="ocultarPassword ? 'password' : 'text'" formControlName="clave"
+                        placeholder="••••••••">
                     <mat-icon matPrefix class="field-icon">lock_open</mat-icon>
-                    <button mat-icon-button matSuffix (click)="ocultarPassword = !ocultarPassword" type="button">
+                    <button mat-icon-button matSuffix (click)="ocultarPassword = !ocultarPassword" type="button"
+                        class="eye-btn">
                         <mat-icon>{{ocultarPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
                     </button>
-                    <mat-error *ngIf="formLogin.get('clave')?.hasError('required')">Requerido</mat-error>
+                    <mat-error *ngIf="formLogin.get('clave')?.hasError('required')">La contraseña es
+                        requerida</mat-error>
                 </mat-form-field>
 
                 <div class="actions-row">
@@ -103,29 +108,20 @@
                 </div>
 
                 <div class="buttons-section">
-                    <button mat-flat-button color="primary" class="main-btn" type="submit"
-                        [disabled]="formLogin.invalid || isLoading">
+                    <button mat-flat-button class="main-btn" type="submit" [disabled]="formLogin.invalid || isLoading">
                         <ng-container *ngIf="!isLoading">
-                            INICIAR SESIÓN
+                            <span>INICIAR SESIÓN</span>
+                            <mat-icon class="btn-arrow">arrow_forward</mat-icon>
                         </ng-container>
                         <div class="loader-content" *ngIf="isLoading">
-                            <mat-spinner diameter="20" color="accent"></mat-spinner>
-                            <span>Procesando...</span>
+                            <mat-spinner diameter="20" class="custom-spinner"></mat-spinner>
+                            <span>Autenticando...</span>
                         </div>
                     </button>
-
-                    <!-- <div class="divider">
-                        <span>o</span>
-                    </div>
-
-                    <button mat-stroked-button class="secondary-btn" type="button" (click)="agregarUsuario()">
-                        Crear nueva cuenta
-                    </button> -->
                 </div>
-
             </form>
         </mat-card>
 
-        <p class="copyright">© 2024 CellCompay. Todos los derechos reservados.</p>
+        <!-- <p class="copyright">© 2026 CellComPay Ecuador · Todos los derechos reservados</p> -->
     </div>
 </div>

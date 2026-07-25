@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml.Spreadsheet;
 using GestionIntApi.DTO;
@@ -85,6 +85,13 @@ namespace GestionIntApi.Repositorios.Implementacion
         {
             try
             {
+                if (modelo == null) modelo = new CreditoDTO();
+                if (string.IsNullOrWhiteSpace(modelo.FrecuenciaPago)) modelo.FrecuenciaPago = "mensual";
+                if (modelo.DiaPago == default) modelo.DiaPago = DateTime.UtcNow;
+                if (modelo.PlazoCuotas <= 0) modelo.PlazoCuotas = 1;
+                if (modelo.MontoTotal <= 0) modelo.MontoTotal = 1;
+                if (modelo.FechaCreacion == default) modelo.FechaCreacion = DateTime.UtcNow;
+                if (modelo.ProximaCuota == default) modelo.ProximaCuota = DateTime.UtcNow.AddMonths(1);
 
                 // =============================
                 // 1. VALIDAR SI CLIENTE TIENE CRÉDITO ACTIVO

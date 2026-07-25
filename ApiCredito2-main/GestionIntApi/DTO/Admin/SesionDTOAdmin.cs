@@ -1,4 +1,4 @@
-﻿namespace GestionIntApi.DTO.Admin
+namespace GestionIntApi.DTO.Admin
 {
     public class SesionDTOAdmin
     {
@@ -6,6 +6,6 @@
         public string? NombreApellidos { get; set; }
         public string? Correo { get; set; }
         public String? RolAdminDescripcion { get; set; }
-
+        public string? Token { get; set; }
     }
 }
