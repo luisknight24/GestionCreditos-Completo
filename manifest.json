@@ -1,11 +1,11 @@
 {
-    "name": "trabajo1",
-    "short_name": "trabajo1",
+    "name": "CELLCOMPAY",
+    "short_name": "CELLCOMPAY",
     "start_url": ".",
     "display": "standalone",
-    "background_color": "#0175C2",
-    "theme_color": "#0175C2",
-    "description": "A new Flutter project.",
+    "background_color": "#090D16",
+    "theme_color": "#10B981",
+    "description": "CELLCOMPAY - Plataforma de gestión de créditos.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
