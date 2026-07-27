@@ -1,4 +1,4 @@
-﻿
+
 using GestionIntApi.Models;
 using GestionIntApi.Models.Admin;
 using GestionIntApi.Repositorios.Contrato;
@@ -292,15 +292,15 @@ using (var scope = app.Services.CreateScope())
             context.UsuariosAdmin.Add(adminUserAdmin);
         }
 
-        if (!context.Tiendas.Any(t => t.CedulaEncargado == "0942997305"))
+        if (!context.Tiendas.Any(t => t.CedulaEncargado == "0912345675"))
         {
             var tiendaDemo = new Tienda
             {
                 NombreTienda = "Tienda Demo Central",
                 Direccion = "Av. Principal 123",
                 NombreEncargado = "Encargado Demo",
-                CedulaEncargado = "0942997305",
-                Telefono = "0942997305",
+                CedulaEncargado = "0912345675",
+                Telefono = "0991234567",
                 ValorComision = 10.00m,
                 FechaRegistro = DateTime.UtcNow
             };

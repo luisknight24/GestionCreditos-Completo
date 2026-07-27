@@ -14,6 +14,14 @@ Sistema multiplataforma diseñado para la administración descentralizada de sol
 
 - **Aplicación móvil (Flutter Web - Entorno Demo):** [https://luisknight24.github.io/GestionCreditos-Completo/](https://luisknight24.github.io/GestionCreditos-Completo/)
 
+### Datos de prueba para demostración (Sandbox)
+
+Para realizar pruebas completas de registro de usuarios e inicio de sesión en la aplicación móvil y panel web:
+
+- **Cédula del encargado de tienda válida (Requerida en Registro App Móvil - Sección 3):** `0912345675`
+- **Cédula de cliente de prueba (Sandbox):** `0952345676`
+- **Cuenta de administrador (Panel Web):** `admin@correo.com`
+
 > [!NOTE]
 > **Aviso de entorno de pruebas (Sandbox / Demostración):**
 > Este repositorio y su despliegue público corresponden a un entorno de pruebas interactivo (*Staging / Sandbox*) configurado exclusivamente para demostración y evaluación funcional. Los usuarios pueden interactuar libremente, registrando información y comprobando la funcionalidad e interactividad. La versión de producción opera sobre infraestructura independiente, dominios dedicados y políticas estrictas de cumplimiento normativo.
