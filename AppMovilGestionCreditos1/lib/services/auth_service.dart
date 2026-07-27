@@ -1,4 +1,4 @@
-﻿import 'dart:convert';
+import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../models/login_dto.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -57,10 +57,13 @@ class AuthService {
       if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
         if (data['status'] == true) {
-          // Guardar token en almacenamiento seguro
           final token = data['value']['token'];
           await storage.write(key: 'jwt_token', value: token);
-           await storage.write(key: 'usuario_id', value: data['usuarioId'].toString()); 
+          final uId = data['value']['id'] ?? data['value']['usuarioId'] ?? data['usuarioId'];
+          if (uId != null) {
+            await storage.write(key: 'usuario_id', value: uId.toString());
+            await storage.write(key: 'usuarioId', value: uId.toString());
+          }
 
           // Retornar datos del usuario y token
           return data['value'];
