@@ -29,14 +29,14 @@ Future<VerificarDTO?> verificarCuenta(VerificarDTO dto) async {
 
     if (response.statusCode == 200) {
       // Respuesta exitosa como string
-      print('✅ Solicitud de recuperación exitosa: ${response.body}');
+      print(' Solicitud de recuperación exitosa: ${response.body}');
       return dto; // simplemente retornamos el DTO enviado
     } else {
-      print('❌ Error al enviar correo: ${response.body}');
+      print(' Error al enviar correo: ${response.body}');
       return null;
     }
   } catch (e) {
-    print('⚠️ Excepción en forgotPassword: $e');
+    print('️ Excepción en forgotPassword: $e');
     return null;
   }
 }
@@ -61,18 +61,18 @@ Future<bool> verificarCuenta1(VerificarDTO dto) async {
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       if (data['status'] == true) {
-        print('✅ Código verificado correctamente');
+        print(' Código verificado correctamente');
         return true; // Retornamos éxito real
       } else {
-        print('❌ Código incorrecto o expirado: ${data['msg']}');
+        print(' Código incorrecto o expirado: ${data['msg']}');
         return false;
       }
     } else {
-      print('❌ Error HTTP: ${response.statusCode}');
+      print(' Error HTTP: ${response.statusCode}');
       return false;
     }
   } catch (e) {
-    print('⚠️ Excepción en verificarCuenta: $e');
+    print('️ Excepción en verificarCuenta: $e');
     return false;
   }
 }
@@ -134,7 +134,7 @@ Future<Map<String, dynamic>> enviarCodigoCompleto(UsuarioDTO dto) async {
 
     if (response.statusCode == 200 && data['status'] == true) {
       if (data['codigo'] != null) {
-        print('🔑 [DEBUG OTP CÓDIGO GENERADO]: ${data['codigo']}');
+        print(' [DEBUG OTP CÓDIGO GENERADO]: ${data['codigo']}');
       }
       return {'exito': true, 'msg': data['msg'] ?? 'Código enviado'};
     } else {

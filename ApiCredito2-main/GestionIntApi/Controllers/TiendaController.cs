@@ -165,7 +165,7 @@ namespace GestionIntApi.Controllers
 
         [HttpGet("tiendasApp")]
 
-        [Authorize] // 🔒 Protegido con JWT
+        [Authorize] //  Protegido con JWT
         public async Task<ActionResult<List<TiendaMostrarAppDTO>>> GetCreditosPendientesApp()
         {
             try
@@ -201,9 +201,9 @@ namespace GestionIntApi.Controllers
 
             try
             {
-                // 1. Validar correo
+                // Validar correo
 
-                // 2. Registrar usuario directamente
+                // Registrar usuario directamente
                 var nuevoCredito = await _TiendaServicios.GetTiendasCliente(tienda);
 
                 rsp.status = true;
@@ -265,7 +265,7 @@ namespace GestionIntApi.Controllers
 
             try
             {
-                // 1️⃣ Obtener ClienteId desde el JWT
+                //  Obtener ClienteId desde el JWT
                 var clienteIdClaim = User.Claims.FirstOrDefault(c => c.Type == "ClienteId");
                 if (clienteIdClaim == null)
                 {
@@ -276,7 +276,7 @@ namespace GestionIntApi.Controllers
 
                 tienda.ClienteId = int.Parse(clienteIdClaim.Value);
 
-                // 2️⃣ Crear el crédito usando el servicio
+                //  Crear el crédito usando el servicio
                 bool actualizado = await _TiendaServicios.UpdateTienda(tienda);
                 if (actualizado) {
                     rsp.status = true;
@@ -310,7 +310,7 @@ namespace GestionIntApi.Controllers
 
             try
             {
-                // 1️⃣ Obtener ClienteId desde el JWT
+                //  Obtener ClienteId desde el JWT
                 var clienteIdClaim = User.Claims.FirstOrDefault(c => c.Type == "ClienteId");
                 if (clienteIdClaim == null)
                 {
@@ -321,7 +321,7 @@ namespace GestionIntApi.Controllers
 
                 tienda.ClienteId = int.Parse(clienteIdClaim.Value);
 
-                // 2️⃣ Crear el crédito usando el servicio
+                //  Crear el crédito usando el servicio
                 var tiendaNueva = await _TiendaServicios.CreateTienda(tienda);
                
                     rsp.status = true;
@@ -344,3 +344,4 @@ namespace GestionIntApi.Controllers
 
 
 }
+

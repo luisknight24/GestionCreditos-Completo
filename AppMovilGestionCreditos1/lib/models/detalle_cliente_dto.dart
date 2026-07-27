@@ -20,7 +20,7 @@ class DetalleClienteDTO {
     //this.fotoCelularEntregadoUrl,
   });
 
- // ------------------- FROM JSON -------------------
+ 
   factory DetalleClienteDTO.fromJson(Map<String, dynamic> json) {
     return DetalleClienteDTO(
       id: json['Id'] ?? 0,
@@ -34,7 +34,7 @@ class DetalleClienteDTO {
     );
   }
 
-  // ------------------- TO JSON -------------------
+  
   Map<String, dynamic> toJson() => {
         'Id': id,
         'NumeroCedula': numeroCedula,
@@ -72,7 +72,7 @@ class DetalleClienteDTO {
     //this.fotoCelularEntregadoUrl,
   });
 
-  // ------------------- FROM JSON -------------------
+  
   factory DetalleClienteDTO.fromJson(Map<String, dynamic> json) {
     return DetalleClienteDTO(
       id: json['Id'] ?? 0,
@@ -87,7 +87,7 @@ class DetalleClienteDTO {
     );
   }
 
-  // ------------------- TO JSON -------------------
+  
   Map<String, dynamic> toJson() => {
     'Id': id,
     'NumeroCedula': numeroCedula,

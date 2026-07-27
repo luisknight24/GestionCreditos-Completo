@@ -53,6 +53,7 @@ graph TD
 - **Servidor transaccional OTP (Brevo SMTP):** Servicio de pasarela de correo encargado del despacho de códigos de verificación numéricos de 6 dígitos para la validación de cuentas e intentos de recuperación de contraseña.
 - **Panel web administrativo (Angular 18):** Interfaz exclusiva para administradores y encargados de tienda que permite la gestión de créditos, monitoreo de pagos, control de bodega, traslados entre tiendas y emisión de reportes financieros.
 - **Cliente móvil (Flutter 3.x):** Aplicación orientada a clientes finales desplegada en GitHub Pages que soporta flujos de registro multipaso guiados en tienda, verificación de OTP por correo electrónico, monitoreo de cuotas y notificaciones de cobranza.
+- **Servicios en la nube y notificaciones (Firebase Cloud):** Infraestructura en la nube encargada del almacenamiento seguro de archivos multimedia (evidencias de registro y comprobantes) y soporte para el despacho transaccional de notificaciones push en dispositivos móviles.
 - **Persistencia distribuida (PostgreSQL en Neon DB):** Base de datos relacional alojada en la nube serverless de AWS con soporte de migraciones automáticas mediante Entity Framework Core 8.
 
 ## Módulos y flujos de la aplicación móvil

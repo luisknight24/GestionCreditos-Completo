@@ -75,15 +75,15 @@ namespace GestionIntApi.Repositorios.Implementacion
         {
             try
             {
-                // 1. Guardar DetalleCliente
+                // Guardar DetalleCliente
                 var detalle = await _DetalleRepositorio.Crear(
                     _mapper.Map<DetalleCliente>(modelo.DetalleCliente)
                 );
 
-                // 2. Guardar Cliente (sin usuario)
+                // Guardar Cliente (sin usuario)
                 var cliente = new Cliente
                 {
-                    UsuarioId = null,  // 🔥 NULL porque no existe usuario
+                    UsuarioId = null,  //  NULL porque no existe usuario
                     DetalleClienteID = detalle.Id
                 };
 
@@ -95,7 +95,7 @@ namespace GestionIntApi.Repositorios.Implementacion
                 {
                     foreach (var t in modelo.TiendaApps)
                     {
-                        // 🔥 CAMBIO: Ahora TiendaApp necesita TiendaId
+                        //  CAMBIO: Ahora TiendaApp necesita TiendaId
                         // Primero debes buscar o crear la Tienda real
 
                         var tiendaExistente = await _context.Tiendas
@@ -112,8 +112,8 @@ namespace GestionIntApi.Repositorios.Implementacion
                         // Crear TiendaApp (la relación intermedia)
                         var TiendaApps = new TiendaApp
                         {
-                            TiendaId = tiendaExistente.Id,  // ✅ FK a Tiendas
-                            ClienteId = cliente.Id,          // ✅ FK a Clientes
+                            TiendaId = tiendaExistente.Id,  //  FK a Tiendas
+                            ClienteId = cliente.Id,          //  FK a Clientes
                             CedulaEncargado = t.CedulaEncargado,
                             EstadoDeComision = "Pendiente",  // O el valor que necesites
                             FechaRegistro = DateTime.UtcNow
@@ -127,7 +127,7 @@ namespace GestionIntApi.Repositorios.Implementacion
                 }
 
 
-                // 4. Guardar créditos si existen
+                // Guardar créditos si existen
                 if (modelo.Creditos != null)
                 {
                     foreach (var c in modelo.Creditos)
@@ -450,3 +450,4 @@ namespace GestionIntApi.Repositorios.Implementacion
 
     }
 }
+

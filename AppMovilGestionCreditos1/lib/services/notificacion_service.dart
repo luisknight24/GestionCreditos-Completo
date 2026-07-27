@@ -13,19 +13,19 @@ class NotificacionService {
 
   late HubConnection _connection;
   final isLoadingNotifier = ValueNotifier<bool>(false);
-  // 🟢 CACHÉ EN MEMORIA
+  //  CACHÉ EN MEMORIA
 
-  // 🟢 Notificador para UI
+  //  Notificador para UI
  // final creditosNotifier = ValueNotifier<List<NotificacionDTO>>([]);
   final mensajeNotifier = ValueNotifier<String>("");
   final notificacionesNotifier = ValueNotifier<List<NotificacionDTO>?>(null);
   final cargandoNotifier = ValueNotifier<bool>(false);
-  // 🟢 CACHÉ EN MEMORIA
+  //  CACHÉ EN MEMORIA
   List<NotificacionDTO>? _cacheNotificaciones;
 
 
   NotificacionService._internal() {
-    debugPrint("🟣 [NotificacionService] instancia creada → hash: $hashCode");
+    debugPrint(" [NotificacionService] instancia creada → hash: $hashCode");
   }
 
   static final NotificacionService _instance = NotificacionService._internal();
@@ -33,12 +33,12 @@ class NotificacionService {
     return _instance;
   }
  Future<void> connectSignalR() async {
-    debugPrint("🟡 Iniciando conexión SignalR");
+    debugPrint(" Iniciando conexión SignalR");
 
     final token = await storage.read(key: 'jwt_token');
 
     if (token == null || token.isEmpty) {
-      debugPrint("❌ TOKEN NULL O VACÍO");
+      debugPrint(" TOKEN NULL O VACÍO");
       return;
     }
 
@@ -51,27 +51,27 @@ class NotificacionService {
         )
         .build();
 
-    // 📡 Evento notificación actualizada/creada
+    //  Evento notificación actualizada/creada
     _connection.on('NotificacionActualizado', (args) {
       debugPrint("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-      debugPrint("🔔🔔🔔 EVENTO SIGNALR RECIBIDO EN FLUTTER");
+      debugPrint(" EVENTO SIGNALR RECIBIDO EN FLUTTER");
       debugPrint("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-      debugPrint("📩 Timestamp: ${DateTime.now().toString()}");
-      debugPrint("📦 Args recibidos: $args");
+      debugPrint(" Timestamp: ${DateTime.now().toString()}");
+      debugPrint(" Args recibidos: $args");
 
       if (args == null || args.isEmpty) {
-        debugPrint("⚠️ Args vacíos o null");
+        debugPrint("️ Args vacíos o null");
         debugPrint("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
         return;
       }
 
       try {
         final data = Map<String, dynamic>.from(args.first);
-        debugPrint("✅ Data parseada correctamente");
+        debugPrint(" Data parseada correctamente");
         debugPrint("   Keys: ${data.keys}");
         
         final notificacion = NotificacionDTO.fromJson(data);
-        debugPrint("✅ NotificacionDTO creado:");
+        debugPrint(" NotificacionDTO creado:");
         debugPrint("   ID: ${notificacion.id}");
         debugPrint("   Mensaje: ${notificacion.mensaje}");
         debugPrint("   Tipo: ${notificacion.tipo}");
@@ -87,30 +87,30 @@ class NotificacionService {
         debugPrint("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
         
       } catch (e, s) {
-        debugPrint("❌ Error procesando evento: $e");
-        debugPrint("📛 Stack: $s");
+        debugPrint(" Error procesando evento: $e");
+        debugPrint(" Stack: $s");
         debugPrint("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
       }
     });
 
-    // 🔌 Ciclo de vida de conexión
-    _connection.onclose((e) => debugPrint("⚡ SignalR cerrado | $e"));
+    //  Ciclo de vida de conexión
+    _connection.onclose((e) => debugPrint(" SignalR cerrado | $e"));
     _connection.onreconnecting(
-      (e) => debugPrint("🔄 SignalR reconectando | $e"),
+      (e) => debugPrint(" SignalR reconectando | $e"),
     );
     _connection.onreconnected(
-      (id) => debugPrint("✅ SignalR reconectado - ConnectionId: $id"),
+      (id) => debugPrint(" SignalR reconectado - ConnectionId: $id"),
     );
 
     try {
-      debugPrint("🚀 Intentando conectar SignalR...");
+      debugPrint(" Intentando conectar SignalR...");
       await _connection.start();
       debugPrint(
-        "✅ SignalR CONECTADO | ConnectionId: ${_connection.connectionId}",
+        " SignalR CONECTADO | ConnectionId: ${_connection.connectionId}",
       );
     } catch (e, s) {
-      debugPrint("❌ ERROR AL CONECTAR SIGNALR | $e");
-      debugPrint("📛 Stack: $s");
+      debugPrint(" ERROR AL CONECTAR SIGNALR | $e");
+      debugPrint(" Stack: $s");
     }
   }
 
@@ -118,7 +118,7 @@ class NotificacionService {
 
     // 1️⃣ Si hay caché y no forzamos refresh → devolver
     if (_cacheNotificaciones != null && !forceRefresh) {
-      print("⚡ Notificacion desde caché");
+      print(" Notificacion desde caché");
       return _cacheNotificaciones!;
     }
 
@@ -137,7 +137,7 @@ class NotificacionService {
       },
     );
 
-    print("🌐 Notificacion desde API");
+    print(" Notificacion desde API");
 
     if (response.statusCode == 200) {
       final List decoded = jsonDecode(response.body);
@@ -155,7 +155,7 @@ class NotificacionService {
 
   // 1️⃣ Si hay caché y no forzamos refresh → devolver
   if (_cacheNotificaciones != null && !forceRefresh) {
-    debugPrint("⚡ Notificacion desde caché");
+    debugPrint(" Notificacion desde caché");
     return _cacheNotificaciones!;
   }
 
@@ -174,7 +174,7 @@ class NotificacionService {
     },
   );
 
-  debugPrint("🌐 Notificacion desde API");
+  debugPrint(" Notificacion desde API");
 
   if (response.statusCode == 200) {
     final List decoded = jsonDecode(response.body);
@@ -183,7 +183,7 @@ class NotificacionService {
         .map((item) => NotificacionDTO.fromJson(item))
         .toList();
 
-    // 🔥🔥🔥 ESTA LÍNEA FALTABA
+    //  ESTA LÍNEA FALTABA
     notificacionesNotifier.value = List.from(_cacheNotificaciones!);
 
     return _cacheNotificaciones!;
@@ -195,7 +195,7 @@ class NotificacionService {
 }
 
 
-  // 🧹 Limpiar caché
+  //  Limpiar caché
   void clearCache() {
     _cacheNotificaciones = null;
   }
@@ -203,15 +203,15 @@ class NotificacionService {
 
 
    void _actualizarNotificacionDesdeEvento(NotificacionDTO nueva) {
-  debugPrint("🔄 [NotifService] _actualizarNotificacionDesdeEvento llamado");
+  debugPrint(" [NotifService] _actualizarNotificacionDesdeEvento llamado");
   debugPrint("   Notificación ID: ${nueva.id}");
   debugPrint("   Cache actual es null? ${_cacheNotificaciones == null}");
   
   if (_cacheNotificaciones == null) {
-    debugPrint("⚠️ [NotifService] Cache null, inicializando...");
+    debugPrint("️ [NotifService] Cache null, inicializando...");
     _cacheNotificaciones = [nueva];
     notificacionesNotifier.value = List.from(_cacheNotificaciones!);
-    debugPrint("✅ [NotifService] Cache inicializado con 1 notificación");
+    debugPrint(" [NotifService] Cache inicializado con 1 notificación");
     return;
   }
 
@@ -219,27 +219,27 @@ class NotificacionService {
   debugPrint("   Index encontrado: $index");
   
   if (index == -1) {
-    // ✅ NUEVA NOTIFICACIÓN
-    debugPrint("➕ [NotifService] Nueva notificación agregada | ID: ${nueva.id}");
+    //  NUEVA NOTIFICACIÓN
+    debugPrint(" [NotifService] Nueva notificación agregada | ID: ${nueva.id}");
     _cacheNotificaciones!.insert(0, nueva);
   } else {
-    // ✅ ACTUALIZACIÓN
-    debugPrint("🔄 [NotifService] Notificación actualizada | ID: ${nueva.id}");
+    //  ACTUALIZACIÓN
+    debugPrint(" [NotifService] Notificación actualizada | ID: ${nueva.id}");
     _cacheNotificaciones![index] = nueva;
   }
 
-  // 🔔 FORZAR ACTUALIZACIÓN DEL NOTIFIER
-  debugPrint("🔔 [NotifService] Actualizando notifier...");
+  //  FORZAR ACTUALIZACIÓN DEL NOTIFIER
+  debugPrint(" [NotifService] Actualizando notifier...");
   final nuevaLista = List<NotificacionDTO>.from(_cacheNotificaciones!);
   notificacionesNotifier.value = nuevaLista;
   
-  debugPrint("✅ [NotifService] Notifier actualizado");
+  debugPrint(" [NotifService] Notifier actualizado");
   debugPrint("   Total notificaciones: ${nuevaLista.length}");
   debugPrint("   No leídas: ${nuevaLista.where((n) => !n.leida).length}");
   debugPrint("   Valor actual del notifier: ${notificacionesNotifier.value?.length}");
 }
 
-  /// 📬 Marcar notificación como leída
+  ///  Marcar notificación como leída
 Future<void> marcarComoLeida(int notificacionId) async {
   try {
     final token = await storage.read(key: 'jwt_token');
@@ -249,7 +249,7 @@ Future<void> marcarComoLeida(int notificacionId) async {
 
     final url = Uri.parse('$baseUrl/Notificacion/marcar-leida/$notificacionId');
 
-    debugPrint("📤 Marcando notificación como leída | ID: $notificacionId");
+    debugPrint(" Marcando notificación como leída | ID: $notificacionId");
 
     final response = await http.post(
       url,
@@ -260,15 +260,15 @@ Future<void> marcarComoLeida(int notificacionId) async {
     );
 
     if (response.statusCode == 204) {
-      debugPrint("✅ Notificación marcada como leída | ID: $notificacionId");
+      debugPrint(" Notificación marcada como leída | ID: $notificacionId");
       
-      // 🔄 Actualizar caché local
+      //  Actualizar caché local
       if (_cacheNotificaciones != null) {
         final index = _cacheNotificaciones!.indexWhere((n) => n.id == notificacionId);
         if (index != -1) {
           _cacheNotificaciones![index].leida = true;
           notificacionesNotifier.value = List.from(_cacheNotificaciones!);
-          debugPrint("🔄 Caché actualizado localmente");
+          debugPrint(" Caché actualizado localmente");
         }
       }
     } else {
@@ -277,20 +277,20 @@ Future<void> marcarComoLeida(int notificacionId) async {
       );
     }
   } catch (e) {
-    debugPrint("❌ Error en marcarComoLeida: $e");
+    debugPrint(" Error en marcarComoLeida: $e");
     rethrow;
   }
 }
 
-  /// 🧹 LIMPIAR ESTADO AL CAMBIAR DE USUARIO
+  ///  LIMPIAR ESTADO AL CAMBIAR DE USUARIO
   Future<void> limpiar() async {
-    debugPrint("🧹 [creditoMostrarHome] limpiando estado");
+    debugPrint(" [creditoMostrarHome] limpiando estado");
 
     // 1️⃣ Detener SignalR
     try {
       if (_connection.state == HubConnectionState.connected) {
         await _connection.stop();
-        debugPrint("🔌 SignalR detenido");
+        debugPrint(" SignalR detenido");
       }
     } catch (_) {}
 

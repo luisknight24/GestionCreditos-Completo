@@ -32,7 +32,7 @@ class _CreditDataScreenState extends State<CreditDataScreen> {
   // NUEVO: Controlador IMEI
   final _imeiCtrl = TextEditingController();
 
-  // ✅ NUEVO CONTROLADOR PARA CRÉDITO
+  //  NUEVO CONTROLADOR PARA CRÉDITO
   final _propietarioCreditoCtrl = TextEditingController();
 
   String _frecuencia = 'Semanal';
@@ -48,8 +48,8 @@ class _CreditDataScreenState extends State<CreditDataScreen> {
   final _capacidadCtrl = TextEditingController();
 
   // VARIABLES PARA LAS FOTOS
-  // File? _fotoContrato; // 📸 COMENTADO
-  // File? _fotoCelular;  // 📸 COMENTADO
+  // File? _fotoContrato; //  COMENTADO
+  // File? _fotoCelular;  //  COMENTADO
   bool _isUploading = false;
 
   @override
@@ -113,13 +113,13 @@ class _CreditDataScreenState extends State<CreditDataScreen> {
       return;
     }
 
-    // ✅ VALIDAR PROPIETARIO
+    //  VALIDAR PROPIETARIO
     if (_propietarioCreditoCtrl.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('El propietario del crédito es requerido'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('El Propietario del crédito es requerido'), backgroundColor: Colors.red));
       return;
     }
 
-    // --- VALIDACIÓN DE CUOTAS DINÁMICA ---
+    
     final int cuotasIngresadas = int.tryParse(_cuotasCtrl.text) ?? 0;
     int maxCuotas = 24; // Default Mensual
 
@@ -133,7 +133,7 @@ class _CreditDataScreenState extends State<CreditDataScreen> {
       );
       return;
     }
-    // ------------------------------------
+    
 
     // VALIDAR IMEI SI ES TELÉFONO
     if (_tipoProducto == 'Teléfono' && _imeiCtrl.text.isEmpty) {
@@ -141,7 +141,7 @@ class _CreditDataScreenState extends State<CreditDataScreen> {
       return;
     }
 
-    // ✅ VALIDAR CAPACIDAD SI ES TELÉFONO (Opcional, o siempre)
+    //  VALIDAR CAPACIDAD SI ES TELÉFONO (Opcional, o siempre)
     if (_capacidadCtrl.text.isNotEmpty) {
       final cap = int.tryParse(_capacidadCtrl.text);
       if (cap == null || cap > 2000) {
@@ -150,9 +150,9 @@ class _CreditDataScreenState extends State<CreditDataScreen> {
       }
     }
 
-    // ------------------------------------
+    
 
-    /* 📸 VALIDACIÓN DE FOTOS COMENTADA
+    /*  VALIDACIÓN DE FOTOS COMENTADA
     // 1. VALIDAR FOTOS
     if (_fotoContrato == null || _fotoCelular == null) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Debes subir fotos de Contrato y Celular'), backgroundColor: Colors.red));
@@ -177,7 +177,7 @@ class _CreditDataScreenState extends State<CreditDataScreen> {
               children: [
                 CircularProgressIndicator(),
                 SizedBox(height: 20),
-                // ✅ CAMBIO: TEXTO SOLICITADO
+                //  CAMBIO: TEXTO SOLICITADO
                 Text("Procesando solicitud...", style: TextStyle(fontWeight: FontWeight.bold))
               ]
           ),
@@ -186,17 +186,17 @@ class _CreditDataScreenState extends State<CreditDataScreen> {
     );
 
     try {
-      // final firebaseService = FirebaseService(); // 📸 COMENTADO
+      // final firebaseService = FirebaseService(); //  COMENTADO
 
       // 2. SUBIR EVIDENCIAS
-      // String? urlContrato = await firebaseService.uploadImage(_fotoContrato!, 'contratos'); // 📸 COMENTADO
-      // String? urlCelular = await firebaseService.uploadImage(_fotoCelular!, 'celulares');   // 📸 COMENTADO
+      // String? urlContrato = await firebaseService.uploadImage(_fotoContrato!, 'contratos'); //  COMENTADO
+      // String? urlCelular = await firebaseService.uploadImage(_fotoCelular!, 'celulares');   //  COMENTADO
 
-      /* 📸 VALIDACIÓN URL COMENTADA
+      /*  VALIDACIÓN URL COMENTADA
       if (urlContrato == null || urlCelular == null) throw Exception("Error al subir evidencias");
       */
 
-      // ⚠️ ELIMINADO: if (mounted) Navigator.pop(context); (ESTO CERRABA EL DIALOGO MUY RÁPIDO)
+      // ️ ELIMINADO: if (mounted) Navigator.pop(context); (ESTO CERRABA EL DIALOGO MUY RÁPIDO)
 
       // 3. CREAR DTO
       final credito = CreditoDTO(
@@ -216,13 +216,13 @@ class _CreditDataScreenState extends State<CreditDataScreen> {
         estadoCuota: "Pendiente",
         abonadoTotal: 0.0,
         // ASIGNAMOS LAS URLS
-        fotoContratoUrl: null, // urlContrato, // 📸 URL COMENTADA
-        fotoCelularUrl: null,  // urlCelular,  // 📸 URL COMENTADA
+        fotoContratoUrl: null, // urlContrato, //  URL COMENTADA
+        fotoCelularUrl: null,  // urlCelular,  //  URL COMENTADA
 
         // NUEVOS CAMPOS PRODUCTO
         tipoProducto: _tipoProducto,
         imei: (_tipoProducto == 'Teléfono') ? _imeiCtrl.text : null,
-        // ✅ ASIGNACIÓN AL DTO
+        //  ASIGNACIÓN AL DTO
         nombrePropietario: _propietarioCreditoCtrl.text,
         capacidad: int.tryParse(_capacidadCtrl.text),
       );
@@ -243,7 +243,7 @@ class _CreditDataScreenState extends State<CreditDataScreen> {
 
       final resultado = await validarCuenta.enviarCodigoCompleto(usuarioFinal);
 
-      // ✅ CAMBIO: AHORA SÍ CERRAMOS EL DIALOGO, JUSTO ANTES DE CAMBIAR DE PANTALLA
+      //  CAMBIO: AHORA SÍ CERRAMOS EL DIALOGO, JUSTO ANTES DE CAMBIAR DE PANTALLA
       if (mounted) Navigator.pop(context);
 
       setState(() => _isUploading = false);
@@ -253,7 +253,7 @@ class _CreditDataScreenState extends State<CreditDataScreen> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(resultado['msg'] ?? 'El correo o número de cédula ya se encuentra registrado.'),
+            content: Text(resultado['msg'] ?? 'El correo o Número de cédula ya se encuentra registrado.'),
             backgroundColor: Colors.red,
             duration: const Duration(seconds: 5),
           ),
@@ -267,9 +267,9 @@ class _CreditDataScreenState extends State<CreditDataScreen> {
     }
   }
 
-  // ----------------------------------------------------------------------
-  // 🟢 WIDGET CALCULADORA VISUAL
-  // ----------------------------------------------------------------------
+  
+  //  WIDGET CALCULADORA VISUAL
+  
   Widget _buildCalculatorVisualizer(ThemeData theme) {
     if (_montoFinanciar <= 0) return const SizedBox.shrink();
 
@@ -291,7 +291,7 @@ class _CreditDataScreenState extends State<CreditDataScreen> {
             children: [
               const Icon(Icons.calculate, size: 20, color: Colors.grey),
               const SizedBox(width: 5),
-              Text("Desglose del Cálculo", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[700])),
+              Text("Desglose del cálculo", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[700])),
             ],
           ),
           const SizedBox(height: 15),
@@ -318,7 +318,7 @@ class _CreditDataScreenState extends State<CreditDataScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 decoration: BoxDecoration(color: Colors.green[100], borderRadius: BorderRadius.circular(8)),
-                child: Column(children: [Text("\$${_valorCuota.toStringAsFixed(2)}", style: valueStyle.copyWith(color: Colors.green[800])), Text("Cuota Final", style: labelStyle)]),
+                child: Column(children: [Text("\$${_valorCuota.toStringAsFixed(2)}", style: valueStyle.copyWith(color: Colors.green[800])), Text("Cuota final", style: labelStyle)]),
               ),
             ],
           ),
@@ -336,13 +336,13 @@ class _CreditDataScreenState extends State<CreditDataScreen> {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            // --- RESUMEN ---
+            
             Container(
               padding: const EdgeInsets.all(20),
               decoration: BoxDecoration(color: theme.primaryColor, borderRadius: BorderRadius.circular(15)),
               child: Column(
                 children: [
-                  const Text('Saldo a Financiar', style: TextStyle(color: Colors.white70)),
+                  const Text('Saldo a financiar', style: TextStyle(color: Colors.white70)),
                   Text('\$${_montoFinanciar.toStringAsFixed(2)}', style: const TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold)),
                   const SizedBox(height: 10),
                   const Divider(color: Colors.white24),
@@ -355,21 +355,21 @@ class _CreditDataScreenState extends State<CreditDataScreen> {
             ),
             const SizedBox(height: 20),
 
-            // ✅ CAMPO PROPIETARIO CREDITO (PRIMERA OPCIÓN)
+            //  CAMPO PROPIETARIO CREDITO (PRIMERA OPCIÓN)
             CustomTextField(
-              label: 'Propietario del Crédito',
+              label: 'Propietario del crédito',
               controller: _propietarioCreditoCtrl,
               icon: Icons.person_pin,
               validator: (v) => v!.isEmpty ? 'Requerido' : null,
             ),
             const SizedBox(height: 15),
 
-            // --- NUEVO: TIPO PRODUCTO Y MARCA ---
+            
             Row(
               children: [
                 Expanded(
                   child: DropdownButtonFormField<String>(
-                    decoration: const InputDecoration(labelText: 'Tipo Producto', border: OutlineInputBorder()),
+                    decoration: const InputDecoration(labelText: 'Tipo producto', border: OutlineInputBorder()),
                     value: _tipoProducto,
                     items: _tiposProducto.map((t) => DropdownMenuItem(value: t, child: Text(t))).toList(),
                     onChanged: (val) {
@@ -383,7 +383,7 @@ class _CreditDataScreenState extends State<CreditDataScreen> {
             ),
             const SizedBox(height: 15),
 
-            // --- FILA 1: MODELO y CAPACIDAD ---
+            
             Row(
               children: [
                 Expanded(flex: 2, child: CustomTextField(label: 'Modelo', controller: _modeloCtrl, icon: Icons.devices)),
@@ -409,7 +409,7 @@ class _CreditDataScreenState extends State<CreditDataScreen> {
               ],
             ),
 
-            // --- FILA 2: IMEI (Si es teléfono, abajo) ---
+            
             if (_tipoProducto == 'Teléfono') ...[
               const SizedBox(height: 15),
               CustomTextField(label: 'IMEI', controller: _imeiCtrl, icon: Icons.qr_code),
@@ -417,37 +417,37 @@ class _CreditDataScreenState extends State<CreditDataScreen> {
 
             const SizedBox(height: 15),
 
-            // --- CAMPOS ---
-            // ✏️ CAMBIO ESTÉTICO: Ícono más general
-            CustomTextField(label: 'Precio Equipo (Total)', controller: _precioCtrl, keyboardType: TextInputType.number, icon: Icons.monetization_on_outlined),
+            
+            // ️ CAMBIO ESTÉTICO: Ícono más general
+            CustomTextField(label: 'Precio equipo (total)', controller: _precioCtrl, keyboardType: TextInputType.number, icon: Icons.monetization_on_outlined),
             const SizedBox(height: 15),
-            CustomTextField(label: 'Entrada (Pago Inicial)', controller: _entradaCtrl, keyboardType: TextInputType.number, icon: Icons.monetization_on),
+            CustomTextField(label: 'Entrada (pago inicial)', controller: _entradaCtrl, keyboardType: TextInputType.number, icon: Icons.monetization_on),
             const SizedBox(height: 15),
 
 
-            CustomTextField(label: 'Plazo (Cuotas)', controller: _cuotasCtrl, keyboardType: TextInputType.number, icon: Icons.calendar_view_week),
+            CustomTextField(label: 'Plazo (cuotas)', controller: _cuotasCtrl, keyboardType: TextInputType.number, icon: Icons.calendar_view_week),
             const SizedBox(height: 20),
             DropdownButtonFormField<String>(
               value: _frecuencia,
-              decoration: InputDecoration(labelText: 'Frecuencia de Pago', border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
+              decoration: InputDecoration(labelText: 'Frecuencia de pago', border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
               items: ['Semanal', 'Quincenal', 'Mensual'].map((String value) => DropdownMenuItem<String>(value: value, child: Text(value))).toList(),
               onChanged: (val) { setState(() { _frecuencia = val!; _calcularValores(); }); },
             ),
             const SizedBox(height: 20),
             ListTile(
-              title: const Text('Fecha de Inicio / Pago'), subtitle: Text(DateFormat('dd MMMM yyyy').format(_fechaPago)),
+              title: const Text('Fecha de inicio / pago'), subtitle: Text(DateFormat('dd MMMM yyyy').format(_fechaPago)),
               trailing: const Icon(Icons.calendar_today),
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: BorderSide(color: Colors.grey.withOpacity(0.5))),
               onTap: _seleccionarFecha,
             ),
 
-            // 🟢 AQUÍ INSERTAMOS LA CALCULADORA VISUAL
+            //  AQUÍ INSERTAMOS LA CALCULADORA VISUAL
             _buildCalculatorVisualizer(theme),
 
             const SizedBox(height: 30),
 
-            /* 📸 SECCIÓN EVIDENCIAS COMENTADA
-            // --- SECCIÓN EVIDENCIAS (NUEVO) ---
+            /*  SECCIÓN EVIDENCIAS COMENTADA
+            
             const Divider(),
             const Text("EVIDENCIA DIGITAL", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
             const SizedBox(height: 15),
@@ -467,7 +467,7 @@ class _CreditDataScreenState extends State<CreditDataScreen> {
                 child: ElevatedButton(
                     style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
                     onPressed: _finalizarRegistro,
-                    child: const Text('FINALIZAR Y VERIFICAR', style: TextStyle(fontSize: 16))
+                    child: const Text('Finalizar y verificar', style: TextStyle(fontSize: 16))
                 )
             ),
           ],
@@ -480,6 +480,7 @@ class _CreditDataScreenState extends State<CreditDataScreen> {
 
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
@@ -555,7 +556,7 @@ class _CreditDataScreenState extends State<CreditDataScreen> {
   void _calcularValores() {
     final precio = double.tryParse(_precioCtrl.text) ?? 0;
 
-    // 🔥 SI ES CONTADO, NO HAY DEUDA
+    //  SI ES CONTADO, NO HAY DEUDA
     if (_esContado) {
       setState(() {
         _montoFinanciar = 0;
@@ -565,7 +566,7 @@ class _CreditDataScreenState extends State<CreditDataScreen> {
       return;
     }
 
-    // 🔥 SI ES CRÉDITO, CALCULAMOS
+    //  SI ES CRÉDITO, CALCULAMOS
     final entrada = double.tryParse(_entradaCtrl.text) ?? 0;
     final cuotas = int.tryParse(_cuotasCtrl.text) ?? 1;
 
@@ -677,7 +678,7 @@ class _CreditDataScreenState extends State<CreditDataScreen> {
 
       // 4. Crear DTO
       final credito = CreditoDTO(
-        esVentaContado: _esContado, // 🔥 Flag importante
+        esVentaContado: _esContado, //  Flag importante
         montoTotal: precioTotal,
         entrada: entradaFinal,
         montoPendiente: montoPendienteFinal,
@@ -727,7 +728,7 @@ class _CreditDataScreenState extends State<CreditDataScreen> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(resultado['msg'] ?? 'El correo o número de cédula ya se encuentra registrado.'),
+            content: Text(resultado['msg'] ?? 'El correo o Número de cédula ya se encuentra registrado.'),
             backgroundColor: Colors.red,
             duration: const Duration(seconds: 5),
           ),
@@ -741,56 +742,91 @@ class _CreditDataScreenState extends State<CreditDataScreen> {
     }
   }
 
+  String _formatearFechaEs(DateTime fecha) {
+    const meses = [
+      'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio',
+      'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre'
+    ];
+    return '${fecha.day} de ${meses[fecha.month - 1]} de ${fecha.year}';
+  }
+
   // Widget Calculadora Visual
   Widget _buildCalculatorVisualizer(ThemeData theme) {
     if (_montoFinanciar <= 0) return const SizedBox.shrink();
 
-    final TextStyle valueStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: theme.primaryColor);
-    final TextStyle labelStyle = TextStyle(fontSize: 12, color: Colors.grey[600]);
+    const TextStyle valueStyle = TextStyle(fontWeight: FontWeight.bold, fontSize: 14, color: Color(0xFF38BDF8));
+    const TextStyle labelStyle = TextStyle(fontSize: 10.5, color: Color(0xFF94A3B8));
 
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 20),
-      padding: const EdgeInsets.all(15),
+      margin: const EdgeInsets.symmetric(vertical: 16),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: Colors.grey[100],
-        borderRadius: BorderRadius.circular(15),
-        border: Border.all(color: Colors.grey[300]!),
+        color: const Color(0x991E293B),
+        borderRadius: BorderRadius.circular(16),
+        border: Border.all(color: Colors.white.withOpacity(0.12)),
       ),
       child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.calculate, size: 20, color: Colors.grey),
-              const SizedBox(width: 5),
-              Text("Desglose del Cálculo", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[700])),
+              const Icon(Icons.calculate_outlined, size: 16, color: Color(0xFF94A3B8)),
+              const SizedBox(width: 6),
+              Text("Desglose del cálculo", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 12.5, color: Colors.white.withOpacity(0.9))),
             ],
           ),
-          const SizedBox(height: 15),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Column(children: [Text("\$${_precioCtrl.text}", style: valueStyle), Text("Precio", style: labelStyle)]),
-              const Icon(Icons.remove_circle_outline, size: 20, color: Colors.redAccent),
-              Column(children: [Text("\$${_entradaCtrl.text.isEmpty ? '0' : _entradaCtrl.text}", style: valueStyle), Text("Entrada", style: labelStyle)]),
-              const Icon(Icons.drag_handle, size: 20, color: Colors.grey),
-              Column(children: [Text("\$${_montoFinanciar.toStringAsFixed(2)}", style: valueStyle), Text("A Financiar", style: labelStyle)]),
-            ],
+          const SizedBox(height: 12),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Column(children: [Text("\$${_precioCtrl.text}", style: valueStyle), Text("Precio", style: labelStyle)]),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 6),
+                  child: Icon(Icons.remove_circle_outline, size: 16, color: Color(0xFFF87171)),
+                ),
+                Column(children: [Text("\$${_entradaCtrl.text.isEmpty ? '0' : _entradaCtrl.text}", style: valueStyle), Text("Entrada", style: labelStyle)]),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 6),
+                  child: Icon(Icons.drag_handle, size: 16, color: Color(0xFF94A3B8)),
+                ),
+                Column(children: [Text("\$${_montoFinanciar.toStringAsFixed(2)}", style: valueStyle), Text("A Financiar", style: labelStyle)]),
+              ],
+            ),
           ),
-          const Divider(height: 25),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Column(children: [Text("\$${_montoFinanciar.toStringAsFixed(2)}", style: valueStyle), Text("Saldo", style: labelStyle)]),
-              const Icon(Icons.percent, size: 20, color: Colors.orangeAccent),
-              Column(children: [Text(_cuotasCtrl.text.isEmpty ? '1' : _cuotasCtrl.text, style: valueStyle), Text("Pagos ($_frecuencia)", style: labelStyle)]),
-              const Icon(Icons.arrow_right_alt, size: 30, color: Colors.green),
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-                decoration: BoxDecoration(color: Colors.green[100], borderRadius: BorderRadius.circular(8)),
-                child: Column(children: [Text("\$${_valorCuota.toStringAsFixed(2)}", style: valueStyle.copyWith(color: Colors.green[800])), Text("Cuota Final", style: labelStyle)]),
-              ),
-            ],
+          Divider(height: 20, color: Colors.white.withOpacity(0.1)),
+          FittedBox(
+            fit: BoxFit.scaleDown,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                Column(children: [Text("\$${_montoFinanciar.toStringAsFixed(2)}", style: valueStyle), Text("Saldo", style: labelStyle)]),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 6),
+                  child: Icon(Icons.percent, size: 16, color: Color(0xFFFBBF24)),
+                ),
+                Column(children: [Text(_cuotasCtrl.text.isEmpty ? '1' : _cuotasCtrl.text, style: valueStyle), Text("Pagos ($_frecuencia)", style: labelStyle)]),
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 6),
+                  child: Icon(Icons.arrow_right_alt, size: 20, color: Color(0xFF10B981)),
+                ),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFF10B981).withOpacity(0.2),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(color: const Color(0xFF10B981).withOpacity(0.4)),
+                  ),
+                  child: Column(
+                    children: [
+                      Text("\$${_valorCuota.toStringAsFixed(2)}", style: valueStyle.copyWith(color: const Color(0xFF10B981))),
+                      Text("Cuota final", style: labelStyle.copyWith(color: const Color(0xFF6EE7B7))),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ],
       ),
@@ -799,178 +835,480 @@ class _CreditDataScreenState extends State<CreditDataScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final size = MediaQuery.of(context).size;
+
     return Scaffold(
-      appBar: AppBar(title: const Text('Paso 4: Configuración de venta')),
+      backgroundColor: const Color(0xFF090D16),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            // --- SELECTOR DE TIPO DE VENTA ---
-            Container(
-              margin: const EdgeInsets.only(bottom: 20),
-              width: double.infinity,
-              padding: const EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                  color: Colors.grey[200],
-                  borderRadius: BorderRadius.circular(10)
-              ),
-              child: Row(
-                children: _tiposVenta.map((tipo) {
-                  final isSelected = _tipoVenta == tipo;
-                  return Expanded(
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          _tipoVenta = tipo;
-                          _calcularValores();
-                        });
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(vertical: 12),
-                        decoration: BoxDecoration(
-                            color: isSelected ? theme.primaryColor : Colors.transparent,
-                            borderRadius: BorderRadius.circular(8),
-                            boxShadow: isSelected ? [BoxShadow(color: Colors.black12, blurRadius: 4)] : []
-                        ),
-                        child: Text(
-                          tipo,
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: isSelected ? Colors.white : Colors.grey[700]
-                          ),
-                        ),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: size.height),
+          child: IntrinsicHeight(
+            child: Stack(
+              children: [
+                // FONDO SECCIONADO CON GRADIENTES RADIALES
+                Positioned.fill(
+                  child: Container(color: const Color(0xFF090D16)),
+                ),
+                Positioned.fill(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: RadialGradient(
+                        center: const Alignment(-0.95, -0.95),
+                        radius: 0.85,
+                        colors: [
+                          const Color(0xFF0284C7).withOpacity(0.35),
+                          Colors.transparent,
+                        ],
                       ),
                     ),
-                  );
-                }).toList(),
-              ),
-            ),
-
-            // --- RESUMEN DE FINANCIAMIENTO (Solo si es Crédito) ---
-            if (!_esContado) ...[
-              Container(
-                padding: const EdgeInsets.all(20),
-                decoration: BoxDecoration(color: theme.primaryColor, borderRadius: BorderRadius.circular(15)),
-                child: Column(
-                  children: [
-                    const Text('Saldo a Financiar', style: TextStyle(color: Colors.white70)),
-                    Text('\$${_montoFinanciar.toStringAsFixed(2)}', style: const TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.bold)),
-                    const SizedBox(height: 10),
-                    const Divider(color: Colors.white24),
-                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                      Text('Cuota: \$${_valorCuota.toStringAsFixed(2)}', style: const TextStyle(color: Colors.white, fontSize: 16)),
-                      Text('Prox: ${DateFormat('dd/MM').format(_proximaCuota)}', style: const TextStyle(color: Colors.greenAccent)),
-                    ])
-                  ],
-                ),
-              ),
-              const SizedBox(height: 20),
-            ],
-
-            // --- FORMULARIO COMÚN ---
-            CustomTextField(
-              label: 'Propietario del Crédito',
-              controller: _propietarioCreditoCtrl,
-              icon: Icons.person_pin,
-              validator: (v) => v!.isEmpty ? 'Requerido' : null,
-            ),
-            const SizedBox(height: 15),
-
-            Row(
-              children: [
-                Expanded(
-                  child: DropdownButtonFormField<String>(
-                    decoration: const InputDecoration(labelText: 'Tipo Producto', border: OutlineInputBorder()),
-                    value: _tipoProducto,
-                    items: _tiposProducto.map((t) => DropdownMenuItem(value: t, child: Text(t))).toList(),
-                    onChanged: (val) => setState(() => _tipoProducto = val!),
                   ),
                 ),
-                const SizedBox(width: 10),
-                Expanded(child: CustomTextField(label: 'Marca', controller: _marcaCtrl, icon: Icons.branding_watermark)),
-              ],
-            ),
-            const SizedBox(height: 15),
+                Positioned.fill(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: RadialGradient(
+                        center: const Alignment(0.95, 0.2),
+                        radius: 1.55,
+                        colors: [
+                          const Color(0xFFFACC15).withOpacity(0.35),
+                          Colors.transparent,
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
 
-            Row(
-              children: [
-                Expanded(flex: 2, child: CustomTextField(label: 'Modelo', controller: _modeloCtrl, icon: Icons.devices)),
-                const SizedBox(width: 10),
-                Expanded(
-                    flex: 1,
-                    child: CustomTextField(
-                      label: 'Cap.',
-                      controller: _capacidadCtrl,
-                      keyboardType: TextInputType.number,
-                      suffixText: 'GB',
-                    )
+                SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+                          onPressed: () => context.pop(),
+                        ),
+                        const SizedBox(height: 10),
+
+                        FadeInDown(
+                          duration: const Duration(milliseconds: 600),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF10B981).withOpacity(0.2),
+                                  borderRadius: BorderRadius.circular(20),
+                                  border: Border.all(color: const Color(0xFF10B981).withOpacity(0.4)),
+                                ),
+                                child: const Text(
+                                  'Paso 4 de 4',
+                                  style: TextStyle(
+                                    color: Color(0xFF10B981),
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              const Text(
+                                'Configuración de venta',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 28,
+                                  fontWeight: FontWeight.w800,
+                                  letterSpacing: -0.5,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                'Selecciona las condiciones comerciales de la venta',
+                                style: TextStyle(
+                                  color: Colors.white.withOpacity(0.7),
+                                  fontSize: 13.5,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(height: 24),
+
+                        FadeInUp(
+                          duration: const Duration(milliseconds: 800),
+                          child: Container(
+                            padding: const EdgeInsets.all(20),
+                            decoration: BoxDecoration(
+                              color: const Color(0xEE0F172A),
+                              borderRadius: BorderRadius.circular(24),
+                              border: Border.all(color: Colors.white.withOpacity(0.12)),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.5),
+                                  blurRadius: 25,
+                                  offset: const Offset(0, 10),
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                
+                                Container(
+                                  margin: const EdgeInsets.only(bottom: 20),
+                                  width: double.infinity,
+                                  padding: const EdgeInsets.all(4),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFF1E293B),
+                                    borderRadius: BorderRadius.circular(14),
+                                  ),
+                                  child: Row(
+                                    children: _tiposVenta.map((tipo) {
+                                      final isSelected = _tipoVenta == tipo;
+                                      return Expanded(
+                                        child: GestureDetector(
+                                          onTap: () {
+                                            setState(() {
+                                              _tipoVenta = tipo;
+                                              _calcularValores();
+                                            });
+                                          },
+                                          child: AnimatedContainer(
+                                            duration: const Duration(milliseconds: 250),
+                                            padding: const EdgeInsets.symmetric(vertical: 12),
+                                            decoration: BoxDecoration(
+                                              color: isSelected ? const Color(0xFF10B981) : Colors.transparent,
+                                              borderRadius: BorderRadius.circular(10),
+                                              boxShadow: isSelected
+                                                  ? [BoxShadow(color: const Color(0xFF10B981).withOpacity(0.3), blurRadius: 8)]
+                                                  : [],
+                                            ),
+                                            child: Text(
+                                              tipo,
+                                              textAlign: TextAlign.center,
+                                              style: TextStyle(
+                                                fontWeight: FontWeight.bold,
+                                                fontSize: 14,
+                                                color: isSelected ? Colors.white : const Color(0xFF94A3B8),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      );
+                                    }).toList(),
+                                  ),
+                                ),
+
+                                
+                                if (!_esContado) ...[
+                                  Container(
+                                    padding: const EdgeInsets.all(20),
+                                    decoration: BoxDecoration(
+                                      gradient: const LinearGradient(
+                                        colors: [Color(0xFF1E293B), Color(0xFF0F172A)],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                      ),
+                                      borderRadius: BorderRadius.circular(18),
+                                      border: Border.all(color: const Color(0xFF10B981).withOpacity(0.3)),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        const Text('Saldo a financiar', style: TextStyle(color: Color(0xFF94A3B8), fontSize: 13)),
+                                        const SizedBox(height: 4),
+                                        Text('\$${_montoFinanciar.toStringAsFixed(2)}', style: const TextStyle(color: Colors.white, fontSize: 32, fontWeight: FontWeight.w800)),
+                                        const SizedBox(height: 12),
+                                        Divider(color: Colors.white.withOpacity(0.1)),
+                                        const SizedBox(height: 4),
+                                        Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text('Cuota: \$${_valorCuota.toStringAsFixed(2)}', style: const TextStyle(color: Colors.white, fontSize: 14.5, fontWeight: FontWeight.bold)),
+                                            Text('Prox: ${DateFormat('dd/MM').format(_proximaCuota)}', style: const TextStyle(color: Color(0xFF10B981), fontWeight: FontWeight.bold)),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(height: 20),
+                                ],
+
+                                
+                                CustomTextField(
+                                  label: 'Propietario del crédito',
+                                  controller: _propietarioCreditoCtrl,
+                                  icon: Icons.person_pin_outlined,
+                                  fillColor: const Color(0x991E293B),
+                                  textColor: Colors.white,
+                                  labelColor: const Color(0xFFCBD5E1),
+                                  iconColor: const Color(0xFF94A3B8),
+                                  focusedBorderColor: const Color(0xFF10B981),
+                                  borderColor: Colors.white.withOpacity(0.12),
+                                  validator: (v) => v!.isEmpty ? 'Requerido' : null,
+                                ),
+                                const SizedBox(height: 14),
+
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: Theme(
+                                        data: Theme.of(context).copyWith(canvasColor: const Color(0xFF1E293B)),
+                                        child: DropdownButtonFormField<String>(
+                                          decoration: InputDecoration(
+                                            labelText: 'Tipo producto',
+                                            labelStyle: const TextStyle(color: Color(0xFFCBD5E1)),
+                                            filled: true,
+                                            fillColor: const Color(0x991E293B),
+                                            enabledBorder: OutlineInputBorder(
+                                              borderRadius: BorderRadius.circular(12),
+                                              borderSide: BorderSide(color: Colors.white.withOpacity(0.12)),
+                                            ),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderRadius: BorderRadius.circular(12),
+                                              borderSide: const BorderSide(color: Color(0xFF10B981)),
+                                            ),
+                                          ),
+                                          style: const TextStyle(color: Colors.white, fontSize: 14),
+                                          value: _tipoProducto,
+                                          items: _tiposProducto.map((t) => DropdownMenuItem(value: t, child: Text(t, style: const TextStyle(color: Colors.white)))).toList(),
+                                          onChanged: (val) => setState(() => _tipoProducto = val!),
+                                        ),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Expanded(
+                                      child: CustomTextField(
+                                        label: 'Marca',
+                                        controller: _marcaCtrl,
+                                        icon: Icons.branding_watermark_outlined,
+                                        fillColor: const Color(0x991E293B),
+                                        textColor: Colors.white,
+                                        labelColor: const Color(0xFFCBD5E1),
+                                        iconColor: const Color(0xFF94A3B8),
+                                        focusedBorderColor: const Color(0xFF10B981),
+                                        borderColor: Colors.white.withOpacity(0.12),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                                const SizedBox(height: 14),
+
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      flex: 2,
+                                      child: CustomTextField(
+                                        label: 'Modelo',
+                                        controller: _modeloCtrl,
+                                        icon: Icons.devices_outlined,
+                                        fillColor: const Color(0x991E293B),
+                                        textColor: Colors.white,
+                                        labelColor: const Color(0xFFCBD5E1),
+                                        iconColor: const Color(0xFF94A3B8),
+                                        focusedBorderColor: const Color(0xFF10B981),
+                                        borderColor: Colors.white.withOpacity(0.12),
+                                      ),
+                                    ),
+                                    const SizedBox(width: 10),
+                                    Expanded(
+                                      flex: 1,
+                                      child: CustomTextField(
+                                        label: 'Cap.',
+                                        controller: _capacidadCtrl,
+                                        keyboardType: TextInputType.number,
+                                        suffixText: 'GB',
+                                        fillColor: const Color(0x991E293B),
+                                        textColor: Colors.white,
+                                        labelColor: const Color(0xFFCBD5E1),
+                                        iconColor: const Color(0xFF94A3B8),
+                                        focusedBorderColor: const Color(0xFF10B981),
+                                        borderColor: Colors.white.withOpacity(0.12),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+
+                                if (_tipoProducto == 'Teléfono') ...[
+                                  const SizedBox(height: 14),
+                                  CustomTextField(
+                                    label: 'IMEI',
+                                    controller: _imeiCtrl,
+                                    icon: Icons.qr_code_outlined,
+                                    fillColor: const Color(0x991E293B),
+                                    textColor: Colors.white,
+                                    labelColor: const Color(0xFFCBD5E1),
+                                    iconColor: const Color(0xFF94A3B8),
+                                    focusedBorderColor: const Color(0xFF10B981),
+                                    borderColor: Colors.white.withOpacity(0.12),
+                                  ),
+                                ],
+
+                                const SizedBox(height: 14),
+
+                                CustomTextField(
+                                  label: _esContado ? 'Valor pagado (total)' : 'Precio equipo (total)',
+                                  controller: _precioCtrl,
+                                  keyboardType: TextInputType.number,
+                                  icon: Icons.monetization_on_outlined,
+                                  fillColor: const Color(0x991E293B),
+                                  textColor: Colors.white,
+                                  labelColor: const Color(0xFFCBD5E1),
+                                  iconColor: const Color(0xFF94A3B8),
+                                  focusedBorderColor: const Color(0xFF10B981),
+                                  borderColor: Colors.white.withOpacity(0.12),
+                                ),
+
+                                if (!_esContado) ...[
+                                  const SizedBox(height: 14),
+                                  CustomTextField(
+                                    label: 'Entrada (pago inicial)',
+                                    controller: _entradaCtrl,
+                                    keyboardType: TextInputType.number,
+                                    icon: Icons.payments_outlined,
+                                    fillColor: const Color(0x991E293B),
+                                    textColor: Colors.white,
+                                    labelColor: const Color(0xFFCBD5E1),
+                                    iconColor: const Color(0xFF94A3B8),
+                                    focusedBorderColor: const Color(0xFF10B981),
+                                    borderColor: Colors.white.withOpacity(0.12),
+                                  ),
+                                  const SizedBox(height: 14),
+                                  CustomTextField(
+                                    label: 'Plazo (cuotas)',
+                                    controller: _cuotasCtrl,
+                                    keyboardType: TextInputType.number,
+                                    icon: Icons.calendar_view_week_outlined,
+                                    fillColor: const Color(0x991E293B),
+                                    textColor: Colors.white,
+                                    labelColor: const Color(0xFFCBD5E1),
+                                    iconColor: const Color(0xFF94A3B8),
+                                    focusedBorderColor: const Color(0xFF10B981),
+                                    borderColor: Colors.white.withOpacity(0.12),
+                                  ),
+                                  const SizedBox(height: 16),
+
+                                  Theme(
+                                    data: Theme.of(context).copyWith(canvasColor: const Color(0xFF1E293B)),
+                                    child: DropdownButtonFormField<String>(
+                                      value: _frecuencia,
+                                      decoration: InputDecoration(
+                                        labelText: 'Frecuencia de pago',
+                                        labelStyle: const TextStyle(color: Color(0xFFCBD5E1)),
+                                        filled: true,
+                                        fillColor: const Color(0x991E293B),
+                                        enabledBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(12),
+                                          borderSide: BorderSide(color: Colors.white.withOpacity(0.12)),
+                                        ),
+                                        focusedBorder: OutlineInputBorder(
+                                          borderRadius: BorderRadius.circular(12),
+                                          borderSide: const BorderSide(color: Color(0xFF10B981)),
+                                        ),
+                                      ),
+                                      style: const TextStyle(color: Colors.white, fontSize: 14),
+                                      items: ['Semanal', 'Quincenal', 'Mensual'].map((String value) => DropdownMenuItem<String>(value: value, child: Text(value, style: const TextStyle(color: Colors.white)))).toList(),
+                                      onChanged: (val) { setState(() { _frecuencia = val!; _calcularValores(); }); },
+                                    ),
+                                  ),
+                                  const SizedBox(height: 16),
+
+                                  InkWell(
+                                    onTap: _seleccionarFecha,
+                                    borderRadius: BorderRadius.circular(12),
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                                      decoration: BoxDecoration(
+                                        color: const Color(0x991E293B),
+                                        borderRadius: BorderRadius.circular(12),
+                                        border: Border.all(color: Colors.white.withOpacity(0.12)),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          Column(
+                                            crossAxisAlignment: CrossAxisAlignment.start,
+                                            children: [
+                                              const Text('Fecha de inicio / pago', style: TextStyle(color: Color(0xFFCBD5E1), fontSize: 12)),
+                                              const SizedBox(height: 2),
+                                              Text(_formatearFechaEs(_fechaPago), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 14)),
+                                            ],
+                                          ),
+                                          const Icon(Icons.calendar_today_outlined, color: Color(0xFF10B981), size: 20),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+
+                                  _buildCalculatorVisualizer(Theme.of(context)),
+                                ] else ...[
+                                  const SizedBox(height: 20),
+                                  Container(
+                                    padding: const EdgeInsets.all(16),
+                                    decoration: BoxDecoration(
+                                      color: const Color(0xFF10B981).withOpacity(0.15),
+                                      borderRadius: BorderRadius.circular(14),
+                                      border: Border.all(color: const Color(0xFF10B981).withOpacity(0.3)),
+                                    ),
+                                    child: const Row(
+                                      children: [
+                                        Icon(Icons.check_circle_outline, color: Color(0xFF10B981)),
+                                        SizedBox(width: 12),
+                                        Expanded(
+                                          child: Text(
+                                            "Venta a contado. No se generará deuda pendiente.",
+                                            style: TextStyle(color: Colors.white, fontSize: 13, fontWeight: FontWeight.w500),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+
+                                const SizedBox(height: 28),
+
+                                SizedBox(
+                                  width: double.infinity,
+                                  height: 52,
+                                  child: ElevatedButton(
+                                    onPressed: _finalizarRegistro,
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color(0xFF10B981),
+                                      foregroundColor: Colors.white,
+                                      elevation: 6,
+                                      shadowColor: const Color(0xFF10B981).withOpacity(0.35),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(14),
+                                      ),
+                                    ),
+                                    child: const Row(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          'Finalizar y verificar',
+                                          style: TextStyle(
+                                            fontSize: 14.5,
+                                            fontWeight: FontWeight.w800,
+                                            letterSpacing: 0.5,
+                                          ),
+                                        ),
+                                        SizedBox(width: 8),
+                                        Icon(Icons.check_circle_outline_rounded, size: 20),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
               ],
             ),
-
-            if (_tipoProducto == 'Teléfono') ...[
-              const SizedBox(height: 15),
-              CustomTextField(label: 'IMEI', controller: _imeiCtrl, icon: Icons.qr_code),
-            ],
-
-            const SizedBox(height: 15),
-
-            // CAMPO PRECIO
-            CustomTextField(
-                label: _esContado ? 'Valor Pagado (Total)' : 'Precio Equipo (Total)',
-                controller: _precioCtrl,
-                keyboardType: TextInputType.number,
-                icon: Icons.monetization_on_outlined
-            ),
-
-            // 🔥 CAMPOS EXCLUSIVOS DE CRÉDITO
-            if (!_esContado) ...[
-              const SizedBox(height: 15),
-              CustomTextField(label: 'Entrada (Pago Inicial)', controller: _entradaCtrl, keyboardType: TextInputType.number, icon: Icons.monetization_on),
-              const SizedBox(height: 15),
-              CustomTextField(label: 'Plazo (Cuotas)', controller: _cuotasCtrl, keyboardType: TextInputType.number, icon: Icons.calendar_view_week),
-              const SizedBox(height: 20),
-              DropdownButtonFormField<String>(
-                value: _frecuencia,
-                decoration: InputDecoration(labelText: 'Frecuencia de Pago', border: OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
-                items: ['Semanal', 'Quincenal', 'Mensual'].map((String value) => DropdownMenuItem<String>(value: value, child: Text(value))).toList(),
-                onChanged: (val) { setState(() { _frecuencia = val!; _calcularValores(); }); },
-              ),
-              const SizedBox(height: 20),
-              ListTile(
-                title: const Text('Fecha de Inicio / Pago'), subtitle: Text(DateFormat('dd MMMM yyyy').format(_fechaPago)),
-                trailing: const Icon(Icons.calendar_today),
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side: BorderSide(color: Colors.grey.withOpacity(0.5))),
-                onTap: _seleccionarFecha,
-              ),
-              _buildCalculatorVisualizer(theme),
-            ] else ...[
-              // Mensaje informativo para contado
-              const SizedBox(height: 20),
-              Container(
-                padding: const EdgeInsets.all(15),
-                decoration: BoxDecoration(color: Colors.green[50], borderRadius: BorderRadius.circular(10), border: Border.all(color: Colors.green)),
-                child: const Row(children: [
-                  Icon(Icons.check_circle, color: Colors.green),
-                  SizedBox(width: 10),
-                  Expanded(child: Text("Venta a contado. No se generará deuda pendiente."))
-                ]),
-              )
-            ],
-
-            const SizedBox(height: 40),
-            SizedBox(
-                width: double.infinity,
-                height: 55,
-                child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                    onPressed: _finalizarRegistro,
-                    child: const Text('FINALIZAR Y VERIFICAR', style: TextStyle(fontSize: 16))
-                )
-            ),
-          ],
+          ),
         ),
       ),
     );

@@ -147,7 +147,7 @@ namespace GestionIntApi.Controllers
 
                         //  var newUser = await _UsuarioServicios.crearUsuario(usuario);
 
-                        // 2. Generar Código
+                        // Generar Código
                         var codigo = new Random().Next(100000, 999999).ToString();
 
                         var datos = new RegistroTemporal
@@ -156,10 +156,10 @@ namespace GestionIntApi.Controllers
                             Codigo = codigo
                         };
 
-                        // 3. Guardar el código temporal asociado al correo del usuario
+                        // Guardar el código temporal asociado al correo del usuario
                         //  _codigoService.GuardarCodigo(usuario.Correo, codigo);
                         _registroTemporal.GuardarRegistro(usuario.Correo, datos);
-                        // 4. Enviar correo
+                        // Enviar correo
                         await _emailService.SendEmailAsync(
                             usuario.Correo,
                             "Código de verificación",
@@ -185,7 +185,7 @@ namespace GestionIntApi.Controllers
             var rsp = new Response<UsuarioDTO>();
             try
             {
-                // 1. Validar si el correo ya existe en la base de datos
+                // Validar si el correo ya existe en la base de datos
                 var existe = await _UsuarioServicios.ExisteCorreo(usuario.Correo);
                 if (existe)
                 {
@@ -194,10 +194,10 @@ namespace GestionIntApi.Controllers
                     return BadRequest(rsp);
                 }
 
-                // 2. Generar el código de verificación aleatorio
+                // Generar el código de verificación aleatorio
                 var codigo = new Random().Next(100000, 999999).ToString();
 
-                // 3. INTENTAR ENVIAR EL CORREO PRIMERO
+                // INTENTAR ENVIAR EL CORREO PRIMERO
                 // Si el servidor de correos falla, lanzará una excepción y saltará al 'catch'
                 // evitando que los datos se guarden en el registro temporal.
                 await _emailService.SendEmailAsync(
@@ -206,7 +206,7 @@ namespace GestionIntApi.Controllers
                     $"<h3>Tu código es: <b>{codigo}</b></h3>"
                 );
 
-                // 4. GUARDAR EN REGISTRO TEMPORAL (Solo si el correo fue exitoso)
+                // GUARDAR EN REGISTRO TEMPORAL (Solo si el correo fue exitoso)
                 var datos = new RegistroTemporal
                 {
                     Usuario = usuario,
@@ -215,7 +215,7 @@ namespace GestionIntApi.Controllers
 
                 _registroTemporal.GuardarRegistro(usuario.Correo, datos);
 
-                // 5. Respuesta de éxito
+                // Respuesta de éxito
                 rsp.status = true;
                 rsp.msg = "Código enviado. Verifique su correo.";
             }
@@ -264,7 +264,7 @@ namespace GestionIntApi.Controllers
 
             try
             {
-                // 1. Validar correo
+                // Validar correo
                 var existe = await _UsuarioServicios.ExisteCorreo(usuario.Correo);
                 if (existe)
                 {
@@ -273,7 +273,7 @@ namespace GestionIntApi.Controllers
                     return BadRequest(rsp);
                 }
 
-                // 2. Registrar usuario directamente
+                // Registrar usuario directamente
                 var nuevoUsuario = await _UsuarioServicios.crearUsuario(usuario);
 
                 rsp.status = true;
@@ -354,3 +354,4 @@ namespace GestionIntApi.Controllers
 
     }
 }
+

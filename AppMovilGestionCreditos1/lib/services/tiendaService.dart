@@ -17,7 +17,7 @@ final tiendasNotifier = ValueNotifier<List<TiendaMostrarAppVentaDTO>?>(null);
 
 
  TiendaService._internal() {
-    debugPrint("🟣 [TiendaService] instancia creada → hash: $hashCode");
+    debugPrint(" [TiendaService] instancia creada → hash: $hashCode");
   }
 
   static final TiendaService _instance = TiendaService._internal();
@@ -64,15 +64,15 @@ final tiendasNotifier = ValueNotifier<List<TiendaMostrarAppVentaDTO>?>(null);
 
   
 Future<List<TiendaMostrarAppVentaDTO>> getTiendaSinLogs({bool forceRefresh = false}) async {
-  debugPrint("🔵 [getTienda] llamado | forceRefresh=$forceRefresh");
-  debugPrint("🔵 [getTienda] cache actual: ${_cacheTiendas?.length}");
+  debugPrint(" [getTienda] llamado | forceRefresh=$forceRefresh");
+  debugPrint(" [getTienda] cache actual: ${_cacheTiendas?.length}");
   cargandoNotifier.value = true;
 
   try {
     // 1️⃣ Usar cache si no se fuerza refresh
     if (_cacheTiendas != null && !forceRefresh) {
       tiendasNotifier.value = List.unmodifiable(_cacheTiendas!);
-      return tiendasNotifier.value!; // ✅ RETORNA LISTA
+      return tiendasNotifier.value!; //  RETORNA LISTA
     }
 
     // 2️⃣ Leer token
@@ -95,7 +95,7 @@ Future<List<TiendaMostrarAppVentaDTO>> getTiendaSinLogs({bool forceRefresh = fal
           .toList();
 
       tiendasNotifier.value = List.unmodifiable(_cacheTiendas!);
-      return tiendasNotifier.value!; // ✅ RETORNA LISTA
+      return tiendasNotifier.value!; //  RETORNA LISTA
     }
 
     if (response.statusCode == 401) {
@@ -106,39 +106,39 @@ Future<List<TiendaMostrarAppVentaDTO>> getTiendaSinLogs({bool forceRefresh = fal
     throw Exception("Error API: ${response.statusCode}");
 
   } catch (e) {
-    debugPrint('❌ Error getTienda: $e');
+    debugPrint(' Error getTienda: $e');
     rethrow;
   } finally {
     cargandoNotifier.value = false;
-    debugPrint("🟢 [getTienda] tiendas cargadas: ${tiendasNotifier.value?.length}");
+    debugPrint(" [getTienda] tiendas cargadas: ${tiendasNotifier.value?.length}");
   }
 }
 
 
 
 Future<List<TiendaMostrarAppVentaDTO>> getTienda({bool forceRefresh = false}) async {
-  debugPrint("🚀 [getTienda] INICIO | forceRefresh=$forceRefresh");
+  debugPrint(" [getTienda] INICIO | forceRefresh=$forceRefresh");
   cargandoNotifier.value = true;
 
   try {
     // 1️⃣ Cache check
     if (_cacheTiendas != null && !forceRefresh) {
-      debugPrint("📦 [getTienda] Usando datos de cache");
+      debugPrint(" [getTienda] Usando datos de cache");
       tiendasNotifier.value = List.unmodifiable(_cacheTiendas!);
       return tiendasNotifier.value!;
     }
 
     // 2️⃣ Token check
-    debugPrint("🔑 [getTienda] Leyendo token...");
+    debugPrint(" [getTienda] Leyendo token...");
     String? token = await storage.read(key: 'jwt_token');
     if (token == null) {
-      debugPrint("⚠️ [getTienda] Token NULL");
+      debugPrint("️ [getTienda] Token NULL");
       throw Exception("Token no encontrado.");
     }
 
     // 3️⃣ Request
     final url = '$baseUrl/TiendaApp/tiendasAppFechaV';
-    debugPrint("🌐 [getTienda] GET a: $url");
+    debugPrint(" [getTienda] GET a: $url");
     
     final response = await http.get(
       Uri.parse(url),
@@ -148,21 +148,21 @@ Future<List<TiendaMostrarAppVentaDTO>> getTienda({bool forceRefresh = false}) as
       },
     ).timeout(const Duration(seconds: 10)); // ⏱️ Timeout para que no cargue eterno
 
-    debugPrint("📡 [getTienda] Status Code: ${response.statusCode}");
-    debugPrint("📄 [getTienda] Body: ${response.body}");
+    debugPrint(" [getTienda] Status Code: ${response.statusCode}");
+    debugPrint(" [getTienda] Body: ${response.body}");
 
     // 4️⃣ Response Handling
     if (response.statusCode == 200) {
       final dynamic decoded = jsonDecode(response.body);
       
       if (decoded is List) {
-        debugPrint("✅ [getTienda] Lista recibida con ${decoded.length} elementos");
+        debugPrint(" [getTienda] Lista recibida con ${decoded.length} elementos");
         
         _cacheTiendas = decoded.map((e) {
           try {
             return TiendaMostrarAppVentaDTO.fromJson(e);
           } catch (e) {
-            debugPrint("❌ [getTienda] Error mapeando un elemento: $e");
+            debugPrint(" [getTienda] Error mapeando un elemento: $e");
             rethrow;
           }
         }).toList();
@@ -170,13 +170,13 @@ Future<List<TiendaMostrarAppVentaDTO>> getTienda({bool forceRefresh = false}) as
         tiendasNotifier.value = List.unmodifiable(_cacheTiendas!);
         return tiendasNotifier.value!;
       } else {
-        debugPrint("❌ [getTienda] El JSON no es una LISTA, es: ${decoded.runtimeType}");
+        debugPrint(" [getTienda] El JSON no es una LISTA, es: ${decoded.runtimeType}");
         throw Exception("Formato de respuesta incorrecto");
       }
     }
 
     if (response.statusCode == 401) {
-      debugPrint("🚫 [getTienda] 401 Unauthorized");
+      debugPrint(" [getTienda] 401 Unauthorized");
       await storage.delete(key: 'jwt_token');
       throw Exception("Sesión expirada.");
     }
@@ -184,17 +184,17 @@ Future<List<TiendaMostrarAppVentaDTO>> getTienda({bool forceRefresh = false}) as
     throw Exception("Error API: ${response.statusCode}");
 
   } catch (e, stacktrace) {
-    debugPrint('🚨 [getTienda] ERROR CRÍTICO: $e');
-    debugPrint('📚 [getTienda] STACKTRACE: $stacktrace');
+    debugPrint(' [getTienda] ERROR CRÍTICO: $e');
+    debugPrint(' [getTienda] STACKTRACE: $stacktrace');
     rethrow;
   } finally {
     // IMPORTANTE: Aseguramos que el estado cambie pase lo que pase
     cargandoNotifier.value = false;
-    debugPrint("🏁 [getTienda] FIN DEL PROCESO");
+    debugPrint(" [getTienda] FIN DEL PROCESO");
   }
 }
 
-  // 🧹 Limpiar caché
+  //  Limpiar caché
   void clearCache() {
     _cacheTiendas = null;
   }
@@ -224,7 +224,7 @@ Future<TiendaMostrarAppVentaDTO> GuardarTienda(TiendaAppDTO tienda) async {
     final decoded = jsonDecode(response.body);
 
     if (decoded['status'] == true) {
-      // 🔄 Limpiamos caché para que al listar se refresque
+      //  Limpiamos caché para que al listar se refresque
       clearCache();
 
       return TiendaMostrarAppVentaDTO.fromJson(decoded['value']);
@@ -251,12 +251,12 @@ void _actualizarTiendaDesdeEvento(TiendaMostrarAppVentaDTO nuevaTienda) {
   //final actual = _cacheCreditos![index];
 _cacheTiendas![index] = nuevaTienda;
   tiendasNotifier.value = List.from(_cacheTiendas!);
-   //debugPrint("✅ Tienda actualizada | id: ${nuevaTienda.id} | nombre: ${nuevaTienda.nombreEncargado}");
+   //debugPrint(" Tienda actualizada | id: ${nuevaTienda.id} | nombre: ${nuevaTienda.nombreEncargado}");
 }
 
-/// 🧹 LIMPIAR ESTADO AL CAMBIAR DE USUARIO
+///  LIMPIAR ESTADO AL CAMBIAR DE USUARIO
 Future<void> limpiar() async {
-  debugPrint("🧹 [creditoMostrarHome] limpiando estado");
+  debugPrint(" [creditoMostrarHome] limpiando estado");
 
 
 

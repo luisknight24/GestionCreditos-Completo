@@ -45,7 +45,7 @@ namespace GestionIntApi.Repositorios.Implementacion
         }
 
         // ===============================
-        // 2️⃣ ADMIN → LISTAR TIENDAS
+        //  ADMIN → LISTAR TIENDAS
         // ===============================
         public async Task<List<TiendaAdminDTO>> GetTiendasAdmin()
         {
@@ -66,14 +66,14 @@ namespace GestionIntApi.Repositorios.Implementacion
         {
             try
             {
-                // 1. Buscamos la tienda existente por ID
+                // Buscamos la tienda existente por ID
                 var consulta = await _tiendaRepository.Consultar(t => t.Id == modelo.Id);
                 var tiendaParaEditar = consulta.FirstOrDefault();
 
                 if (tiendaParaEditar == null)
                     throw new TaskCanceledException("La tienda no existe");
 
-                // 2. Mapeamos los datos del DTO a la Entidad (Actualizamos los campos)
+                // Mapeamos los datos del DTO a la Entidad (Actualizamos los campos)
                 tiendaParaEditar.NombreTienda = modelo.NombreTienda;
                 tiendaParaEditar.NombreEncargado = modelo.NombreEncargado;
                 tiendaParaEditar.CedulaEncargado = modelo.CedulaEncargado;
@@ -83,7 +83,7 @@ namespace GestionIntApi.Repositorios.Implementacion
                 tiendaParaEditar.Comentario = modelo.Comentario;
                 // La fecha de registro normalmente no se edita, se mantiene la original
 
-                // 3. Ejecutamos la edición en el repositorio
+                // Ejecutamos la edición en el repositorio
                 bool respuesta = await _tiendaRepository.Editar(tiendaParaEditar);
 
                 return respuesta;
@@ -93,7 +93,7 @@ namespace GestionIntApi.Repositorios.Implementacion
                 throw ex;
             }
         }
-        // 3️⃣ APP → ASOCIAR TIENDA A CLIENTE
+        //  APP → ASOCIAR TIENDA A CLIENTE
         // ===============================
         public async Task<bool> AsociarTiendaCliente1(TiendaAppDTO dto)
         {
@@ -147,7 +147,7 @@ namespace GestionIntApi.Repositorios.Implementacion
             if (existeRelacion != null)
                 throw new Exception("La tienda ya está asociada a este cliente");
           */
-            // 1. Creamos la entidad
+            // Creamos la entidad
             var tiendaApp = new TiendaApp
             {
                 TiendaId = tienda.Id,
@@ -157,10 +157,10 @@ namespace GestionIntApi.Repositorios.Implementacion
                 FechaRegistro = DateTime.UtcNow
             };
 
-            // 2. Al crear, el repositorio debe llenar el ID automáticamente
+            // Al crear, el repositorio debe llenar el ID automáticamente
             var nuevaTiendaApp = await _tiendaAppRepository.Crear(tiendaApp);
 
-            // 3. Retornamos el DTO con el ID generado
+            // Retornamos el DTO con el ID generado
             return new TiendaAppDTO
             {
                 Id = nuevaTiendaApp.Id, // <--- ESTE ES EL ID QUE NECESITA FLUTTER
@@ -175,31 +175,31 @@ namespace GestionIntApi.Repositorios.Implementacion
             try
             {
                 Console.WriteLine("--- Iniciando proceso de asociación ---");
-                Console.WriteLine($"🔍 Buscando tienda con cédula: {dto.CedulaEncargado}");
+                Console.WriteLine($" Buscando tienda con cédula: {dto.CedulaEncargado}");
 
-                // 1. Buscar tienda
+                // Buscar tienda
                 var tienda = await _tiendaRepository.Obtener(t => t.CedulaEncargado == dto.CedulaEncargado);
 
                 if (tienda == null)
                 {
-                    Console.WriteLine("❌ ERROR: La tienda no existe en la DB.");
+                    Console.WriteLine(" ERROR: La tienda no existe en la DB.");
                     throw new Exception("No existe una tienda con esa cédula");
                 }
 
-                Console.WriteLine($"✅ Tienda encontrada: {tienda.NombreTienda} (ID: {tienda.Id})");
+                Console.WriteLine($" Tienda encontrada: {tienda.NombreTienda} (ID: {tienda.Id})");
 
-                // 2. Validar duplicados
+                // Validar duplicados
                 var existeRelacion = await _tiendaAppRepository.Obtener(
                     ta => ta.ClienteId == dto.ClienteId && ta.CedulaEncargado == dto.CedulaEncargado
                 );
 
                 if (existeRelacion != null)
                 {
-                    Console.WriteLine("⚠️ ADVERTENCIA: La relación ya existe.");
+                    Console.WriteLine(" ADVERTENCIA: La relación ya existe.");
                     throw new Exception("La tienda ya está asociada a este cliente");
                 }
 
-                // 3. Crear entidad
+                // Crear entidad
                 var tiendaApp = new TiendaApp
                 {
                     TiendaId = tienda.Id,
@@ -209,21 +209,21 @@ namespace GestionIntApi.Repositorios.Implementacion
                     FechaRegistro = DateTime.UtcNow
                 };
 
-                Console.WriteLine("💾 Intentando guardar en la base de datos...");
+                Console.WriteLine(" Intentando guardar en la base de datos...");
 
-                // 4. Guardar y capturar el resultado
+                // Guardar y capturar el resultado
                 var nuevaTiendaApp = await _tiendaAppRepository.Crear(tiendaApp);
 
                 // --- AQUÍ SUELE OCURRIR EL ERROR ---
                 if (nuevaTiendaApp == null)
                 {
-                    Console.WriteLine("❌ ERROR FATAL: El repositorio devolvió NULL al intentar crear.");
+                    Console.WriteLine(" ERROR FATAL: El repositorio devolvió NULL al intentar crear.");
                     throw new Exception("El objeto creado es nulo. Revisa el SaveChanges en el repositorio.");
                 }
 
                 Console.WriteLine($"🎉 Éxito: Registro creado con ID {nuevaTiendaApp.Id}");
 
-                // 5. Retornar DTO
+                // Retornar DTO
                 return new TiendaAppDTO
                 {
                     Id = nuevaTiendaApp.Id,
@@ -235,7 +235,7 @@ namespace GestionIntApi.Repositorios.Implementacion
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"🔥 EXCEPCIÓN DETECTADA: {ex.Message}");
+                Console.WriteLine($" EXCEPCIÓN DETECTADA: {ex.Message}");
                 if (ex.InnerException != null)
                     Console.WriteLine($"🔗 INNER EXCEPTION: {ex.InnerException.Message}");
 
@@ -243,7 +243,7 @@ namespace GestionIntApi.Repositorios.Implementacion
             }
         }
         // ===============================
-        // 4️⃣ APP → OBTENER TIENDAS DEL CLIENTE
+        //  APP → OBTENER TIENDAS DEL CLIENTE
         // ===============================
         public async Task<List<TiendaAppDTO>> GetTiendasCliente(int clienteId)
         {
@@ -400,5 +400,6 @@ namespace GestionIntApi.Repositorios.Implementacion
 
 
 }
+
 
 

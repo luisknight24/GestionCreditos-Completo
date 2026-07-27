@@ -1,4 +1,4 @@
-/*
+﻿/*
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -47,8 +47,8 @@ class _NewCreditFinancialScreenState extends State<NewCreditFinancialScreen> {
   final List<String> _tiposProducto = ['Teléfono', 'Televisor'];
 
   // VARIABLES DE EVIDENCIA (Contrato y Celular)
-  // File? _fotoContrato; // 📸 COMENTADO
-  // File? _fotoCelular;  // 📸 COMENTADO
+  // File? _fotoContrato; //  COMENTADO
+  // File? _fotoCelular;  //  COMENTADO
 
   bool _isLoading = false;
 
@@ -67,7 +67,7 @@ class _NewCreditFinancialScreenState extends State<NewCreditFinancialScreen> {
     _entradaCtrl.addListener(_calcularValores);
     _plazoCtrl.addListener(_calcularValores);
 
-    debugPrint("🟠 [NEW CREDIT] usando instancia → hash: ${creditoHomeService.hashCode}");
+    debugPrint(" [NEW CREDIT] usando instancia → hash: ${creditoHomeService.hashCode}");
   }
 
   @override
@@ -86,7 +86,7 @@ class _NewCreditFinancialScreenState extends State<NewCreditFinancialScreen> {
   int? _plazoSeleccionado;
   final List<int> _opcionesCuotas = [3, 6, 9, 12, 15, 18, 24];
 
-  // --- LÓGICA DE CALCULADORA ---
+  
   void _calcularValores() {
     double monto = double.tryParse(_montoCtrl.text) ?? 0.0;
     double entrada = double.tryParse(_entradaCtrl.text) ?? 0.0;
@@ -123,7 +123,7 @@ class _NewCreditFinancialScreenState extends State<NewCreditFinancialScreen> {
       return;
     }
 
-    /* 📸 VALIDACIÓN DE FOTOS COMENTADA
+    /*  VALIDACIÓN DE FOTOS COMENTADA
     // VALIDACIÓN DE EVIDENCIAS (NUEVO)
     if (_fotoContrato == null || _fotoCelular == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -135,9 +135,9 @@ class _NewCreditFinancialScreenState extends State<NewCreditFinancialScreen> {
 
     setState(() => _isLoading = true);
 
-    // ✅ VALIDAR PROPIETARIO
+    //  VALIDAR PROPIETARIO
     if (_propietarioCreditoCtrl.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('El propietario del crédito es requerido'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('El Propietario del crédito es requerido'), backgroundColor: Colors.red));
       return;
     }
 
@@ -168,17 +168,17 @@ class _NewCreditFinancialScreenState extends State<NewCreditFinancialScreen> {
     );
 
     try {
-      // final firebaseService = FirebaseService(); // 📸 COMENTADO
+      // final firebaseService = FirebaseService(); //  COMENTADO
 
       // 1. SUBIR EVIDENCIAS
-      // String? urlContrato = await firebaseService.uploadImage(_fotoContrato!, 'contratos_nuevos'); // 📸 COMENTADO
-      // String? urlCelular = await firebaseService.uploadImage(_fotoCelular!, 'celulares_nuevos');   // 📸 COMENTADO
+      // String? urlContrato = await firebaseService.uploadImage(_fotoContrato!, 'contratos_nuevos'); //  COMENTADO
+      // String? urlCelular = await firebaseService.uploadImage(_fotoCelular!, 'celulares_nuevos');   //  COMENTADO
 
       // Simulación
       await Future.delayed(const Duration(seconds: 2));
 
 
-      // 🚨 CAMBIO: ELIMINADO EL Navigator.pop(context) TEMPRANO
+      //  CAMBIO: ELIMINADO EL Navigator.pop(context) TEMPRANO
       // if (mounted && Navigator.canPop(context)) { ... }
 
       // 2. CREAR DTO
@@ -202,8 +202,8 @@ class _NewCreditFinancialScreenState extends State<NewCreditFinancialScreen> {
         estadoCuota: "Pendiente",
         abonadoTotal: 0.0,
         // Nuevos campos Foto
-        fotoContratoUrl: null, // urlContrato, // 📸 URL COMENTADA
-        fotoCelularUrl: null,  // urlCelular,  // 📸 URL COMENTADA
+        fotoContratoUrl: null, // urlContrato, //  URL COMENTADA
+        fotoCelularUrl: null,  // urlCelular,  //  URL COMENTADA
 
         // NUEVOS CAMPOS PRODUCTO
         tipoProducto: _tipoProducto,
@@ -215,7 +215,7 @@ class _NewCreditFinancialScreenState extends State<NewCreditFinancialScreen> {
 
       final response=await creditoHomeService.guardarCredito(credito);
 
-      debugPrint("✅ [NEW CREDIT] Crédito creado en backend:");
+      debugPrint(" [NEW CREDIT] Crédito creado en backend:");
       debugPrint("id: ${response.id}");
       debugPrint("montoPendiente: ${response.montoPendiente}");
       debugPrint("estado: ${response.estado}");
@@ -226,39 +226,39 @@ class _NewCreditFinancialScreenState extends State<NewCreditFinancialScreen> {
 
       // 2️⃣ Refrescar la lista completa desde backend
       await creditoHomeService.getCreditos(forceRefresh: true);
-      debugPrint("🟠 [NEW CREDIT] notifier → ${creditoHomeService.creditosNotifier.value?.length}");
+      debugPrint(" [NEW CREDIT] notifier → ${creditoHomeService.creditosNotifier.value?.length}");
 
-      debugPrint("🔄 ValueNotifier después de actualizar:");
+      debugPrint(" ValueNotifier después de actualizar:");
       debugPrint(creditoHomeService.creditosNotifier.value.toString());
       await Future.delayed(const Duration(seconds: 2)); // Simulación
 
-      // 🚨 CAMBIO: AHORA CERRAMOS EL LOADING AQUÍ, AL FINAL
+      //  CAMBIO: AHORA CERRAMOS EL LOADING AQUÍ, AL FINAL
       if (mounted) Navigator.pop(context);
 
       if (mounted) {
-        debugPrint('🟢 BEFORE setState éxito');
+        debugPrint(' BEFORE setState éxito');
         setState(() => _isLoading = false);
 
-        debugPrint('🟢 BEFORE _mostrarExito');
+        debugPrint(' BEFORE _mostrarExito');
         _mostrarExito(credito.montoTotal);
-        debugPrint('🟢 AFTER _mostrarExito');
+        debugPrint(' AFTER _mostrarExito');
       }
 
     } catch (e, stackTrace) {
-      debugPrint('❌❌❌ ERROR AL ENVIAR SOLICITUD ❌❌❌');
-      debugPrint('🧨 Tipo: ${e.runtimeType}');
-      debugPrint('🧨 Mensaje: $e');
-      debugPrint('📍 StackTrace:\n$stackTrace');
+      debugPrint(' ERROR AL ENVIAR SOLICITUD ');
+      debugPrint(' Tipo: ${e.runtimeType}');
+      debugPrint(' Mensaje: $e');
+      debugPrint(' StackTrace:\n$stackTrace');
 
       if (mounted) {
         debugPrint('↩️ Navigator.pop en catch');
         Navigator.pop(context); // Cierra loading si hay error
       } else {
-        debugPrint('⚠️ Widget no montado, no pop');
+        debugPrint('️ Widget no montado, no pop');
       }
 
       if (mounted) {
-        debugPrint('🔄 setState(_isLoading = false) en catch');
+        debugPrint(' setState(_isLoading = false) en catch');
         setState(() => _isLoading = false);
 
         ScaffoldMessenger.of(context).showSnackBar(
@@ -290,7 +290,7 @@ class _NewCreditFinancialScreenState extends State<NewCreditFinancialScreen> {
               context.go('/home', extra: true);
               // cerrar diálogo
               // context.go('/home', extra: true);
-              debugPrint("✅ [NEW CREDIT] Crédito creado, haciendo pop()");
+              debugPrint(" [NEW CREDIT] Crédito creado, haciendo pop()");
 //context.pop(true);
               // context.pop(true);      // Volver al inicio
             },
@@ -301,9 +301,9 @@ class _NewCreditFinancialScreenState extends State<NewCreditFinancialScreen> {
     );
   }
 
-  // ----------------------------------------------------------------------
-  // 🟢 NUEVO: WIDGET CALCULADORA VISUAL (Misma lógica, adaptada a variables locales)
-  // ----------------------------------------------------------------------
+  
+  //  NUEVO: WIDGET CALCULADORA VISUAL (Misma lógica, adaptada a variables locales)
+  
   Widget _buildCalculatorVisualizer(ThemeData theme) {
     if (_totalPagar <= 0) return const SizedBox.shrink();
 
@@ -326,7 +326,7 @@ class _NewCreditFinancialScreenState extends State<NewCreditFinancialScreen> {
             children: [
               const Icon(Icons.calculate, size: 20, color: Colors.grey),
               const SizedBox(width: 5),
-              Text("Desglose del Cálculo", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[700])),
+              Text("Desglose del cálculo", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[700])),
             ],
           ),
           const SizedBox(height: 15),
@@ -353,7 +353,7 @@ class _NewCreditFinancialScreenState extends State<NewCreditFinancialScreen> {
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                 decoration: BoxDecoration(color: Colors.green[100], borderRadius: BorderRadius.circular(8)),
-                child: Column(children: [Text("\$${_valorCuota.toStringAsFixed(2)}", style: valueStyle.copyWith(color: Colors.green[800])), Text("Cuota Final", style: labelStyle)]),
+                child: Column(children: [Text("\$${_valorCuota.toStringAsFixed(2)}", style: valueStyle.copyWith(color: Colors.green[800])), Text("Cuota final", style: labelStyle)]),
               ),
             ],
           ),
@@ -375,7 +375,7 @@ class _NewCreditFinancialScreenState extends State<NewCreditFinancialScreen> {
           key: _formKey,
           child: Column(
             children: [
-              // --- CALCULADORA ---
+              
               FadeInDown(
                 child: Container(
                   padding: const EdgeInsets.all(20),
@@ -409,21 +409,21 @@ class _NewCreditFinancialScreenState extends State<NewCreditFinancialScreen> {
               ),
               const SizedBox(height: 20),
 
-              // ✅ CAMPO PROPIETARIO CREDITO (PRIMERA OPCIÓN DE INPUT)
+              //  CAMPO PROPIETARIO CREDITO (PRIMERA OPCIÓN DE INPUT)
               CustomTextField(
-                label: 'Propietario del Crédito',
+                label: 'Propietario del crédito',
                 controller: _propietarioCreditoCtrl,
                 icon: Icons.person_pin,
                 validator: (v) => v!.isEmpty ? 'Requerido' : null,
               ),
               const SizedBox(height: 15),
 
-              // --- NUEVO: TIPO PRODUCTO Y MARCA ---
+              
               Row(
                 children: [
                   Expanded(
                     child: DropdownButtonFormField<String>(
-                      decoration: const InputDecoration(labelText: 'Tipo Producto', border: OutlineInputBorder()),
+                      decoration: const InputDecoration(labelText: 'Tipo producto', border: OutlineInputBorder()),
                       value: _tipoProducto,
                       items: _tiposProducto.map((t) => DropdownMenuItem(value: t, child: Text(t))).toList(),
                       onChanged: (val) {
@@ -443,7 +443,7 @@ class _NewCreditFinancialScreenState extends State<NewCreditFinancialScreen> {
                   Expanded(flex: 2, child: CustomTextField(label: 'Modelo', controller: _modeloCtrl, icon: Icons.devices)),
                   const SizedBox(width: 10),
 
-                  // ✅ CAMPO CAPACIDAD
+                  //  CAMPO CAPACIDAD
                   Expanded(
                       flex: 1,
                       child: CustomTextField(
@@ -469,8 +469,8 @@ class _NewCreditFinancialScreenState extends State<NewCreditFinancialScreen> {
               ],
 
               const SizedBox(height: 15),
-              // --- CAMPOS ---
-              // ✏️ CAMBIO ESTÉTICO: Ícono más general
+              
+              // ️ CAMBIO ESTÉTICO: Ícono más general
               CustomTextField(
                 label: 'Precio Equipo (\$)',
                 controller: _montoCtrl,
@@ -496,7 +496,7 @@ class _NewCreditFinancialScreenState extends State<NewCreditFinancialScreen> {
                       controller: _plazoCtrl,
                       keyboardType: TextInputType.number,
                       icon: Icons.calendar_today,
-                      // --- VALIDACIÓN DE CUOTAS DINÁMICA ---
+                      
                       validator: (v) {
                         if (v == null || v.isEmpty) return 'Requerido';
                         final val = int.tryParse(v);
@@ -510,7 +510,7 @@ class _NewCreditFinancialScreenState extends State<NewCreditFinancialScreen> {
                         if (val > max) return 'Máx $max cuotas';
                         return null;
                       },
-                      // ------------------------------------
+                      
                     ),
 
 // 4. CAMBIO: DROPDOWN DE CUOTAS
@@ -532,13 +532,13 @@ class _NewCreditFinancialScreenState extends State<NewCreditFinancialScreen> {
                 ],
               ),
 
-              // 🟢 AQUÍ INSERTAMOS LA CALCULADORA VISUAL
+              //  AQUÍ INSERTAMOS LA CALCULADORA VISUAL
               _buildCalculatorVisualizer(theme),
 
               const SizedBox(height: 30),
 
-              /* 📸 SECCIÓN EVIDENCIAS COMENTADA
-              // --- SECCIÓN EVIDENCIAS (NUEVO) ---
+              /*  SECCIÓN EVIDENCIAS COMENTADA
+              
               const Divider(),
               const Text("EVIDENCIA DIGITAL", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey)),
               const SizedBox(height: 15),
@@ -610,7 +610,7 @@ class _NewCreditFinancialScreenState extends State<NewCreditFinancialScreen> {
   final _propietarioCreditoCtrl = TextEditingController();
   final _capacidadCtrl = TextEditingController();
 
-  // 🔥 NUEVO: Variables para controlar Crédito vs Contado
+  //  NUEVO: Variables para controlar Crédito vs Contado
   String _tipoVenta = 'Crédito';
   final List<String> _tiposVenta = ['Crédito', 'Contado'];
   bool get _esContado => _tipoVenta == 'Contado';
@@ -649,12 +649,12 @@ class _NewCreditFinancialScreenState extends State<NewCreditFinancialScreen> {
     super.dispose();
   }
 
-  // --- LÓGICA DE CÁLCULO ---
+  
   void _calcularValores() {
     // 1. Obtener valores base
     double monto = double.tryParse(_montoCtrl.text) ?? 0.0;
 
-    // 🔥 NUEVO: Si es contado, forzamos valores a cero deuda
+    //  NUEVO: Si es contado, forzamos valores a cero deuda
     if (_esContado) {
       setState(() {
         _totalPagar = 0.0; // No hay deuda pendiente
@@ -688,7 +688,7 @@ class _NewCreditFinancialScreenState extends State<NewCreditFinancialScreen> {
     // LÓGICA EXISTENTE: Validaciones base
     // Validar propietario
     if (_propietarioCreditoCtrl.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('El propietario del crédito es requerido'), backgroundColor: Colors.red));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('El Propietario del crédito es requerido'), backgroundColor: Colors.red));
       return;
     }
 
@@ -707,7 +707,7 @@ class _NewCreditFinancialScreenState extends State<NewCreditFinancialScreen> {
       }
     }
 
-    // 🔥 NUEVO: Validaciones condicionales
+    //  NUEVO: Validaciones condicionales
     if (!_esContado) {
       // Si es crédito, validamos el formulario completo (entrada, cuotas, frecuencia)
       if (!_formKey.currentState!.validate()) return;
@@ -747,7 +747,7 @@ class _NewCreditFinancialScreenState extends State<NewCreditFinancialScreen> {
       // LÓGICA EXISTENTE: Preparación de variables para el DTO
       final double precioTotal = double.parse(_montoCtrl.text);
 
-      // 🔥 NUEVO: Ajuste de valores según tipo de venta
+      //  NUEVO: Ajuste de valores según tipo de venta
       final double entradaFinal = _esContado ? precioTotal : (double.tryParse(_entradaCtrl.text) ?? 0);
       final double montoPendienteFinal = _esContado ? 0 : _totalPagar;
       final int plazoFinal = _esContado ? 1 : int.parse(_plazoCtrl.text);
@@ -760,7 +760,7 @@ class _NewCreditFinancialScreenState extends State<NewCreditFinancialScreen> {
       // LÓGICA EXISTENTE: Creación del DTO
       final credito = CreditoDTO(
         id: 0,
-        esVentaContado: _esContado, // 🔥 Enviamos el flag al backend
+        esVentaContado: _esContado, //  Enviamos el flag al backend
         montoTotal: precioTotal,
         entrada: entradaFinal,
         plazoCuotas: plazoFinal,
@@ -790,7 +790,7 @@ class _NewCreditFinancialScreenState extends State<NewCreditFinancialScreen> {
       // LÓGICA EXISTENTE: Llamada al servicio
       final response = await creditoHomeService.guardarCredito(credito);
 
-      debugPrint("✅ Crédito creado: ID ${response.id}");
+      debugPrint(" Crédito creado: ID ${response.id}");
 
       // Refrescar lista
       await creditoHomeService.getCreditos(forceRefresh: true);
@@ -858,7 +858,7 @@ class _NewCreditFinancialScreenState extends State<NewCreditFinancialScreen> {
             children: [
               const Icon(Icons.calculate, size: 20, color: Colors.grey),
               const SizedBox(width: 5),
-              Text("Desglose del Cálculo", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[700])),
+              Text("Desglose del cálculo", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.grey[700])),
             ],
           ),
           const SizedBox(height: 15),
@@ -908,7 +908,7 @@ class _NewCreditFinancialScreenState extends State<NewCreditFinancialScreen> {
           child: Column(
             children: [
 
-              // 🔥 NUEVO: TOGGLE CRÉDITO / CONTADO
+              //  NUEVO: TOGGLE CRÉDITO / CONTADO
               ToggleButtons(
                 borderRadius: BorderRadius.circular(10),
                 isSelected: [_tipoVenta == 'Crédito', _tipoVenta == 'Contado'],
@@ -964,9 +964,9 @@ class _NewCreditFinancialScreenState extends State<NewCreditFinancialScreen> {
                 ),
               const SizedBox(height: 20),
 
-              // --- CAMPOS COMUNES ---
+              
               CustomTextField(
-                label: 'Propietario del Crédito',
+                label: 'Propietario del crédito',
                 controller: _propietarioCreditoCtrl,
                 icon: Icons.person_pin,
                 validator: (v) => v!.isEmpty ? 'Requerido' : null,
@@ -977,7 +977,7 @@ class _NewCreditFinancialScreenState extends State<NewCreditFinancialScreen> {
                 children: [
                   Expanded(
                     child: DropdownButtonFormField<String>(
-                      decoration: const InputDecoration(labelText: 'Tipo Producto', border: OutlineInputBorder()),
+                      decoration: const InputDecoration(labelText: 'Tipo producto', border: OutlineInputBorder()),
                       value: _tipoProducto,
                       items: _tiposProducto.map((t) => DropdownMenuItem(value: t, child: Text(t))).toList(),
                       onChanged: (val) {
@@ -1024,14 +1024,14 @@ class _NewCreditFinancialScreenState extends State<NewCreditFinancialScreen> {
 
               // CAMPO PRECIO (Siempre visible, cambia etiqueta según modo)
               CustomTextField(
-                label: _esContado ? 'Valor Pagado (Total)' : 'Precio Equipo (\$)',
+                label: _esContado ? 'Valor pagado (total)' : 'Precio Equipo (\$)',
                 controller: _montoCtrl,
                 keyboardType: TextInputType.number,
                 icon: Icons.monetization_on_outlined,
                 validator: (v) => v!.isEmpty ? 'Requerido' : null,
               ),
 
-              // 🔥 CONDICIONAL: CAMPOS DE CRÉDITO
+              //  CONDICIONAL: CAMPOS DE CRÉDITO
               if (!_esContado) ...[
                 const SizedBox(height: 15),
                 CustomTextField(

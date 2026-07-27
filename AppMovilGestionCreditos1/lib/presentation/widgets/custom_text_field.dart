@@ -58,8 +58,14 @@ class CustomTextField extends StatefulWidget {
   final bool isPassword;
   final TextInputType keyboardType;
   final String? Function(String?)? validator;
-  final bool readOnly; // Nueva propiedad para bloquear edición
+  final bool readOnly;
   final String? suffixText;
+  final Color? fillColor;
+  final Color? textColor;
+  final Color? labelColor;
+  final Color? iconColor;
+  final Color? focusedBorderColor;
+  final Color? borderColor;
 
   const CustomTextField({
     super.key,
@@ -69,8 +75,14 @@ class CustomTextField extends StatefulWidget {
     this.isPassword = false,
     this.keyboardType = TextInputType.text,
     this.validator,
-    this.readOnly = false, // Por defecto es editable
+    this.readOnly = false,
     this.suffixText,
+    this.fillColor,
+    this.textColor,
+    this.labelColor,
+    this.iconColor,
+    this.focusedBorderColor,
+    this.borderColor,
   });
 
   @override
@@ -78,45 +90,60 @@ class CustomTextField extends StatefulWidget {
 }
 
 class _CustomTextFieldState extends State<CustomTextField> {
-  // Variable interna para controlar si se ve o no el texto
   bool _obscureText = true;
 
   @override
   Widget build(BuildContext context) {
+    final effectiveTextColor = widget.textColor ?? (widget.readOnly ? Colors.grey[700]! : Colors.black);
+    final effectiveFillColor = widget.fillColor ?? (widget.readOnly ? Colors.grey[100]! : Colors.grey[50]!);
+    final effectiveLabelColor = widget.labelColor ?? Colors.grey[700];
+    final effectiveIconColor = widget.iconColor ?? Theme.of(context).primaryColor;
+    final effectiveBorderColor = widget.borderColor ?? Colors.grey[300]!;
+    final effectiveFocusedBorderColor = widget.focusedBorderColor ?? Theme.of(context).primaryColor;
+
     return TextFormField(
       controller: widget.controller,
       obscureText: widget.isPassword ? _obscureText : false,
       keyboardType: widget.keyboardType,
-      readOnly: widget.readOnly, // Aplicamos la propiedad
+      readOnly: widget.readOnly,
       validator: widget.validator,
       style: TextStyle(
-        color: widget.readOnly ? Colors.grey[700] : Colors.black, // Texto gris si es solo lectura
+        color: effectiveTextColor,
+        fontSize: 14.5,
+        fontWeight: FontWeight.w500,
       ),
       decoration: InputDecoration(
         labelText: widget.label,
-        prefixIcon: widget.icon != null ? Icon(widget.icon) : null,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
+        labelStyle: TextStyle(color: effectiveLabelColor),
+        prefixIcon: widget.icon != null ? Icon(widget.icon, color: effectiveIconColor) : null,
         filled: true,
-        fillColor: widget.readOnly ? Colors.grey[100] : Colors.grey[50], // Fondo gris claro si es readOnly
-
-        // 🟢 Lógica del botón para ver contraseña
+        fillColor: effectiveFillColor,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: BorderSide(color: effectiveBorderColor, width: 1),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: BorderSide(color: effectiveBorderColor, width: 1),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(14),
+          borderSide: BorderSide(color: effectiveFocusedBorderColor, width: 1.8),
+        ),
         suffixIcon: widget.isPassword
             ? IconButton(
-          icon: Icon(
-            _obscureText ? Icons.visibility_off : Icons.visibility,
-            color: Colors.grey,
-          ),
-          onPressed: () {
-            setState(() {
-              _obscureText = !_obscureText;
-            });
-          },
-        )
+                icon: Icon(
+                  _obscureText ? Icons.visibility_off : Icons.visibility,
+                  color: widget.iconColor ?? Colors.grey,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _obscureText = !_obscureText;
+                  });
+                },
+              )
             : null,
-
-        suffixText: widget.suffixText, // ✅ Mostrar GB aquí
+        suffixText: widget.suffixText,
         suffixStyle: const TextStyle(fontWeight: FontWeight.bold, color: Colors.grey),
       ),
     );

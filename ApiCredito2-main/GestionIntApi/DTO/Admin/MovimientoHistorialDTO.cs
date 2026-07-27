@@ -8,7 +8,7 @@
 
         // Producto
         public int ProductoId { get; set; }
-        public string Codigo { get; set; } // 🔥 NUEVO
+        public string Codigo { get; set; } //  NUEVO
         public string TipoProducto { get; set; } // "Telefono", "TV"
         public string Marca { get; set; }
         public string Modelo { get; set; }
@@ -16,9 +16,9 @@
         public string? Serie { get; set; }
 
         // Origen/Destino
-        public int? TiendaOrigenId { get; set; }      // 🔥 NUEVO
+        public int? TiendaOrigenId { get; set; }      //  NUEVO
         public string? TiendaOrigen { get; set; }
-        public int? TiendaDestinoId { get; set; }     // 🔥 NUEVO
+        public int? TiendaDestinoId { get; set; }     //  NUEVO
         public string? TiendaDestino { get; set; }
 
         // Venta

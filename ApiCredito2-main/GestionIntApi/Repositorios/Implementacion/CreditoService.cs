@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using DocumentFormat.OpenXml.Drawing;
 using DocumentFormat.OpenXml.Spreadsheet;
 using GestionIntApi.DTO;
@@ -94,7 +94,7 @@ namespace GestionIntApi.Repositorios.Implementacion
                 if (modelo.ProximaCuota == default) modelo.ProximaCuota = DateTime.UtcNow.AddMonths(1);
 
                 // =============================
-                // 1. VALIDAR SI CLIENTE TIENE CRÉDITO ACTIVO
+                // VALIDAR SI CLIENTE TIENE CRÉDITO ACTIVO
                 // =============================
 
                 var creditoActual = await _creditoRepository.Obtener(
@@ -107,7 +107,7 @@ namespace GestionIntApi.Repositorios.Implementacion
                 // }
 
                 // ==========================================
-                // 🔥 NUEVA LÓGICA: PAGO AL CONTADO
+                //  NUEVA LÓGICA: PAGO AL CONTADO
                 // ==========================================
                 bool esAlContado = modelo.MetodoPago?.ToLower() == "al contado";
 
@@ -134,7 +134,7 @@ namespace GestionIntApi.Repositorios.Implementacion
 
                 // Cálculo del TotalPagar (sin intereses)
                 // modelo.MontoPendiente = modelo.MontoTotal-modelo.Entrada;
-                // 3️⃣ Monto pendiente real
+                //  Monto pendiente real
                 modelo.MontoPendiente = Math.Round(
                     modelo.MontoTotal - modelo.Entrada, 2
                 );
@@ -142,7 +142,7 @@ namespace GestionIntApi.Repositorios.Implementacion
 
 
 
-                // 3. Si es al contado, forzamos valores de crédito finalizado
+                // Si es al contado, forzamos valores de crédito finalizado
                 if (esAlContado || modelo.MontoPendiente <= 0)
                 {
                     modelo.MontoPendiente = 0;
@@ -160,10 +160,10 @@ namespace GestionIntApi.Repositorios.Implementacion
                     int totalCuotas = modelo.PlazoCuotas;
 
                     // =============================
-                    // 5. VALOR POR CUOTA REAL
+                    // VALOR POR CUOTA REAL
                     // =============================
 
-                    // 4️⃣ Valor por cuota BASE (NO PROBLEMA)
+                    //  Valor por cuota BASE (NO PROBLEMA)
                     decimal valorBase = Math.Floor(
                         (modelo.MontoPendiente / totalCuotas) * 100
                     ) / 100;
@@ -177,7 +177,7 @@ namespace GestionIntApi.Repositorios.Implementacion
                     //  modelo.ValorPorCuota = modelo.MontoPendiente / modelo.PlazoCuotas;
 
 
-                    // 🔥 NUEVO: Guardar día original para pagos mensuales
+                    //  NUEVO: Guardar día original para pagos mensuales
                     int diaOriginal = modelo.DiaPago.Day;
                     // Cálculo de PróximaCuota según frecuencia
                     /*   modelo.ProximaCuota = modelo.FrecuenciaPago.ToLower() switch
@@ -195,7 +195,7 @@ namespace GestionIntApi.Repositorios.Implementacion
                 } */
                     ;
 
-                    // 🔥 ACTUALIZADO: Cálculo de PróximaCuota según frecuencia
+                    //  ACTUALIZADO: Cálculo de PróximaCuota según frecuencia
                     switch (modelo.FrecuenciaPago.ToLower())
                     {
                         case "semanal":
@@ -205,7 +205,7 @@ namespace GestionIntApi.Repositorios.Implementacion
                             modelo.ProximaCuota = modelo.DiaPago.AddDays(15);
                             break;
                         case "mensual":
-                            // 🔥 NUEVO: Manejo correcto de fechas mensuales
+                            //  NUEVO: Manejo correcto de fechas mensuales
                             var nuevaFecha = modelo.DiaPago.AddMonths(1);
                             int ultimoDia = DateTime.DaysInMonth(nuevaFecha.Year, nuevaFecha.Month);
                             int diaFinal = Math.Min(diaOriginal, ultimoDia);
@@ -229,7 +229,7 @@ namespace GestionIntApi.Repositorios.Implementacion
 
 
                     // =============================
-                    // 6. Inicializar propiedades de pagos
+                    // Inicializar propiedades de pagos
                     // =============================
                     // =============================
 
@@ -237,7 +237,7 @@ namespace GestionIntApi.Repositorios.Implementacion
                     modelo.AbonadoTotal = modelo.Entrada;   // total del crédito
                     modelo.EstadoCuota = "Pendiente";
                     // =============================
-                    // 5. Actualizar estado
+                    // Actualizar estado
                     // =============================
                     modelo.Estado = modelo.MontoPendiente <= 0 ? "Pagado" : "Pendiente";
 
@@ -246,7 +246,7 @@ namespace GestionIntApi.Repositorios.Implementacion
 
 
 
-                // 🔥 OPCIONAL: Registrar el pago inicial en tu tabla de historial de pagos
+                //  OPCIONAL: Registrar el pago inicial en tu tabla de historial de pagos
                 if (modelo.Entrada > 0)
                 {
                     var registroPago = new RegistrarPago
@@ -310,7 +310,7 @@ namespace GestionIntApi.Repositorios.Implementacion
                 // detalleClienteEncontrado.FotoContrato = DetlleModelo.FotoContrato;
 
 
-                // 🔥 Recalcular correctamente
+                //  Recalcular correctamente
                 TiendaEncontrado.MontoPendiente = TiendaEncontrado.MontoTotal - TiendaEncontrado.Entrada;
 
                 TiendaEncontrado.ValorPorCuota = TiendaEncontrado.PlazoCuotas > 0
@@ -349,7 +349,7 @@ namespace GestionIntApi.Repositorios.Implementacion
 
             var historial = new List<HistoriaAppDTO>();
 
-            // 1️⃣ Registrar entrada
+            //  Registrar entrada
             decimal saldoRestante = credito.MontoTotal - credito.Entrada;
 
             historial.Add(new HistoriaAppDTO
@@ -377,7 +377,7 @@ namespace GestionIntApi.Repositorios.Implementacion
 
             decimal pagoRestante = credito.AbonadoTotal - credito.Entrada;
 
-            // 2️⃣ Generar cuotas restantes
+            //  Generar cuotas restantes
             for (int i = 0; i < credito.PlazoCuotas; i++)
             {
                 string estado;
@@ -401,7 +401,7 @@ namespace GestionIntApi.Repositorios.Implementacion
 
                 if (esUltimaCuota)
                 {
-                    // ✅ La última cuota cierra el saldo exacto
+                    //  La última cuota cierra el saldo exacto
                     historial.Add(new HistoriaAppDTO
                     {
                         Id = credito.Id,
@@ -415,11 +415,11 @@ namespace GestionIntApi.Repositorios.Implementacion
                 }
                 else
                 {
-                    // ✅ Restar cuota y redondear
+                    //  Restar cuota y redondear
                     decimal nuevoSaldo = saldoRestante - valorCuota;
                     nuevoSaldo = Math.Round(nuevoSaldo, 2);
 
-                    // ✅ Si el nuevo saldo es menor que la cuota, ajustar
+                    //  Si el nuevo saldo es menor que la cuota, ajustar
                     if (nuevoSaldo < valorCuota && nuevoSaldo > 0)
                     {
                         // Penúltima cuota: ajustar para que coincida
@@ -474,7 +474,7 @@ namespace GestionIntApi.Repositorios.Implementacion
                     throw new TaskCanceledException("El crédito no existe");
 
                 // =============================
-                // 🔒 NO TOCAR CAMPOS FINANCIEROS
+                //  NO TOCAR CAMPOS FINANCIEROS
                 // =============================
                 // NO modificar:
                 // - MontoTotal
@@ -489,7 +489,7 @@ namespace GestionIntApi.Repositorios.Implementacion
                 // - AbonadoCuota
 
                 // =============================
-                // ✏️ Campos editables
+                //  Campos editables
                 // =============================
                 credito.Marca = modelo.Marca;
                 credito.Modelo = modelo.Modelo;
@@ -497,7 +497,7 @@ namespace GestionIntApi.Repositorios.Implementacion
                // credito.FotoContrato = modelo.FotoContrato;
 
                 // =============================
-                // 🕒 Recalcular SOLO estado de cuota
+                //  Recalcular SOLO estado de cuota
                 // =============================
                 credito.EstadoCuota =
                     DateTime.UtcNow.Date > credito.ProximaCuota.Date
@@ -505,7 +505,7 @@ namespace GestionIntApi.Repositorios.Implementacion
                         : "Pendiente";
 
                 // =============================
-                // 💾 Guardar
+                //  Guardar
                 // =============================
                 bool respuesta = await _creditoRepository.Editar(credito);
                 return respuesta;
@@ -544,14 +544,14 @@ namespace GestionIntApi.Repositorios.Implementacion
         }
         public async Task<PagarCreditoDTO> RegistrarPagoAsync(PagoCreditoDTO pago)
         {
-            // 1. Buscar el crédito por Id
+            // Buscar el crédito por Id
             var credito = await _creditoRepository.Obtener(u => u.Id == pago.CreditoId);
 
             if (credito == null)
                 throw new Exception("Crédito no encontrado");
 
             // =============================
-            // 2. Normalizar fechas a UTC
+            // Normalizar fechas a UTC
             // =============================
             credito.ProximaCuota = DateTime.SpecifyKind(credito.ProximaCuota, DateTimeKind.Utc);
             credito.DiaPago = DateTime.SpecifyKind(credito.DiaPago, DateTimeKind.Utc);
@@ -559,12 +559,12 @@ namespace GestionIntApi.Repositorios.Implementacion
             credito.FechaCreacion = DateTime.SpecifyKind(credito.FechaCreacion, DateTimeKind.Utc);
 
 
-            // 🔥 NUEVO: Guardar día original para pagos mensuales
+            //  NUEVO: Guardar día original para pagos mensuales
             int diaOriginal = credito.DiaPago.Day;
 
 
             // =============================
-            // 3. Restar monto pagado 
+            // Restar monto pagado 
             // =============================
             if (pago.MontoPagado <= 0)
                 throw new Exception("El monto pagado debe ser mayor a 0");
@@ -574,7 +574,7 @@ namespace GestionIntApi.Repositorios.Implementacion
             //      $"El monto pagado ({pago.MontoPagado}) no puede ser mayor al saldo pendiente ({credito.MontoPendiente})"
             // );
 
-            // 🔑 ÚLTIMA CUOTA – ajuste automático
+            //  ÚLTIMA CUOTA – ajuste automático
             if (pago.MontoPagado > credito.MontoPendiente)
             {
                 pago.MontoPagado = credito.MontoPendiente;
@@ -646,12 +646,12 @@ namespace GestionIntApi.Repositorios.Implementacion
             }
 
             // =============================
-            // 5. Actualizar estado
+            // Actualizar estado
             // =============================
             credito.Estado = credito.MontoPendiente <= 0 ? "Pagado" : "Pendiente";
 
             // =============================
-            // 7. Estado de la cuota (SOLO Pendiente o Atrasada)
+            // Estado de la cuota (SOLO Pendiente o Atrasada)
             // =============================
 
 
@@ -670,12 +670,12 @@ namespace GestionIntApi.Repositorios.Implementacion
 
             }
               // =============================
-            // 6. Guardar cambios en BD
+            // Guardar cambios en BD
             // =============================
             await _creditoRepository.Editar(credito);
 
-            // 🔥 Cambia de RegistroPago a RegistrarPago
-            var registroPago = new RegistrarPago  // ✅ Con "ar"
+            //  Cambia de RegistroPago a RegistrarPago
+            var registroPago = new RegistrarPago  //  Con "ar"
             {
                 CreditoId = pago.CreditoId,
                 MontoPagado = pago.MontoPagado,
@@ -683,14 +683,39 @@ namespace GestionIntApi.Repositorios.Implementacion
                 FechaPago = DateTime.UtcNow
             };
             _context.RegistrosPagos.Add(registroPago);
+            
+            //  Crear notificación de pago realizado
+            var notifPago = new Notificacion
+            {
+                ClienteId = credito.ClienteId,
+                Tipo = "PagoRealizado",
+                Mensaje = $"Pago confirmado: Se registró un pago de ${pago.MontoPagado:F2} el {DateTime.Now:dd/MM/yyyy HH:mm}. ¡Gracias por tu pago!",
+                Fecha = DateTime.UtcNow,
+                Leida = false
+            };
+            _context.Notificacions.Add(notifPago);
+
             await _context.SaveChangesAsync();
-            // 🔥 FIN NUEVO
+
+            //  Enviar notificación SignalR al cliente
+            if (_hubContext != null)
+            {
+                try
+                {
+                    var notifDto = _mapper.Map<NotificacionDTO>(notifPago);
+                    await _hubContext.Clients.User(credito.ClienteId.ToString()).SendAsync("NotificacionActualizado", notifDto);
+                }
+                catch (Exception exNotif)
+                {
+                    Console.WriteLine($" Error enviando notificación SignalR: {exNotif.Message}");
+                }
+            }
 
 
             var dto = _mapper.Map<PagarCreditoDTO>(credito);
 
 
-            // 🔹 Calcular proximaCuotaStr como en GetCreditosClienteApp
+            //  Calcular proximaCuotaStr como en GetCreditosClienteApp
             dto.ProximaCuotaStr = credito.ProximaCuota.ToString("dd/MM/yyyy");
             dto.FechaCreditoStr = credito.FechaCreacion.ToString("dd/MM/yyyy");
             if (credito.Estado == "Pagado")
@@ -701,14 +726,14 @@ namespace GestionIntApi.Repositorios.Implementacion
 
 
             await _hubContext.Clients.All.SendAsync("CreditoActualizado", dto);
-            Console.WriteLine("✅ SignalR SendAsync ejecutado");
+            Console.WriteLine(" SignalR SendAsync ejecutado");
 
 
             try
             {
-                Console.WriteLine($"🔍 Obteniendo calendario para crédito: {pago.CreditoId}");
+                Console.WriteLine($" Obteniendo calendario para crédito: {pago.CreditoId}");
 
-                // 🔥 Agregamos 'credito.ClienteId' como segundo parámetro
+                //  Agregamos 'credito.ClienteId' como segundo parámetro
                 var calendarioActualizado = await GetCalendarioPagos(pago.CreditoId, credito.ClienteId);
 
                 Console.WriteLine($"📅 Calendario obtenido: {calendarioActualizado.Count} registros");
@@ -719,21 +744,21 @@ namespace GestionIntApi.Repositorios.Implementacion
                     Historial = calendarioActualizado
                 };
 
-                // 🛡️ SEGURIDAD: En lugar de 'All', enviamos solo al grupo del cliente
+                //  SEGURIDAD: En lugar de 'All', enviamos solo al grupo del cliente
                 // El nombre del grupo debe coincidir con el que definas en el Hub (ej. "Cliente_1")
                 string nombreGrupo = $"Cliente_{credito.ClienteId}";
                 await _hubContext.Clients.Group(nombreGrupo).SendAsync("CalendarioActualizado", mensaje);
 
-                Console.WriteLine($"✅ SignalR CalendarioActualizado enviado al grupo {nombreGrupo}");
+                Console.WriteLine($" SignalR CalendarioActualizado enviado al grupo {nombreGrupo}");
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ Error en CalendarioActualizado: {ex.Message}");
-                Console.WriteLine($"❌ StackTrace: {ex.StackTrace}");
+                Console.WriteLine($" Error en CalendarioActualizado: {ex.Message}");
+                Console.WriteLine($" StackTrace: {ex.StackTrace}");
             }
 
             // =============================
-            // 7. Mapear y devolver DTO
+            // Mapear y devolver DTO
             // =============================
             return dto;
         }
@@ -817,7 +842,7 @@ namespace GestionIntApi.Repositorios.Implementacion
             decimal saldoRestante = credito.MontoTotal - credito.Entrada;
 
 
-            // 1️⃣ Registrar entrada
+            //  Registrar entrada
             historial.Add(new HistoriaAppDTO
             {
                 Id = credito.Id,
@@ -834,7 +859,7 @@ namespace GestionIntApi.Repositorios.Implementacion
             decimal valorCuota = credito.ValorPorCuota;
             DateTime fechaPago = credito.FechaCreacion;
 
-            // 🔥 Guardar día original para pagos mensuales
+            //  Guardar día original para pagos mensuales
             int diaOriginal = fechaPago.Day;
 
             // Calcular primera fecha de pago
@@ -842,7 +867,7 @@ namespace GestionIntApi.Repositorios.Implementacion
 
             decimal pagoRestante = credito.AbonadoTotal - credito.Entrada;
 
-            // 2️⃣ Generar cuotas restantes
+            //  Generar cuotas restantes
             for (int i = 0; i < credito.PlazoCuotas; i++)
             {
                 // Determinar estado del pago
@@ -874,7 +899,7 @@ namespace GestionIntApi.Repositorios.Implementacion
 
                 if (esUltimaCuota)
                 {
-                    // ✅ La última cuota cierra el saldo exacto
+                    //  La última cuota cierra el saldo exacto
                     historial.Add(new HistoriaAppDTO
                     {
                         Id = credito.Id,
@@ -968,7 +993,7 @@ namespace GestionIntApi.Repositorios.Implementacion
                 NombreCliente = p.Credito?.Cliente?.DetalleCliente?.NombreApellidos ?? "N/A"
             }).ToList();
         }
-        // 🔥 MÉTODO AUXILIAR (agrega este método en tu clase)
+        //  MÉTODO AUXILIAR (agrega este método en tu clase)
         private DateTime CalcularProximaFecha(DateTime fechaActual, string frecuencia, int diaOriginal)
         {
             switch (frecuencia.ToLower())
@@ -1012,4 +1037,5 @@ namespace GestionIntApi.Repositorios.Implementacion
 
 
 }
+
 

@@ -11,7 +11,7 @@ class TiendaAppDTO {
     this.fechaRegistro,
   });
 
-  // ------------------- FROM JSON -------------------
+  
   factory TiendaAppDTO.fromJson(Map<String, dynamic> json) {
     return TiendaAppDTO(
       id: json['id'] ?? 0,
@@ -23,7 +23,7 @@ class TiendaAppDTO {
     );
   }
 
-  // ------------------- TO JSON -------------------
+  
   Map<String, dynamic> toJson() => {
     'Id': id,
     'CedulaEncargado': cedulaEncargado,

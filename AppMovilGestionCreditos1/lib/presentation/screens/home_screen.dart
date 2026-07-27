@@ -1,15 +1,15 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:go_router/go_router.dart';
 import 'package:trabajo1/services/historial_service.dart';
 import '../../models/credito_dto.dart';
- import '../../models/tienda_dto.dart'; // 🏪 COMENTADO: Tienda
+ import '../../models/tienda_dto.dart'; //  COMENTADO: Tienda
 import '../../models/CreditoMostrarDTO.dart';
 import '../widgets/credit_summary_card.dart';
 import '../widgets/side_menu.dart';
 import '../../services/creditoMostrarHome.dart';
- import '../../services/tiendaService.dart'; // 🏪 COMENTADO: Tienda
-import '../../models/tiendaMostrar_dto.dart'; // 🏪 COMENTADO: Tienda
+ import '../../services/tiendaService.dart'; //  COMENTADO: Tienda
+import '../../models/tiendaMostrar_dto.dart'; //  COMENTADO: Tienda
 import '../../services/usuario_service.dart';
 import '../../models/ClienteMostrarDTO.dart';
 import '../../services/location_service.dart';
@@ -19,6 +19,7 @@ import '../../services/notificacion_service.dart';
 import '../../models/notificacion_dto.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -49,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
   //final String _nombreUsuario = "aszcsz";
   final String _emailUsuario = "luis@ejemplo.com";
 
-  /* 🏪 COMENTADO: Mock de Tienda
+  /*  COMENTADO: Mock de Tienda
   final TiendaDTO _tiendaMock = TiendaDTO(
     nombreTienda: "Celulares El Centro",
     nombreEncargado: "Luis",
@@ -59,7 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
   );
   */
   // final creditoServicio = creditoMostrarHome();
- // 🔴 AGREGAR ESTE FLAG PARA EVITAR RECARGAS MÚLTIPLES
+ //  AGREGAR ESTE FLAG PARA EVITAR RECARGAS MÚLTIPLES
   bool _estaProcesandoRecarga = false;
   DateTime? _ultimaRecarga;
   bool _isRedirectingToLogin = false;
@@ -74,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
     if (context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('🔒 Tu sesión ha caducado. Por favor, inicia sesión nuevamente.'),
+          content: Text(' Tu sesión ha caducado. Por favor, inicia sesión nuevamente.'),
           backgroundColor: Colors.orange,
           duration: Duration(seconds: 4),
         ),
@@ -99,30 +100,30 @@ class _HomeScreenState extends State<HomeScreen> {
    // A. Inicializar Futuros de datos inmediatos (Sin lógica de red pesada aquí)
    super.initState();
     debugPrint(
-      "🔵 [HOME] usando instancia → hash: ${_creditoService.hashCode}",
+      " [HOME] usando instancia → hash: ${_creditoService.hashCode}",
     );
 
     _checkSessionToken();
 
-    // _Tiendas = _tiendaService.getTienda(); // 🏪 COMENTADO: Carga inicial Tienda
+    // _Tiendas = _tiendaService.getTienda(); //  COMENTADO: Carga inicial Tienda
     _futureClientes = _clienteService.getCliente();
 
-    debugPrint("🏠 [HOME] carga inicial créditos");
+    debugPrint(" [HOME] carga inicial créditos");
     // _futureCreditos1 = _creditoService.getCreditos(); // carga inicial
     //_creditoService.connectSignalR();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final state = GoRouterState.of(context);
-      debugPrint("🏠 [HOME] extra recibido: ${state.extra}");
+      debugPrint(" [HOME] extra recibido: ${state.extra}");
       if (state.extra == true) {
-        debugPrint("🏠 [HOME] FORZANDO REFRESH DE CRÉDITOS");
+        debugPrint(" [HOME] FORZANDO REFRESH DE CRÉDITOS");
         _creditoService.cargarCreditos();
       }
     });
     _futureCreditos1 = _creditoService.getCreditos(); // carga inicial
     _creditoService.connectSignalR();
     _notificacionService.connectSignalR();
-    // 🔴 CARGAR NOTIFICACIONES AL INICIO
+    //  CARGAR NOTIFICACIONES AL INICIO
     _cargarNotificaciones();
 _historialService.connectSignalR();
     // 3. EJECUTAR RASTREO EN SEGUNDO PLANO (Sin await para no bloquear la UI)
@@ -130,15 +131,15 @@ _historialService.connectSignalR();
   }
 
 
-  // 🔴 FUNCIÓN NUEVA: Obtiene el conteo del servicio
+  //  FUNCIÓN NUEVA: Obtiene el conteo del servicio
   Future<void> _cargarNotificaciones() async {
     try {
-      debugPrint("🔵 [HOME] Iniciando notificaciones...");
+      debugPrint(" [HOME] Iniciando notificaciones...");
       // await _notificacionService.connectSignalR();
-      debugPrint("✅ [HOME] SignalR de notificaciones conectado");
+      debugPrint(" [HOME] SignalR de notificaciones conectado");
       final notificaciones = await _notificacionService.getNotificaciones();
       _notificacionService.notificacionesNotifier.value = notificaciones;
-      debugPrint("✅ [HOME] ${notificaciones.length} notificaciones cargadas");
+      debugPrint(" [HOME] ${notificaciones.length} notificaciones cargadas");
 
     } catch (e) {
       print("Error cargando notificaciones badge: $e");
@@ -166,7 +167,7 @@ _historialService.connectSignalR();
     await _futureCreditos1;
   }
 
-  // 🏪 COMENTADO: Función Refrescar Tienda
+  //  COMENTADO: Función Refrescar Tienda
   Future<void> _refreshTienda() async {
     _Tiendas = _tiendaService.getTienda();
     await _Tiendas;
@@ -178,30 +179,31 @@ _historialService.connectSignalR();
     final theme = Theme.of(context);
 
     return Scaffold(
+      backgroundColor: const Color(0xFF090D16),
       appBar: AppBar(
-        title: const Text('Resumen de crédito', style: TextStyle(color: Colors.white)),
-        backgroundColor: theme.primaryColor,
+        title: const Text(
+          'Resumen de crédito',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18),
+        ),
+        backgroundColor: const Color(0xFF0F172A),
+        elevation: 0,
         iconTheme: const IconThemeData(color: Colors.white),
         actions: [
-          // 🔴 BADGE REACTIVO CON ValueListenableBuilder
+          // BADGE REACTIVO CON ValueListenableBuilder
           ValueListenableBuilder<List<NotificacionDTO>?>(
             valueListenable: _notificacionService.notificacionesNotifier,
             builder: (context, notificaciones, child) {
-              // Contar solo las NO LEÍDAS
               final noLeidas = notificaciones?.where((n) => !n.leida).length ?? 0;
 
               return IconButton(
                 icon: Badge(
                   isLabelVisible: noLeidas > 0,
                   label: Text('$noLeidas'),
-                  backgroundColor: Colors.red,
-                  child: const Icon(Icons.notifications_none),
+                  backgroundColor: const Color(0xFFEF4444),
+                  child: const Icon(Icons.notifications_none_rounded, size: 24),
                 ),
                 onPressed: () async {
-                  // Navegar a notificaciones
                   await context.push('/notifications');
-
-                  // Al volver, recargar notificaciones
                   try {
                     final actualizadas = await _notificacionService.getNotificaciones(forceRefresh: true);
                     _notificacionService.notificacionesNotifier.value = actualizadas;
@@ -214,12 +216,11 @@ _historialService.connectSignalR();
           ),
         ],
       ),
-      drawer: //SideMenu(userName: _nombreUsuario, userEmail: _emailUsuario),
-      FutureBuilder<ClienteMostrarDTO>(
+      drawer: FutureBuilder<ClienteMostrarDTO>(
         future: _futureClientes,
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Drawer(); // Drawer vacío mientras carga
+            return const Drawer();
           }
 
           if (snapshot.hasError) {
@@ -242,29 +243,28 @@ _historialService.connectSignalR();
       ),
 
       body: SingleChildScrollView(
-        padding: const EdgeInsets.all(20),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 22),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             FutureBuilder<ClienteMostrarDTO>(
               future: _futureClientes,
               builder: (context, snapshot) {
-                // Verifica el estado de la conexión
                 if (snapshot.connectionState == ConnectionState.waiting) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator(color: Color(0xFF10B981)));
                 }
 
                 if (snapshot.hasError) {
                   final errStr = snapshot.error.toString();
                   if (errStr.contains('Token no encontrado') || errStr.contains('401') || errStr.contains('autenticado')) {
                     WidgetsBinding.instance.addPostFrameCallback((_) => _redirectToLogin(context));
-                    return const Center(child: CircularProgressIndicator());
+                    return const Center(child: CircularProgressIndicator(color: Color(0xFF10B981)));
                   }
-                  return Text('Error: ${snapshot.error}');
+                  return Text('Error: ${snapshot.error}', style: const TextStyle(color: Colors.red));
                 }
 
                 if (!snapshot.hasData) {
-                  return const Text('No se encontraron datos del usuario');
+                  return const Text('No se encontraron datos del usuario', style: TextStyle(color: Colors.white));
                 }
 
                 String saludo = 'Hola, usuario';
@@ -274,19 +274,22 @@ _historialService.connectSignalR();
                 return FadeInDown(
                   child: Text(
                     saludo,
-                    style: theme.textTheme.headlineSmall?.copyWith(
-                      fontWeight: FontWeight.bold,
+                    style: const TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.white,
+                      letterSpacing: -0.5,
                     ),
                   ),
                 );
               },
             ),
 
-            const SizedBox(height: 5),
+            const SizedBox(height: 4),
             FadeInDown(
-              child: Text(
-                'Aquí está el resumen de tu crédito',
-                style: TextStyle(color: Colors.grey[600]),
+              child: const Text(
+                'Aquí está el resumen de tu crédito activo',
+                style: TextStyle(color: Color(0xFFCBD5E1), fontSize: 13.5),
               ),
             ),
 
@@ -294,45 +297,34 @@ _historialService.connectSignalR();
 
             ValueListenableBuilder<List<CreditoMostrarDTO>?>(
               valueListenable: _creditoService.creditosNotifier,
-
-
               builder: (context, creditos, _) {
-
-
-                // Cargando
                 if (creditos == null) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(child: CircularProgressIndicator(color: Color(0xFF10B981)));
                 }
-             // final creditoMostrado = creditos.first;
-                // 🔥 CASO: NO TIENE CRÉDITOS → PUEDE SOLICITAR
+
                 if (creditos.isEmpty) {
                   return Column(
                     children: [
-                      const Text('No tienes créditos activos.'),
+                      const Text('No tienes créditos activos.', style: TextStyle(color: Colors.white70)),
                       const SizedBox(height: 20),
                       _NewCreditRequestCard(
-                        isPaid:
-                        true, // Si no hay créditos, se asume que puede solicitar
+                        isPaid: true,
                         onTap: () async {
                           context.push('/new-credit-request');
-
-                          // await _refreshCreditos();
                         },
                       ),
                     ],
                   );
                 }
 
-                // 🔹 CASO: TIENE CRÉDITO
                 final credito = creditos.first;
-
                 final bool estaPagado = credito.montoPendiente <= 0;
 
                 return Column(
                   children: [
                     CreditSummaryCard(credito: credito),
 
-                    const SizedBox(height: 15),
+                    const SizedBox(height: 16),
 
                     FadeInUp(
                       child: GestureDetector(
@@ -341,226 +333,89 @@ _historialService.connectSignalR();
                         },
                         child: Container(
                           width: double.infinity,
-                          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+                          padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 20),
                           decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [Colors.teal.shade400, Colors.teal.shade700],
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFF10B981), Color(0xFF059669)],
                               begin: Alignment.topLeft,
                               end: Alignment.bottomRight,
                             ),
-                            borderRadius: BorderRadius.circular(15),
+                            borderRadius: BorderRadius.circular(16),
                             boxShadow: [
                               BoxShadow(
-                                color: Colors.teal.withOpacity(0.3),
-                                blurRadius: 8,
-                                offset: const Offset(0, 4),
+                                color: const Color(0xFF10B981).withOpacity(0.3),
+                                blurRadius: 12,
+                                offset: const Offset(0, 6),
                               ),
                             ],
                           ),
                           child: const Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Icon(Icons.receipt_long, color: Colors.white),
+                              Icon(Icons.receipt_long_rounded, color: Colors.white, size: 22),
                               SizedBox(width: 10),
                               Text(
-                                "Ver Historial de Pagos",
+                                "Ver historial de pagos",
                                 style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 16
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 15.5,
+                                  letterSpacing: 0.2,
                                 ),
                               ),
                               Spacer(),
-                              Icon(Icons.arrow_forward_ios, color: Colors.white70, size: 16),
+                              Icon(Icons.arrow_forward_ios_rounded, color: Colors.white70, size: 16),
                             ],
                           ),
                         ),
                       ),
                     ),
 
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 16),
                     _NewCreditRequestCard(
                       isPaid: estaPagado,
-
                       onTap: () async {
-                        //  context.push('/new-credit-request');
                         await context.push('/new-credit-request');
                         await _refreshCreditos();
-                        // await _refreshTienda(); // 🏪 COMENTADO: Refrescar Tienda
                       },
                     ),
-
-
-Visibility(
-                      visible: false,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-
-                          _QuickActionBtn(
-                            icon: Icons.receipt_long,
-                            label: 'Historial',
-                            color: Colors.teal,
-                            onTap: () {
-                              // ✅ Ahora 'credito' existe perfectamente aquí
-                              context.push('/payment-history/${credito.id}');
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-
                   ],
                 );
               },
             ),
 
-            const SizedBox(height: 30),
-
-            // 🏪 COMENTADO: SECCIÓN VISUAL DE TIENDA
-           // 3. Sección Tienda
-          /*  FadeInUp(
-              child: Text(
-                'Mi Tienda',
-                style: theme.textTheme.titleLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
-
-            FadeInUp(
-              delay: const Duration(milliseconds: 200),
-              child: ValueListenableBuilder<List<CreditoMostrarDTO>?>(
-                valueListenable: _creditoService.creditosNotifier,
-                builder: (context, creditos, _) {
-                  // ✅ Verificar que haya créditos
-                  if (creditos == null || creditos.isEmpty) {
-                    return const Text(
-                      'No hay crédito activo para mostrar tienda',
-                    );
-                  }
-
-                  final creditoActual = creditos.first;
-
-                  return ValueListenableBuilder<List<TiendaMostrarAppVentaDTO>?>(
-                    valueListenable: _tiendaService.tiendasNotifier,
-                    builder: (context, tiendas, _) {
-                      if (tiendas == null) {
-                        return const Center(child: CircularProgressIndicator());
-                      }
-
-                      if (tiendas.isEmpty) {
-                        return const Text('No hay fecha de venta registrada');
-                      }
-
-                      // 🏪 Buscar tienda asociada al crédito
-                      final tienda = tiendas.firstWhere(
-                        (t) => t.id == creditoActual.tiendaId,
-                        orElse: () => TiendaMostrarAppVentaDTO(
-                          id: 0,
-                          fechaRegistroStr: 'Fecha de venta no encontrada',
-
-                          clienteId: 0,
-                        ),
-                      );
-
-                      debugPrint(
-                        '✅ Tienda encontrada: ${tienda.fechaRegistroStr} (ID: ${tienda.id})',
-                      );
-
-
-
-                      return Container(
-                        padding: const EdgeInsets.all(15),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(15),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.grey.withOpacity(0.1),
-                              blurRadius: 10,
-                              spreadRadius: 2,
-                            ),
-                          ],
-                          border: Border.all(color: Colors.grey.shade200),
-                        ),
-                        child: Row(
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.all(12),
-                              decoration: BoxDecoration(
-                                color: Colors.orange.withOpacity(0.1),
-                                shape: BoxShape.circle,
-                              ),
-                              child: const Icon(
-                                Icons.store,
-                                color: Colors.orange,
-                              ),
-                            ),
-                            const SizedBox(width: 15),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    tienda.fechaRegistroStr,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16,
-                                    ),
-                                  ),
-
-                                ],
-                              ),
-                            ),
-                            const Icon(
-                              Icons.arrow_forward_ios,
-                              size: 16,
-                              color: Colors.grey,
-                            ),
-                          ],
-                        ),
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
-*/
-            const SizedBox(height: 15), // Un poco más de espacio arriba
+            const SizedBox(height: 25),
 
             Center(
               child: RichText(
                 textAlign: TextAlign.center,
-                text: TextSpan(
-                  // Estilo base para toda la frase
-                  style: const TextStyle(
+                text: const TextSpan(
+                  style: TextStyle(
                     fontSize: 15,
-                    fontFamily: 'Roboto', // O la fuente que use tu app
+                    fontFamily: 'Roboto',
                   ),
                   children: [
                     TextSpan(
                       text: "Crédito financiado por ",
                       style: TextStyle(
-                        color: Colors.grey[600], // Gris suave para el texto introductorio
+                        color: Color(0xFF94A3B8),
                         fontWeight: FontWeight.w400,
                       ),
                     ),
-                    const TextSpan(
+                    TextSpan(
                       text: "CELLCOM",
                       style: TextStyle(
-                        color: Color(0xFF424242), // Gris oscuro tipo "Plata/Plomo" del logo
-                        fontWeight: FontWeight.w900, // Extra negrita para que parezca logo
-                        letterSpacing: -0.5, // Un toque más compacto como el logo
+                        color: Color(0xFFE2E8F0),
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: -0.5,
                         fontSize: 16,
                       ),
                     ),
-                    const TextSpan(
+                    TextSpan(
                       text: "PAY",
                       style: TextStyle(
-                        color: Color(0xFF4CAF50), // Verde similar al del logo
-                        fontWeight: FontWeight.w900, // Extra negrita
+                        color: Color(0xFF4CAF50),
+                        fontWeight: FontWeight.w900,
                         fontSize: 16,
                       ),
                     ),
@@ -568,21 +423,18 @@ Visibility(
                 ),
               ),
             ),
-            const SizedBox(height: 20), // Espacio inferior de seguridad
+            const SizedBox(height: 24),
 
-            const SizedBox(height: 380),
-            // 4. Accesos Rápidos (Opcional pero útil)
             FadeInUp(
               delay: const Duration(milliseconds: 300),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // BOTÓN PÁGINA WEB
                   Expanded(
                     child: _QuickActionBtn(
-                      icon: Icons.language,
+                      icon: Icons.language_rounded,
                       label: 'Página web',
-                      color: Colors.blue,
+                      color: const Color(0xFF38BDF8),
                       onTap: () {
                         _abrirEnlace('https://www.cellcompayec.com');
                       },
@@ -591,21 +443,19 @@ Visibility(
 
                   const SizedBox(width: 15),
 
-                  // BOTÓN SOPORTE (WHATSAPP)
                   Expanded(
                     child: _QuickActionBtn(
                       icon: FontAwesomeIcons.whatsapp,
                       label: 'Soporte',
-                      color: Colors.green,
+                      color: const Color(0xFF10B981),
                       onTap: () {
-                        // Enlace directo a WhatsApp
                         _abrirEnlace('https://wa.me/593982327250');
                       },
                     ),
                   ),
-                ], // Cierra children
-              ), // Cierra Row
-            ), // Cierra FadeInUp
+                ],
+              ),
+            ),
             const SizedBox(height: 20),
           ],
         ),
@@ -633,24 +483,24 @@ class _QuickActionBtn extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 100,
-        padding: const EdgeInsets.symmetric(vertical: 15),
+        padding: const EdgeInsets.symmetric(vertical: 16),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(15),
+          color: const Color(0xEE0F172A),
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: Colors.white.withOpacity(0.1)),
           boxShadow: [
-            BoxShadow(color: Colors.grey.withOpacity(0.1), blurRadius: 5),
+            BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 10, offset: const Offset(0, 4)),
           ],
         ),
         child: Column(
           children: [
             icon is IconData
-                ? Icon(icon as IconData, color: color, size: 30)
-                : FaIcon(icon, color: color, size: 30),
+                ? Icon(icon as IconData, color: color, size: 28)
+                : FaIcon(icon, color: color, size: 28),
             const SizedBox(height: 8),
             Text(
               label,
-              style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.bold, color: Colors.white),
             ),
           ],
         ),
@@ -667,52 +517,52 @@ class _NewCreditRequestCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final backgroundColor = isPaid ? theme.primaryColor : Colors.grey.shade300;
-    final textColor = isPaid ? Colors.white : Colors.grey.shade600;
-    final iconColor = isPaid ? Colors.white : Colors.grey.shade500;
-
     return Material(
       color: Colors.transparent,
       child: InkWell(
         onTap: isPaid ? onTap : null,
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(16),
         child: Container(
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: backgroundColor,
-            borderRadius: BorderRadius.circular(15),
-            boxShadow: isPaid
-                ? [
+            color: const Color(0xEE0F172A),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: isPaid ? const Color(0xFF10B981).withOpacity(0.4) : Colors.white.withOpacity(0.08),
+            ),
+            boxShadow: [
               BoxShadow(
-                color: theme.primaryColor.withOpacity(0.3),
+                color: Colors.black.withOpacity(0.3),
                 blurRadius: 10,
                 offset: const Offset(0, 4),
               ),
-            ]
-                : null,
+            ],
           ),
           child: Row(
             children: [
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: Colors.white.withOpacity(isPaid ? 0.2 : 0.5),
+                  color: isPaid ? const Color(0xFF10B981).withOpacity(0.2) : Colors.white.withOpacity(0.05),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(Icons.add_card_rounded, color: iconColor, size: 28),
+                child: Icon(
+                  Icons.add_card_rounded,
+                  color: isPaid ? const Color(0xFF10B981) : const Color(0xFF64748B),
+                  size: 26,
+                ),
               ),
               const SizedBox(width: 15),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      'Solicitar Nuevo Crédito',
+                    const Text(
+                      'Solicitar nuevo crédito',
                       style: TextStyle(
-                        color: textColor,
+                        color: Colors.white,
                         fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                        fontSize: 15.5,
                       ),
                     ),
                     const SizedBox(height: 4),
@@ -721,7 +571,7 @@ class _NewCreditRequestCard extends StatelessWidget {
                           ? '¡Estás listo para renovar tu equipo!'
                           : 'Termina de pagar tu crédito actual para desbloquear.',
                       style: TextStyle(
-                        color: textColor.withOpacity(isPaid ? 0.9 : 0.7),
+                        color: isPaid ? const Color(0xFFCBD5E1) : const Color(0xFF64748B),
                         fontSize: 12,
                       ),
                     ),
@@ -729,9 +579,9 @@ class _NewCreditRequestCard extends StatelessWidget {
                 ),
               ),
               if (isPaid)
-                Icon(Icons.arrow_forward_ios, color: textColor, size: 18)
+                const Icon(Icons.arrow_forward_ios_rounded, color: Color(0xFF10B981), size: 16)
               else
-                Icon(Icons.lock_outline, color: iconColor, size: 20),
+                const Icon(Icons.lock_outline_rounded, color: Color(0xFF64748B), size: 18),
             ],
           ),
         ),

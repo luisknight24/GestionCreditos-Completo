@@ -19,17 +19,17 @@ namespace GestionIntApi.Repositorios.Implementacion
                 Expira = DateTime.Now.AddMinutes(5)
             };
 
-            Console.WriteLine($"📦 [CODIGO] Total códigos en memoria: {_codigos.Count}");
+            Console.WriteLine($" [CODIGO] Total códigos en memoria: {_codigos.Count}");
         }
 
         public bool ValidarCodigo(string correo, string codigo)
         {
 
-            Console.WriteLine($"🔍 [CODIGO] Validando código {codigo} para {correo}");
+            Console.WriteLine($" [CODIGO] Validando código {codigo} para {correo}");
             if (!_codigos.ContainsKey(correo))
 
             {
-                Console.WriteLine("❌ [CODIGO] No existe código para ese correo");
+                Console.WriteLine(" [CODIGO] No existe código para ese correo");
                 return false;
 
             }
@@ -45,8 +45,9 @@ namespace GestionIntApi.Repositorios.Implementacion
                 return false;
 
             }
-            Console.WriteLine($"✅ [CODIGO] Código guardado: {data.Codigo}");
+            Console.WriteLine($" [CODIGO] Código guardado: {data.Codigo}");
             return data.Codigo == codigo;
         }
     }
 }
+

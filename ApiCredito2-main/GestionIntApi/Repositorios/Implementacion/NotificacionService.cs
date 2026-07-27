@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using GestionIntApi.DTO;
 using GestionIntApi.Models;
 using GestionIntApi.Repositorios.Contrato;
@@ -33,50 +33,71 @@ namespace GestionIntApi.Repositorios.Implementacion
         public async Task GenerarNotificaciones()
         {
             var listaCreditos = await _CreditoRepositorio.Consultar();
-            var creditos = listaCreditos.ToList();
+            var creditos = listaCreditos.Where(c => c.MontoPendiente > 0 && c.Estado != "Pagado").ToList();
             var hoy = DateTime.Now.Date;
+
             foreach (var credito in creditos)
             {
                 var proximaCuota = credito.ProximaCuota.Date;
+                int diasDiferencia = (proximaCuota - hoy).Days;
 
-                // 1. PAGO MAÑANA
-                if (credito.ProximaCuota.Date == DateTime.Now.AddDays(182).Date)
+                if (diasDiferencia == 5)
                 {
-                    if (!await ExisteNotificacionHoy(credito.Id, "PagoMañana")) {
-
-                        await CrearNotificacion(credito.ClienteId, "PagoMañana",
-                            $"El cliente debe pagar mañana: {credito.ProximaCuota:dd/MM/yyyy}");
-
-                    }
-                }
-
-                // 2. CUOTA VENCIDA
-                if (credito.ProximaCuota.Date < DateTime.Now.Date)
-                {
-                    if (!await ExisteNotificacionHoy(credito.Id, "Moroso")) {
-
-                        int diasAtrazo1 = (hoy - proximaCuota).Days;
+                    if (!await ExisteNotificacionHoy(credito.ClienteId, "Recordatorio5Dias"))
+                    {
                         await CrearNotificacion(
-                   credito.ClienteId,
-                   "Moroso",
-                   $"Tiene {diasAtrazo1} día(s) de atraso en el pago."
-               );
-
+                            credito.ClienteId,
+                            "Recordatorio5Dias",
+                            $"Recordatorio: Faltan 5 días para la fecha de pago de tu cuota de ${credito.ValorPorCuota:F2} ({credito.ProximaCuota:dd/MM/yyyy})."
+                        );
                     }
-                    
                 }
-
-                // 3. CLIENTE MOROSO (más de 5 días)
-              /*  var diasAtraso = (DateTime.Now.Date - credito.ProximaCuota.Date).Days;
-
-                if (diasAtraso >= 1)
+                else if (diasDiferencia == 3)
                 {
-                    await CrearNotificacion(credito.ClienteId, "ClienteMoroso",
-                        $"Tiene {diasAtraso} días de atraso en el pago.");
+                    if (!await ExisteNotificacionHoy(credito.ClienteId, "Recordatorio3Dias"))
+                    {
+                        await CrearNotificacion(
+                            credito.ClienteId,
+                            "Recordatorio3Dias",
+                            $"Recordatorio: Faltan 3 días para el vencimiento de tu cuota de ${credito.ValorPorCuota:F2}."
+                        );
+                    }
                 }
-            
-                */
+                else if (diasDiferencia == 2)
+                {
+                    if (!await ExisteNotificacionHoy(credito.ClienteId, "Recordatorio2Dias"))
+                    {
+                        await CrearNotificacion(
+                            credito.ClienteId,
+                            "Recordatorio2Dias",
+                            $"Recordatorio: Faltan 2 días para el vencimiento de tu cuota de ${credito.ValorPorCuota:F2}."
+                        );
+                    }
                 }
+                else if (diasDiferencia == 0)
+                {
+                    if (!await ExisteNotificacionHoy(credito.ClienteId, "PagoHoy"))
+                    {
+                        await CrearNotificacion(
+                            credito.ClienteId,
+                            "PagoHoy",
+                            $"¡Hoy es tu día de pago! Recuérdalo para mantener tu crédito al día (${credito.ValorPorCuota:F2})."
+                        );
+                    }
+                }
+                else if (diasDiferencia < 0)
+                {
+                    int diasAtraso = Math.Abs(diasDiferencia);
+                    if (!await ExisteNotificacionHoy(credito.ClienteId, "Moroso"))
+                    {
+                        await CrearNotificacion(
+                            credito.ClienteId,
+                            "Moroso",
+                            $"Atención: Tu cuota tiene {diasAtraso} día(s) de atraso. Regulariza tu saldo de ${credito.ValorPorCuota:F2} para evitar recargos."
+                        );
+                    }
+                }
+            }
         }
 
         public async Task CrearNotificacion(int clienteId, string tipo, string mensaje)
@@ -91,39 +112,37 @@ namespace GestionIntApi.Repositorios.Implementacion
 
             await _notificacionRepository.Crear(notificacion);
 
-            // 2️⃣ Mapear a DTO
             var dto = _mapper.Map<NotificacionDTO>(notificacion);
 
-            // 3️⃣ 📡 Enviar por SignalR al cliente específico
             if (_hubContext != null)
             {
                 try
                 {
-                    Console.WriteLine($"📤 Enviando notificación por SignalR a cliente {clienteId}");
-                    Console.WriteLine($"   Tipo: {tipo} | Mensaje: {mensaje}");
+                    Console.WriteLine($"Enviando notificación por SignalR a cliente {clienteId}");
+                    Console.WriteLine($"Tipo: {tipo} | Mensaje: {mensaje}");
 
                     await _hubContext.Clients.User(clienteId.ToString())
      .SendAsync("NotificacionActualizado", dto);
-     //.SendAsync("NotificacionActualizado", dto);
 
-                    Console.WriteLine($"✅ Notificación enviada por SignalR exitosamente");
+                    Console.WriteLine($"Notificación enviada por SignalR exitosamente");
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"⚠️ Error enviando notificación SignalR: {ex.Message}");
-                    Console.WriteLine($"⚠️ Stack: {ex.StackTrace}");
+                    Console.WriteLine($"Error enviando notificación SignalR: {ex.Message}");
+                    Console.WriteLine($"Stack: {ex.StackTrace}");
                 }
             }
             else
             {
-                Console.WriteLine("❌ _hubContext es NULL, no se puede enviar SignalR");
+                Console.WriteLine("_hubContext es NULL, no se puede enviar SignalR");
             }
         }
 
         public async Task<List<NotificacionDTO>> GetNotificaciones()
         {
             var query = await _notificacionRepository.Consultar();
-            return _mapper.Map<List<NotificacionDTO>>(query.ToList());
+            var ordenadas = query.OrderByDescending(n => n.Fecha).ToList();
+            return _mapper.Map<List<NotificacionDTO>>(ordenadas);
         }
 
 
@@ -142,7 +161,6 @@ namespace GestionIntApi.Repositorios.Implementacion
 
             var dto = _mapper.Map<NotificacionDTO>(notificacion);
 
-            // ✅ Verificar que _hubContext no sea null
             if (_hubContext != null)
             {
                 try
@@ -153,8 +171,7 @@ namespace GestionIntApi.Repositorios.Implementacion
                 }
                 catch (Exception ex)
                 {
-                    // Log pero no fallar
-                    Console.WriteLine($"⚠️ Error enviando notificación SignalR: {ex.Message}");
+                    Console.WriteLine($"Error enviando notificación SignalR: {ex.Message}");
                 }
             }
         }
@@ -168,7 +185,6 @@ namespace GestionIntApi.Repositorios.Implementacion
             notificacion.Leida = true;
             await _notificacionRepository.Editar(notificacion);
 
-            // Enviar actualización por SignalR si _hubContext no es null
             if (_hubContext != null)
             {
                 var dto = _mapper.Map<NotificacionDTO>(notificacion);

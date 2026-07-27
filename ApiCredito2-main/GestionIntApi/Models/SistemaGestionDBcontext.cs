@@ -54,7 +54,7 @@ namespace GestionIntApi.Models
       new Rol { Id = 3, Descripcion = "Cajera", FechaRegistro = new DateTime(2025, 12, 12, 0, 0, 0, DateTimeKind.Utc) }
   );
 
-            // 2. Seed Menus (App Móvil)
+            // Seed Menus (App Móvil)
             modelBuilder.Entity<Menu>().HasData(
                 new Menu { Id = 1, Nombre = "DashBoard", Icono = "dashboard", Url = "/pages/dashboard" },
                 new Menu { Id = 2, Nombre = "Pagos", Icono = "payments", Url = "/pages/pagos" },
@@ -68,7 +68,7 @@ namespace GestionIntApi.Models
                 new Menu { Id = 10, Nombre = "Ubicacion", Icono = "location_on", Url = "/pages/ubicacion" }
             );
 
-            // 3. Seed MenuRols (App Móvil)
+            // Seed MenuRols (App Móvil)
             modelBuilder.Entity<MenuRol>().HasData(
                 // PERMISOS PARA EL ADMINISTRADOR (RolId = 1) - Acceso completo
                 new MenuRol { Id = 1, MenuId = 1, RolId = 1 },   // Dashboard
@@ -98,14 +98,14 @@ namespace GestionIntApi.Models
             // SEED PARA PANEL ADMINISTRATIVO WEB
             // ============================================================================
 
-            // 4. Seed RolAdmin (Panel Web)
+            // Seed RolAdmin (Panel Web)
             modelBuilder.Entity<RolAdmin>().HasData(
                 new RolAdmin { Id = 1, Descripcion = "Administrador", FechaRegistro = new DateTime(2025, 12, 12, 0, 0, 0, DateTimeKind.Utc) },
                 //new RolAdmin { Id = 2, Descripcion = "Cliente", FechaRegistro = new DateTime(2025, 12, 12, 0, 0, 0, DateTimeKind.Utc) },
                 new RolAdmin { Id = 3, Descripcion = "Team", FechaRegistro = new DateTime(2025, 12, 12, 0, 0, 0, DateTimeKind.Utc) }
             );
 
-            // 5. Seed MenuAdmin (Panel Web)
+            // Seed MenuAdmin (Panel Web)
             modelBuilder.Entity<MenuAdmin>().HasData(
                 new MenuAdmin { Id = 1, Nombre = "Dashboard", Icono = "dashboard", Url = "panel-control" },
                 new MenuAdmin { Id = 2, Nombre = "Usuarios Admin", Icono = "admin_panel_settings", Url = "gestion-administradores" },
@@ -119,7 +119,7 @@ namespace GestionIntApi.Models
                 new MenuAdmin { Id = 10, Nombre = "Reportes", Icono = "assessment", Url = "reportes-generales" }
             );
 
-            // 6. Seed MenuRolAdmin (Panel Web)
+            // Seed MenuRolAdmin (Panel Web)
             modelBuilder.Entity<MenuRolAdmin>().HasData(
                 // PERMISOS PARA EL ADMINISTRADOR (RolAdminId = 1) - Acceso completo a los 10 menús
                 new MenuRolAdmin { Id = 1, MenuAdminId = 1, RolAdminId = 1 },   // Dashboard
@@ -154,4 +154,5 @@ namespace GestionIntApi.Models
     }
 
 }
+
 

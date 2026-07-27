@@ -1,4 +1,4 @@
-using GestionIntApi.DTO;
+﻿using GestionIntApi.DTO;
 using GestionIntApi.DTO.Admin;
 using GestionIntApi.Models;
 using GestionIntApi.Models.Admin;
@@ -74,17 +74,17 @@ namespace GestionIntApi.Controllers
             var correo = usuario.Correo.Trim().ToLower();
             var cedula = usuario.Cliente?.DetalleCliente?.NumeroCedula;
 
-            // 1. Verificar si el correo ya existe en BD
+            // Verificar si el correo ya existe en BD
             var usuarioExistente = await _context.Usuarios
                 .FirstOrDefaultAsync(u => u.Correo.ToLower() == correo);
 
             if (usuarioExistente != null)
             {
-                Console.WriteLine($"⚠️ El correo '{correo}' ya existe en BD. Cancelando envío de OTP.");
+                Console.WriteLine($" El correo '{correo}' ya existe en BD. Cancelando envío de OTP.");
                 return BadRequest(new { status = false, msg = $"El correo '{correo}' ya se encuentra registrado y asociado a una cuenta de crédito." });
             }
 
-            // 2. Verificar si la cédula ya existe en BD
+            // Verificar si la cédula ya existe en BD
             if (!string.IsNullOrWhiteSpace(cedula))
             {
                 var cedulaExistente = await _context.DetallesCliente
@@ -92,7 +92,7 @@ namespace GestionIntApi.Controllers
 
                 if (cedulaExistente != null)
                 {
-                    Console.WriteLine($"⚠️ La cédula '{cedula}' ya existe en BD. Cancelando envío de OTP.");
+                    Console.WriteLine($" La cédula '{cedula}' ya existe en BD. Cancelando envío de OTP.");
                     return BadRequest(new { status = false, msg = $"La cédula '{cedula}' ya se encuentra registrada y asociada a una cuenta de crédito." });
                 }
             }
@@ -123,11 +123,11 @@ namespace GestionIntApi.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"❌ Error enviando correo en background: {ex.Message}");
+                    Console.WriteLine($" Error enviando correo en background: {ex.Message}");
                 }
             });
 
-            Console.WriteLine($"🔑 [OTP GENERADO]: {codigo} para {correo}");
+            Console.WriteLine($" [OTP GENERADO]: {codigo} para {correo}");
             return Ok(new { status = true, msg = "Código enviado", codigo = codigo });
         }
 
@@ -160,7 +160,7 @@ namespace GestionIntApi.Controllers
 
             var correo = usuario.Correo.Trim().ToLower();
 
-            // 1️⃣ Verificar código activo en BD
+            //  Verificar código activo en BD
             var codigoActivo = await _context.CodigosVerificacion
                 .FirstOrDefaultAsync(c => c.Correo == correo && c.Expira > DateTime.UtcNow);
 
@@ -169,7 +169,7 @@ namespace GestionIntApi.Controllers
                 return Ok(new { status = true, msg = "Código ya enviado, revisa tu correo" });
             }
 
-            // 2️⃣ Crear código
+            //  Crear código
             var codigo = new Random().Next(100000, 999999).ToString();
 
             var nuevoCodigo = new VerificationCode
@@ -182,7 +182,7 @@ namespace GestionIntApi.Controllers
             _context.CodigosVerificacion.Add(nuevoCodigo);
             await _context.SaveChangesAsync();
 
-            // 3️⃣ Enviar correo en BACKGROUND
+            //  Enviar correo en BACKGROUND
             _ = Task.Run(async () =>
             {
                 try
@@ -195,11 +195,11 @@ namespace GestionIntApi.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"❌ Error enviando correo: {ex.Message}");
+                    Console.WriteLine($" Error enviando correo: {ex.Message}");
                 }
             });
 
-            // 4️⃣ Responder INMEDIATO
+            //  Responder INMEDIATO
             return Ok(new { status = true, msg = "Código enviado" });
         }
 
@@ -244,7 +244,7 @@ namespace GestionIntApi.Controllers
 
             if (registro == null)
             {
-                Console.WriteLine("❌ No existe registro temporal para este correo.");
+                Console.WriteLine(" No existe registro temporal para este correo.");
                 rsp.status = false;
                 rsp.msg = "Código incorrecto o expirado.";
                 return BadRequest(rsp);
@@ -255,13 +255,13 @@ namespace GestionIntApi.Controllers
 
             if (registro.Codigo != req.Codigo)
             {
-            //    Console.WriteLine("❌ El código NO coincide con el guardado.");
+            //    Console.WriteLine(" El código NO coincide con el guardado.");
                 rsp.status = false;
                 rsp.msg = "Código incorrecto o expirado.";
                 return BadRequest(rsp);
             }
 
-            //Console.WriteLine("✅ Código correcto, procediendo a crear usuario...");
+            //Console.WriteLine(" Código correcto, procediendo a crear usuario...");
 
             // Guardar usuario en la base de datos
             var nuevoUsuario = await _UsuarioServicios.crearUsuario(registro.Usuario);
@@ -296,17 +296,17 @@ namespace GestionIntApi.Controllers
 
                 if (registro == null)
                 {
-                    Console.WriteLine($"❌ No existe registro temporal para el correo '{correo}'.");
+                    Console.WriteLine($" No existe registro temporal para el correo '{correo}'.");
                     rsp.status = false;
                     rsp.msg = "Código incorrecto o expirado.";
                     return BadRequest(rsp);
                 }
 
-                // ✅ Verificar expiración por tiempo
+                //  Verificar expiración por tiempo
                 var tiempoTranscurrido = DateTime.UtcNow - registro.Expira;
                 if (tiempoTranscurrido.TotalMinutes > 5) // Expira en 5 minutos
                 {
-                    Console.WriteLine("❌ El código ha expirado por tiempo.");
+                    Console.WriteLine(" El código ha expirado por tiempo.");
                     _registroTemporal.EliminarRegistro(correo);
                     rsp.status = false;
                     rsp.msg = "El código ha expirado. Solicite uno nuevo.";
@@ -316,15 +316,15 @@ namespace GestionIntApi.Controllers
                 // Validar código
                 if (registro.Codigo != req.Codigo)
                 {
-                    Console.WriteLine("❌ El código NO coincide con el guardado.");
+                    Console.WriteLine(" El código NO coincide con el guardado.");
                     rsp.status = false;
                     rsp.msg = "Código incorrecto.";
                     return BadRequest(rsp);
                 }
 
-                Console.WriteLine("✅ Código correcto, procediendo a crear usuario...");
+                Console.WriteLine(" Código correcto, procediendo a crear usuario...");
 
-                // ✅ SOLO AQUÍ SE GUARDA EN LA BASE DE DATOS
+                //  SOLO AQUÍ SE GUARDA EN LA BASE DE DATOS
                 var nuevoUsuario = await _UsuarioServicios.crearUsuario(registro.Usuario);
 
                 // Eliminar registro temporal SOLO si se guardó exitosamente
@@ -341,7 +341,7 @@ namespace GestionIntApi.Controllers
             catch (Exception ex)
             {
                 var errDetail = $"{ex.GetType().Name}: {ex.Message} | StackTrace: {ex.StackTrace}";
-                Console.WriteLine($"❌ ERROR GENERAL: {errDetail}");
+                Console.WriteLine($" ERROR GENERAL: {errDetail}");
 
                 rsp.status = false;
                 rsp.msg = ex is TaskCanceledException ? ex.Message : $"Error en servidor: {errDetail}";
@@ -362,7 +362,7 @@ namespace GestionIntApi.Controllers
 
             var correo = req.Correo.Trim().ToLower();
 
-            // 1️⃣ Buscar código activo en DB
+            //  Buscar código activo en DB
             var codigoActivo = await _context.CodigosVerificacion
                 .FirstOrDefaultAsync(c => c.Correo == correo && c.Codigo == req.Codigo && c.Expira > DateTime.UtcNow);
 
@@ -371,10 +371,10 @@ namespace GestionIntApi.Controllers
 
             try
             {
-                // 2️⃣ Crear usuario usando tu servicio existente
+                //  Crear usuario usando tu servicio existente
                 var nuevoUsuario = await _UsuarioServicios.crearUsuario(req.Usuario);
 
-                // 3️⃣ Opcional: eliminar código usado
+                //  Opcional: eliminar código usado
                 _context.CodigosVerificacion.Remove(codigoActivo);
                 await _context.SaveChangesAsync();
 
@@ -382,7 +382,7 @@ namespace GestionIntApi.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"❌ Error creando usuario: {ex.Message}");
+                Console.WriteLine($" Error creando usuario: {ex.Message}");
                 return StatusCode(500, new { status = false, msg = "Error creando usuario" });
             }
         }
@@ -425,7 +425,7 @@ namespace GestionIntApi.Controllers
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"❌ Error enviando correo en background admin: {ex.Message}");
+                    Console.WriteLine($" Error enviando correo en background admin: {ex.Message}");
                 }
             });
 
@@ -447,7 +447,7 @@ namespace GestionIntApi.Controllers
 
             if (registro == null)
             {
-                Console.WriteLine("❌ No existe registro temporal para este correo.");
+                Console.WriteLine(" No existe registro temporal para este correo.");
                 rsp.status = false;
                 rsp.msg = "Código incorrecto o expirado.";
                 return BadRequest(rsp);
@@ -458,13 +458,13 @@ namespace GestionIntApi.Controllers
 
             if (registro.Codigo != req.Codigo)
             {
-                //    Console.WriteLine("❌ El código NO coincide con el guardado.");
+                //    Console.WriteLine(" El código NO coincide con el guardado.");
                 rsp.status = false;
                 rsp.msg = "Código incorrecto o expirado.";
                 return BadRequest(rsp);
             }
 
-            //Console.WriteLine("✅ Código correcto, procediendo a crear usuario...");
+            //Console.WriteLine(" Código correcto, procediendo a crear usuario...");
 
             // Guardar usuario en la base de datos
             var nuevoUsuario = await _UsuarioServiciosAdmin.crearUsuario(registro.UsuarioAdmin);
@@ -486,3 +486,4 @@ namespace GestionIntApi.Controllers
     }
 
 }
+

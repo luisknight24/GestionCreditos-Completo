@@ -15,13 +15,13 @@ class AuthService {
   // 1. REGISTRO
   Future<bool> registrarUsuario(UsuarioDTO usuario) async {
     if (_modoSimulacion) {
-      print("⚠️ MODO SIMULACIÓN: Registrando usuario...");
+      print("️ MODO SIMULACIÓN: Registrando usuario...");
       print("JSON Enviado: ${jsonEncode(usuario.toJson())}");
       await Future.delayed(const Duration(seconds: 2)); // Simula espera de red
       return true; // Simula éxito siempre
     }
 
-    // --- CÓDIGO REAL (Se usará cuando _modoSimulacion sea false) ---
+    
     final url = Uri.parse('$baseUrl/Auth/Register');
     try {
       final response = await http.post(
@@ -39,7 +39,7 @@ class AuthService {
   // 2. VERIFICAR OTP
   Future<bool> verificarCodigo(VerificarDTO datos) async {
     if (_modoSimulacion) {
-      print("⚠️ MODO SIMULACIÓN: Verificando código OTP ${datos.codigo}...");
+      print("️ MODO SIMULACIÓN: Verificando código OTP ${datos.codigo}...");
       await Future.delayed(const Duration(seconds: 2));
       // Simular que solo el código "123456" es válido (opcional) o aceptar todos
       return true;
@@ -61,7 +61,7 @@ class AuthService {
   // 3. LOGIN
   Future<Map<String, dynamic>?> login(LoginDTO datos) async {
     if (_modoSimulacion) {
-      print("⚠️ MODO SIMULACIÓN: Login...");
+      print("️ MODO SIMULACIÓN: Login...");
       await Future.delayed(const Duration(seconds: 2));
       // Retornamos un token falso y datos falsos
       return {

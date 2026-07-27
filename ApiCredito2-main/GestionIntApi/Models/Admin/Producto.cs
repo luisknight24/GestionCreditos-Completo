@@ -10,14 +10,14 @@ namespace GestionIntApi.Models.Admin
         [Required]
        
         public string Codigo { get; set; }
-        // 🔥 TIPO DE PRODUCTO (para diferenciar)
+        //  TIPO DE PRODUCTO (para diferenciar)
         [Required]
         
         public string TipoProducto { get; set; } // Telefono, TV, Tablet, Laptop, etc.
 
         public string? PropietarioDelProducto { get; set; } 
 
-        // 🔥 IDENTIFICADOR ÚNICO (nullable porque no todo tiene IMEI)
+        //  IDENTIFICADOR ÚNICO (nullable porque no todo tiene IMEI)
         
         public string? IMEI { get; set; } // Solo para teléfonos/tablets
 
@@ -43,7 +43,7 @@ namespace GestionIntApi.Models.Admin
      
         public string Estado { get; set; } // Disponible, Vendido, Dañado, En Reparación
 
-        // 🔥 Ubicación actual (se actualiza automáticamente con movimientos)
+        //  Ubicación actual (se actualiza automáticamente con movimientos)
         public int? TiendaId { get; set; }
         public Tienda? Tienda { get; set; }
 
@@ -63,3 +63,4 @@ namespace GestionIntApi.Models.Admin
 
     }
 }
+

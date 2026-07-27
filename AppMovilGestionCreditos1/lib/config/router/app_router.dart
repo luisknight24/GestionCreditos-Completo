@@ -96,7 +96,7 @@ final appRouter = GoRouter(
     final idStr = state.pathParameters['creditoId']!;
     final id = int.parse(idStr);
     
-    return PaymentHistoryScreen(creditoId: id); // 👈 Se lo pasamos a la pantalla
+    return PaymentHistoryScreen(creditoId: id); //  Se lo pasamos a la pantalla
   },
     ),
     GoRoute(

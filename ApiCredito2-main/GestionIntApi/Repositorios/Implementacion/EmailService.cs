@@ -1,4 +1,4 @@
-using GestionIntApi.Models;
+﻿using GestionIntApi.Models;
 using GestionIntApi.Repositorios.Interfaces;
 using Microsoft.Extensions.Options;
 using SendGrid;
@@ -115,11 +115,11 @@ namespace GestionIntApi.Repositorios.Implementacion
 
             if (string.IsNullOrWhiteSpace(_settings1.ApiKey))
             {
-                Console.WriteLine("❌ [SENDGRID] ApiKey está VACÍA o NULL");
+                Console.WriteLine(" [SENDGRID] ApiKey está VACÍA o NULL");
                 throw new Exception("SendGrid ApiKey no configurada");
             }
 
-            Console.WriteLine($"🔑 [SENDGRID] ApiKey detectada (length: {_settings1.ApiKey.Length})");
+            Console.WriteLine($" [SENDGRID] ApiKey detectada (length: {_settings1.ApiKey.Length})");
             Console.WriteLine($"👤 [SENDGRID] FromEmail: {_settings1.FromEmail}");
             Console.WriteLine($"🏷️ [SENDGRID] FromName: {_settings1.FromName}");
 
@@ -141,16 +141,16 @@ namespace GestionIntApi.Repositorios.Implementacion
 
 
 
-            Console.WriteLine($"📡 [SENDGRID] StatusCode: {(int)response.StatusCode}");
+            Console.WriteLine($" [SENDGRID] StatusCode: {(int)response.StatusCode}");
 
             if ((int)response.StatusCode >= 200 && (int)response.StatusCode < 300)
             {
-                Console.WriteLine("✅ [SENDGRID] Correo enviado correctamente.");
+                Console.WriteLine(" [SENDGRID] Correo enviado correctamente.");
             }
             else
             {
                 var responseBody = await response.Body.ReadAsStringAsync();
-                Console.WriteLine("❌ [SENDGRID] Error al enviar correo");
+                Console.WriteLine(" [SENDGRID] Error al enviar correo");
                 Console.WriteLine($"📄 [SENDGRID] Response body: {responseBody}");
             }
         }
@@ -161,7 +161,7 @@ namespace GestionIntApi.Repositorios.Implementacion
             var gmailPassword = Environment.GetEnvironmentVariable("EmailSettings__Password");
             var apiKeyFromEnv = Environment.GetEnvironmentVariable("SENDGRID_API_KEY") ?? _settings1.ApiKey;
 
-            // 1. Intentar con Brevo / SendGrid si la API Key está configurada
+            // Intentar con Brevo / SendGrid si la API Key está configurada
             if (!string.IsNullOrWhiteSpace(apiKeyFromEnv) && apiKeyFromEnv != "PON_TU_API_KEY_AQUI")
             {
                 try
@@ -184,17 +184,17 @@ namespace GestionIntApi.Repositorios.Implementacion
                     var response = await _httpClient.SendAsync(request);
                     if (response.IsSuccessStatusCode)
                     {
-                        Console.WriteLine("✅ [BREVO] Correo enviado correctamente.");
+                        Console.WriteLine(" [BREVO] Correo enviado correctamente.");
                         return;
                     }
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"⚠️ [BREVO] Excepción: {ex.Message}");
+                    Console.WriteLine($" [BREVO] Excepción: {ex.Message}");
                 }
             }
 
-            // 2. Intentar con Gmail SMTP si EmailSettings__Password está configurada
+            // Intentar con Gmail SMTP si EmailSettings__Password está configurada
             if (!string.IsNullOrWhiteSpace(gmailPassword))
             {
                 try
@@ -215,18 +215,19 @@ namespace GestionIntApi.Repositorios.Implementacion
                             await smtp.SendMailAsync(message);
                         }
                     }
-                    Console.WriteLine("✅ [GMAIL SMTP] Correo enviado vía Gmail SMTP correctamente.");
+                    Console.WriteLine(" [GMAIL SMTP] Correo enviado vía Gmail SMTP correctamente.");
                     return;
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"❌ [GMAIL SMTP] Error enviando correo: {ex.Message}");
+                    Console.WriteLine($" [GMAIL SMTP] Error enviando correo: {ex.Message}");
                 }
             }
 
-            Console.WriteLine("⚠️ [EMAIL] Sin credenciales activas (Brevo/Gmail). Saltando envío real.");
-            Console.WriteLine($"🔑 [DEV ONLY] Contenido del correo: {body}");
+            Console.WriteLine(" [EMAIL] Sin credenciales activas (Brevo/Gmail). Saltando envío real.");
+            Console.WriteLine($" [DEV ONLY] Contenido del correo: {body}");
         }
 
     }
 }
+

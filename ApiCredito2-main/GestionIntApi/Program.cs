@@ -1,4 +1,4 @@
-
+﻿
 using GestionIntApi.Models;
 using GestionIntApi.Models.Admin;
 using GestionIntApi.Repositorios.Contrato;
@@ -46,7 +46,7 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 // ?? JWT ENV
-builder.WebHost.UseUrls("http://0.0.0.0:7166");
+builder.WebHost.UseUrls("http:// 0.0.0:7166");
 
 /*var jwtSecret = Environment.GetEnvironmentVariable("JWT_SECRET_KEY");
 
@@ -78,7 +78,7 @@ if (string.IsNullOrWhiteSpace(jwtSecret))
 
 var key = Encoding.UTF8.GetBytes(jwtSecret);
 
-builder.WebHost.UseUrls("http://0.0.0.0:7166");
+builder.WebHost.UseUrls("http:// 0.0.0:7166");
 
 
 //var jwtSettings = builder.Configuration.GetSection("JwtSettings");

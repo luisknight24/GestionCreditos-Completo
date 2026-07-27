@@ -21,7 +21,7 @@ class UsuarioDTO {
     this.cliente,
   });
 
-   // ---- FROM JSON ----
+   
   factory UsuarioDTO.fromJson(Map<String, dynamic> json) {
     return UsuarioDTO(
       id: json["id"] ?? 0,
@@ -37,7 +37,7 @@ class UsuarioDTO {
     );
   }
 
-  // ---- TO JSON ----
+  
   Map<String, dynamic> toJson() => {
         'Id': id,
         'NombreApellidos': nombreApellidos,

@@ -31,14 +31,14 @@ Future<ForgotPasswordDTO?> forgotPassword(ForgotPasswordDTO dto) async {
 
     if (response.statusCode == 200) {
       // Respuesta exitosa como string
-      print('✅ Solicitud de recuperación exitosa: ${response.body}');
+      print(' Solicitud de recuperación exitosa: ${response.body}');
       return dto; // simplemente retornamos el DTO enviado
     } else {
-      print('❌ Error al enviar correo: ${response.body}');
+      print(' Error al enviar correo: ${response.body}');
       return null;
     }
   } catch (e) {
-    print('⚠️ Excepción en forgotPassword: $e');
+    print('️ Excepción en forgotPassword: $e');
     return null;
   }
 }

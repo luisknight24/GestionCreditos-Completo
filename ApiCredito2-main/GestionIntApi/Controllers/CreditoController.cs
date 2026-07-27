@@ -1,4 +1,4 @@
-﻿using GestionIntApi.DTO;
+using GestionIntApi.DTO;
 using GestionIntApi.Models;
 using GestionIntApi.Repositorios.Implementacion;
 using GestionIntApi.Repositorios.Interfaces;
@@ -52,7 +52,7 @@ namespace GestionIntApi.Controllers
         {
             try
             {
-                Console.WriteLine("🔵 Endpoint pendientesApp llamado");
+                Console.WriteLine("Endpoint pendientesApp llamado");
                 var odontologo = await _CreditoServicios.GetTiendaById(id);
                 if (odontologo == null)
                     return NotFound();
@@ -70,7 +70,7 @@ namespace GestionIntApi.Controllers
         {
             try
             {
-                Console.WriteLine("🔵 Endpoint pendientesApp llamado");
+                Console.WriteLine("Endpoint pendientesApp llamado");
                 var credito = await _CreditoServicios.GetCreditosPendientesPorCliente(id);
                 if (credito == null)
                     return NotFound();
@@ -86,7 +86,7 @@ namespace GestionIntApi.Controllers
         {
             try
             {
-                Console.WriteLine("🔵 Endpoint pendientesApp llamado");
+                Console.WriteLine("Endpoint pendientesApp llamado");
                 var credito = await _CreditoServicios.GetCreditosPendientesPorCliente1(clienteId);
                 if (credito == null)
                     return NotFound();
@@ -122,12 +122,11 @@ namespace GestionIntApi.Controllers
         }
         [HttpGet("pendientesApp1")]
 
-        [Authorize] // 🔒 Protegido con JWT
+        [Authorize]
         public async Task<ActionResult<List<CreditoMostrarDTO>>> GetByIdCreditoActivoApp1()
         {
             try
             {
-
                 var clienteIdClaim = User.FindFirst("ClienteId")?.Value;
                 if (string.IsNullOrEmpty(clienteIdClaim))
                     return Unauthorized("Token inválido o ClienteId no encontrado");
@@ -156,31 +155,30 @@ namespace GestionIntApi.Controllers
         {
             try
             {
-                Console.WriteLine("🔵 Endpoint pendientesApp llamado");
+                Console.WriteLine("Endpoint pendientesApp llamado");
 
                 var clienteIdClaim = User.FindFirst("ClienteId")?.Value;
-                Console.WriteLine($"🆔 ClienteId claim: {clienteIdClaim}");
+                Console.WriteLine($"ClienteId claim: {clienteIdClaim}");
 
                 if (string.IsNullOrEmpty(clienteIdClaim))
                 {
-                    Console.WriteLine("❌ ClienteId no encontrado en el token");
+                    Console.WriteLine("ClienteId no encontrado en el token");
                     return Unauthorized("Token inválido o ClienteId no encontrado");
                 }
 
                 int clienteId = int.Parse(clienteIdClaim);
-                Console.WriteLine($"✅ ClienteId parseado: {clienteId}");
+                Console.WriteLine($"ClienteId parseado: {clienteId}");
 
                 var creditos = await _CreditoServicios.GetCreditosClienteApp(clienteId);
 
                 if (creditos == null)
                 {
-                    Console.WriteLine("⚠️ No se encontraron créditos");
+                    Console.WriteLine("No se encontraron créditos");
                     return NotFound();
                 }
 
-                Console.WriteLine($"📦 Créditos encontrados: {creditos.Count}");
+                Console.WriteLine($"Créditos encontrados: {creditos.Count}");
 
-                // 🔥 LOG CLAVE: ver qué se está enviando
                 foreach (var c in creditos)
                 {
                     Console.WriteLine("----- CRÉDITO -----");
@@ -194,7 +192,7 @@ namespace GestionIntApi.Controllers
             }
             catch (Exception ex)
             {
-                Console.WriteLine("❌ ERROR en pendientesApp");
+                Console.WriteLine("ERROR en pendientesApp");
                 Console.WriteLine(ex);
 
                 return StatusCode(500, $"Error al obtener los créditos: {ex.Message}");
@@ -211,9 +209,6 @@ namespace GestionIntApi.Controllers
 
             try
             {
-                // 1. Validar correo
-
-                // 2. Registrar usuario directamente
                 var nuevoCredito = await _CreditoServicios.CreateCredito(credito);
 
                 rsp.status = true;
@@ -239,9 +234,6 @@ namespace GestionIntApi.Controllers
 
             try
             {
-                // 1. Validar correo
-
-                // 2. Registrar usuario directamente
                 var nuevoCredito = await _CreditoServicios.RegistrarPagoAsync(credito);
 
                 rsp.status = true;
@@ -295,14 +287,13 @@ namespace GestionIntApi.Controllers
 
         [HttpPost]
         [Route("GuardarJWT")]
-        [Authorize] // Requiere JWT válido
+        [Authorize]
         public async Task<IActionResult> GuardarConJWT([FromBody] CreditoDTO credito)
         {
             var rsp = new Response<CreditoDTO>();
 
             try
             {
-                // 1️⃣ Obtener ClienteId desde el JWT
                 var clienteIdClaim = User.Claims.FirstOrDefault(c => c.Type == "ClienteId");
                 if (clienteIdClaim == null)
                 {
@@ -313,7 +304,6 @@ namespace GestionIntApi.Controllers
 
                 credito.ClienteId = int.Parse(clienteIdClaim.Value);
 
-                // 2️⃣ Crear el crédito usando el servicio
                 var nuevoCredito = await _CreditoServicios.CreateCredito(credito);
 
                 rsp.status = true;
@@ -333,7 +323,6 @@ namespace GestionIntApi.Controllers
         [Authorize]
         public async Task<IActionResult> GetCalendario(int creditoId)
         {
-            // 1️⃣ Extraemos el ClienteId directamente del JWT (Token)
             var clienteIdClaim = User.FindFirst("ClienteId")?.Value;
             if (string.IsNullOrEmpty(clienteIdClaim))
                 return Unauthorized("Token inválido o ClienteId no encontrado");
@@ -342,8 +331,6 @@ namespace GestionIntApi.Controllers
 
             try
             {
-                // 2️⃣ Llamamos al servicio con los DOS parámetros.
-                // Esto busca: El crédito específico Y que pertenezca a este cliente.
                 var data = await _CreditoServicios.GetCalendarioPagos(creditoId, clienteId);
 
                 return Ok(data);

@@ -10,25 +10,25 @@ class HistorialService {
    final String baseUrl = "https://gestioncreditos-backend.onrender.com/api";
    // Tu URL
   final storage = const FlutterSecureStorage();
-// 🔔 NOTIFICADORES UNIFICADOS
+//  NOTIFICADORES UNIFICADOS
   final historialNotifier = ValueNotifier<List<HistoriaAppDTO>?>(null);
   final cargandoNotifier = ValueNotifier<bool>(false);
   final mensajeNotifier = ValueNotifier<String>("");
 int? _creditoIdActual;
   late HubConnection _connection;
    bool _isConnected = false;
-  // 🟢 CACHÉ INTERNA
+  //  CACHÉ INTERNA
   List<HistoriaAppDTO>? _cacheHistorial;
 
-  // --- SINGLETON ---
+  
   HistorialService._internal() {
-    debugPrint("🟣 [HistorialService] instancia creada → hash: $hashCode");
+    debugPrint(" [HistorialService] instancia creada → hash: $hashCode");
   }
 
   static final HistorialService _instance = HistorialService._internal();
   factory HistorialService() => _instance;
 
-  // --- SIGNALR ---
+  
   Future<void> connectSignalR() async {
     final token = await storage.read(key: 'jwt_token');
     if (token == null || token.isEmpty) return;
@@ -54,19 +54,19 @@ int? _creditoIdActual;
  // Si el crédito actualizado es el que estamos viendo, recargamos
         final creditoIdRecibido = data['id'] ?? data['creditoId'];
         if (creditoIdRecibido == _creditoIdActual) {
-          debugPrint("🔄 Recargando historial porque el crédito actual fue actualizado");
+          debugPrint(" Recargando historial porque el crédito actual fue actualizado");
           getHistorialPagos(creditoId: _creditoIdActual!, forceRefresh: true);
         }
       } catch (e) {
-        debugPrint("❌ Error en evento SignalR: $e");
+        debugPrint(" Error en evento SignalR: $e");
       }
     });
 
     try {
       await _connection.start();
-      debugPrint("✅ SignalR CONECTADO");
+      debugPrint(" SignalR CONECTADO");
     } catch (e) {
-      debugPrint("❌ Error al conectar SignalR: $e");
+      debugPrint(" Error al conectar SignalR: $e");
     }
   }
 
@@ -88,10 +88,10 @@ int? _creditoIdActual;
       final token = await storage.read(key: 'jwt_token');
       if (token == null) throw Exception("Sin autenticación");
 
-      // 📝 Endpoint Maquetado: Ajusta la ruta según tu API real
+      //  Endpoint Maquetado: Ajusta la ruta según tu API real
       final url = Uri.parse('$baseUrl/Credito/calendario/$creditoId');
 
-      debugPrint("🔵 Consultando historial: $url");
+      debugPrint(" Consultando historial: $url");
 
       final response = await http.get(
         url,
@@ -110,12 +110,12 @@ int? _creditoIdActual;
         // Actualizamos el estado
         historialNotifier.value = listaHistorial;
       } else {
-        debugPrint("❌ Error API Historial: ${response.statusCode}");
+        debugPrint(" Error API Historial: ${response.statusCode}");
         // Si falla, podrías limpiar o manejar error
         // historialNotifier.value = [];
       }
     } catch (e) {
-      debugPrint("❌ Error servicio historial: $e");
+      debugPrint(" Error servicio historial: $e");
       // MOCK DE RESPALDO PARA PRUEBAS VISUALES SI FALLA LA RED
       await Future.delayed(const Duration(seconds: 1));
       historialNotifier.value = [
@@ -130,19 +130,19 @@ int? _creditoIdActual;
   }
 
 
-// --- OBTENER HISTORIAL ---
+
   Future<void> getHistorialPagos({
     required int creditoId,
     bool forceRefresh = false,
   }) async {
     cargandoNotifier.value = true;
-    _creditoIdActual = creditoId; // 🔥 Guardamos el crédito actual
+    _creditoIdActual = creditoId; //  Guardamos el crédito actual
 
     // Optimización: usar caché si existe y no forzamos recarga
     if (!forceRefresh && _cacheHistorial != null && _cacheHistorial!.isNotEmpty) {
       historialNotifier.value = _cacheHistorial;
       cargandoNotifier.value = false;
-      debugPrint("📦 Usando caché para crédito $creditoId");
+      debugPrint(" Usando caché para crédito $creditoId");
       return;
     }
 
@@ -151,7 +151,7 @@ int? _creditoIdActual;
       if (token == null) throw Exception("Sin autenticación");
 
       final url = Uri.parse('$baseUrl/Credito/calendario/$creditoId');
-      debugPrint("🔵 Consultando historial: $url");
+      debugPrint(" Consultando historial: $url");
 
       final response = await http.get(
         url,
@@ -167,22 +167,22 @@ int? _creditoIdActual;
             .map((e) => HistoriaAppDTO.fromJson(e))
             .toList();
 
-        // 🔥 Actualizamos AMBOS: caché y notificador
+        //  Actualizamos AMBOS: caché y notificador
         _cacheHistorial = listaHistorial;
         historialNotifier.value = listaHistorial;
 
-        debugPrint("✅ Historial cargado: ${listaHistorial.length} cuotas");
+        debugPrint(" Historial cargado: ${listaHistorial.length} cuotas");
 
-        // 🔥 Conectar SignalR después de cargar datos
+        //  Conectar SignalR después de cargar datos
         if (!_isConnected) {
           await connectSignalR();
         }
       } else {
-        debugPrint("❌ Error API Historial: ${response.statusCode}");
+        debugPrint(" Error API Historial: ${response.statusCode}");
         throw Exception("Error al cargar historial");
       }
     } catch (e) {
-      debugPrint("❌ Error servicio historial: $e");
+      debugPrint(" Error servicio historial: $e");
       mensajeNotifier.value = "Error al cargar historial";
       
       // MOCK DE RESPALDO (solo en desarrollo)
@@ -199,7 +199,7 @@ int? _creditoIdActual;
     }
   }
 
-  // --- LÓGICA DE ACTUALIZACIÓN ---
+  
   void _actualizarCreditoDesdeEvento(HistoriaAppDTO nuevo) {
     if (_cacheHistorial == null) return;
 
@@ -210,13 +210,13 @@ int? _creditoIdActual;
       _cacheHistorial![index] = nuevo;
       // Emitimos la nueva lista a la UI
       historialNotifier.value = List.from(_cacheHistorial!);
-      debugPrint("✅ UI Sincronizada con SignalR (ID: ${nuevo.id})");
+      debugPrint(" UI Sincronizada con SignalR (ID: ${nuevo.id})");
     }
   }
-/// 🧹 LIMPIAR ESTADO AL CAMBIAR DE USUARIO
-// --- LIMPIEZA ---
+///  LIMPIAR ESTADO AL CAMBIAR DE USUARIO
+
   Future<void> limpiar() async {
-    debugPrint("🧹 Limpiando HistorialService");
+    debugPrint(" Limpiando HistorialService");
     try {
       if (_connection.state == HubConnectionState.connected) {
         await _connection.stop();
@@ -243,7 +243,7 @@ class HistorialService {
   final String baseUrl = "https://gestioncreditos-backend.onrender.com/api";
   final storage = const FlutterSecureStorage();
 
-  // 🔔 NOTIFICADORES UNIFICADOS
+  //  NOTIFICADORES UNIFICADOS
   final historialNotifier = ValueNotifier<List<HistoriaAppDTO>?>(null);
   final cargandoNotifier = ValueNotifier<bool>(false);
   final mensajeNotifier = ValueNotifier<String>("");
@@ -252,31 +252,31 @@ class HistorialService {
   late HubConnection _connection;
   bool _isConnected = false;
   
-  // 🟢 CACHÉ INTERNA
+  //  CACHÉ INTERNA
   List<HistoriaAppDTO>? _cacheHistorial;
 
-  // 🔴 CONTROL DE RECARGA PARA EVITAR BUCLE INFINITO
+  //  CONTROL DE RECARGA PARA EVITAR BUCLE INFINITO
   bool _estaCargando = false;
   DateTime? _ultimaCarga;
 
-  // --- SINGLETON ---
+  
   HistorialService._internal() {
-    debugPrint("🟣 [HistorialService] instancia creada → hash: $hashCode");
+    debugPrint(" [HistorialService] instancia creada → hash: $hashCode");
   }
 
   static final HistorialService _instance = HistorialService._internal();
   factory HistorialService() => _instance;
 
-  // --- SIGNALR ---
+  
   Future<void> connectSignalR() async {
     if (_isConnected) {
-      debugPrint("⚠️ [HISTORIAL] SignalR ya está conectado");
+      debugPrint("️ [HISTORIAL] SignalR ya está conectado");
       return;
     }
 
     final token = await storage.read(key: 'jwt_token');
     if (token == null || token.isEmpty) {
-      debugPrint("❌ [HISTORIAL] No hay token, no se puede conectar SignalR");
+      debugPrint(" [HISTORIAL] No hay token, no se puede conectar SignalR");
       return;
     }
 
@@ -296,30 +296,30 @@ class HistorialService {
         try {
           final data = Map<String, dynamic>.from(args.first);
           
-          // 🔴 FILTRAR: Solo procesar si es del crédito actual
+          //  FILTRAR: Solo procesar si es del crédito actual
           final creditoIdRecibido = data['id'] ?? data['creditoId'];
           
           if (creditoIdRecibido != _creditoIdActual) {
-            debugPrint("⚠️ [HISTORIAL] Evento ignorado, no es del crédito actual");
+            debugPrint("️ [HISTORIAL] Evento ignorado, no es del crédito actual");
             return;
           }
 
-          // 🔴 DEBOUNCE: Evitar recargas múltiples
+          //  DEBOUNCE: Evitar recargas múltiples
           final ahora = DateTime.now();
           if (_ultimaCarga != null && 
               ahora.difference(_ultimaCarga!).inSeconds < 3) {
-            debugPrint("⚠️ [HISTORIAL] Recarga muy reciente (${ahora.difference(_ultimaCarga!).inSeconds}s), ignorando");
+            debugPrint("️ [HISTORIAL] Recarga muy reciente (${ahora.difference(_ultimaCarga!).inSeconds}s), ignorando");
             return;
           }
 
-          // 🔴 EVITAR SI YA ESTÁ CARGANDO
+          //  EVITAR SI YA ESTÁ CARGANDO
           if (_estaCargando) {
-            debugPrint("⚠️ [HISTORIAL] Ya hay una carga en proceso, ignorando");
+            debugPrint("️ [HISTORIAL] Ya hay una carga en proceso, ignorando");
             return;
           }
 
-          debugPrint("📡 [HISTORIAL] Evento recibido para crédito: $creditoIdRecibido");
-          debugPrint("🔄 [HISTORIAL] Recargando historial...");
+          debugPrint(" [HISTORIAL] Evento recibido para crédito: $creditoIdRecibido");
+          debugPrint(" [HISTORIAL] Recargando historial...");
           
           _ultimaCarga = ahora;
           
@@ -331,28 +331,28 @@ class HistorialService {
           });
 
         } catch (e) {
-          debugPrint("❌ [HISTORIAL] Error procesando evento SignalR: $e");
+          debugPrint(" [HISTORIAL] Error procesando evento SignalR: $e");
         }
       });
 
       await _connection.start();
       _isConnected = true;
-      debugPrint("✅ [HISTORIAL] SignalR CONECTADO");
+      debugPrint(" [HISTORIAL] SignalR CONECTADO");
       
     } catch (e) {
-      debugPrint("❌ [HISTORIAL] Error al conectar SignalR: $e");
+      debugPrint(" [HISTORIAL] Error al conectar SignalR: $e");
       _isConnected = false;
     }
   }
 
-  // --- OBTENER HISTORIAL ---
+  
   Future<void> getHistorialPagos({
     required int creditoId,
     bool forceRefresh = false,
   }) async {
-    // 🔴 EVITAR MÚLTIPLES CARGAS SIMULTÁNEAS
+    //  EVITAR MÚLTIPLES CARGAS SIMULTÁNEAS
     if (_creditoIdActual != creditoId) {
-    debugPrint("🔄 [HISTORIAL] El ID cambió de $_creditoIdActual a $creditoId. Limpiando caché anterior.");
+    debugPrint(" [HISTORIAL] El ID cambió de $_creditoIdActual a $creditoId. Limpiando caché anterior.");
     _cacheHistorial = null; // Borramos la caché vieja
     historialNotifier.value = null; // Limpiamos la UI
     forceRefresh = true; // Forzamos la descarga del nuevo crédito
@@ -369,7 +369,7 @@ class HistorialService {
       historialNotifier.value = _cacheHistorial;
       cargandoNotifier.value = false;
       _estaCargando = false;
-      debugPrint("📦 [HISTORIAL] Usando caché para crédito $creditoId");
+      debugPrint(" [HISTORIAL] Usando caché para crédito $creditoId");
       return;
     }
 
@@ -378,7 +378,7 @@ class HistorialService {
       if (token == null) throw Exception("Sin autenticación");
 
       final url = Uri.parse('$baseUrl/Credito/calendario/$creditoId');
-      debugPrint("🔵 [HISTORIAL] Consultando: $url");
+      debugPrint(" [HISTORIAL] Consultando: $url");
 
       final response = await http.get(
         url,
@@ -394,22 +394,22 @@ class HistorialService {
             .map((e) => HistoriaAppDTO.fromJson(e))
             .toList();
 
-        // 🔥 Actualizamos AMBOS: caché y notificador
+        //  Actualizamos AMBOS: caché y notificador
         _cacheHistorial = listaHistorial;
         historialNotifier.value = listaHistorial;
 
-        debugPrint("✅ [HISTORIAL] Cargado: ${listaHistorial.length} cuotas");
+        debugPrint(" [HISTORIAL] Cargado: ${listaHistorial.length} cuotas");
 
-        // 🔥 Conectar SignalR después de cargar datos (solo una vez)
+        //  Conectar SignalR después de cargar datos (solo una vez)
         if (!_isConnected) {
           await connectSignalR();
         }
       } else {
-        debugPrint("❌ [HISTORIAL] Error API: ${response.statusCode}");
+        debugPrint(" [HISTORIAL] Error API: ${response.statusCode}");
         throw Exception("Error al cargar historial");
       }
     } catch (e) {
-      debugPrint("❌ [HISTORIAL] Error: $e");
+      debugPrint(" [HISTORIAL] Error: $e");
       mensajeNotifier.value = "Error al cargar historial";
       
       // MOCK DE RESPALDO (solo en desarrollo)
@@ -427,7 +427,7 @@ class HistorialService {
     }
   }
 
-  // --- DESCONECTAR SIGNALR ---
+  
   Future<void> disconnectSignalR() async {
     if (!_isConnected) return;
     
@@ -435,16 +435,16 @@ class HistorialService {
       if (_connection.state == HubConnectionState.connected) {
         await _connection.stop();
         _isConnected = false;
-        debugPrint("🔴 [HISTORIAL] SignalR desconectado");
+        debugPrint(" [HISTORIAL] SignalR desconectado");
       }
     } catch (e) {
-      debugPrint("❌ [HISTORIAL] Error desconectando SignalR: $e");
+      debugPrint(" [HISTORIAL] Error desconectando SignalR: $e");
     }
   }
 
-  // --- LIMPIEZA ---
+  
   Future<void> limpiar() async {
-    debugPrint("🧹 [HISTORIAL] Limpiando servicio");
+    debugPrint(" [HISTORIAL] Limpiando servicio");
     await disconnectSignalR();
     
     _cacheHistorial = null;
@@ -459,7 +459,7 @@ class HistorialService {
 
   bool get isSignalRConnected => _isConnected;
 
-  // --- DISPOSE ---
+  
   void dispose() {
     disconnectSignalR();
     historialNotifier.dispose();

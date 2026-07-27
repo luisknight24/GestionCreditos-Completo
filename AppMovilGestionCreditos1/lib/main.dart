@@ -11,9 +11,9 @@ import 'package:http/http.dart' as http;
 void _warmupServer() {
   try {
     http.get(Uri.parse('https://gestioncreditos-backend.onrender.com/api/Rol/Lista')).then((res) {
-      debugPrint('🔥 [WARMUP] Servidor en línea (Status: ${res.statusCode})');
+      debugPrint(' [WARMUP] Servidor en línea (Status: ${res.statusCode})');
     }).catchError((e) {
-      debugPrint('⚠️ [WARMUP] Error al calentar servidor: $e');
+      debugPrint('️ [WARMUP] Error al calentar servidor: $e');
     });
   } catch (_) {}
 }

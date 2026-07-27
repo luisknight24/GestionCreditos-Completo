@@ -1,4 +1,4 @@
-/*
+﻿/*
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:animate_do/animate_do.dart';
@@ -34,7 +34,7 @@ class _NewCreditStoreScreenState extends State<NewCreditStoreScreen> {
     super.dispose();
   }
 
-  // --- MAQUETACIÓN DE VALIDACIÓN (Igual que en StoreDataScreen) ---
+  
   Future<bool> _validarEncargadoEnBackend(String cedula) async {
     // Simulación de llamada al API
     await Future.delayed(const Duration(seconds: 1));
@@ -78,9 +78,9 @@ class _NewCreditStoreScreenState extends State<NewCreditStoreScreen> {
 
     // Refrescar lista de tiendas (opcional si se usa en el home)
     await tiendaServicio.getTienda(forceRefresh: true);
-    debugPrint("🟠 [NEW Tienda] notifier → ${tiendaServicio.tiendasNotifier.value?.length}");
+    debugPrint(" [NEW Tienda] notifier → ${tiendaServicio.tiendasNotifier.value?.length}");
 
-    debugPrint("🔄 ValueNotifier después de actualizar:");
+    debugPrint(" ValueNotifier después de actualizar:");
     debugPrint(tiendaServicio.tiendasNotifier.value.toString());
 
     await Future.delayed(const Duration(seconds: 1)); // Pequeña pausa UX
@@ -109,9 +109,9 @@ class _NewCreditStoreScreenState extends State<NewCreditStoreScreen> {
               FadeInLeft(child: const Text('Validación del Vendedor', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
               const SizedBox(height: 20),
 
-              // --- CAMPO CÉDULA ---
+              
               CustomTextField(
-                label: 'Cédula del Encargado/Vendedor',
+                label: 'Cédula del encargado/Vendedor',
                 controller: _cedulaEncargadoCtrl,
                 icon: Icons.badge,
                 keyboardType: TextInputType.number,
@@ -125,8 +125,8 @@ class _NewCreditStoreScreenState extends State<NewCreditStoreScreen> {
 
               const SizedBox(height: 25),
 
-              // --- DROPDOWN COMISIÓN ---
-              const Text('Estado de la Comisión', style: TextStyle(fontWeight: FontWeight.bold)),
+              
+              const Text('Estado de la comisión', style: TextStyle(fontWeight: FontWeight.bold)),
               const SizedBox(height: 10),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -161,7 +161,7 @@ class _NewCreditStoreScreenState extends State<NewCreditStoreScreen> {
               ),
               const Padding(
                 padding: EdgeInsets.only(top: 5, left: 5),
-                child: Text('Indique el estado de la comisión.', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                child: Text('Indique el Estado de la comisión.', style: TextStyle(fontSize: 12, color: Colors.grey)),
               ),
 
               const SizedBox(height: 40),
@@ -219,7 +219,7 @@ class _NewCreditStoreScreenState extends State<NewCreditStoreScreen> {
     super.dispose();
   }
 
-  // --- MAQUETACIÓN DE VALIDACIÓN (Igual que en StoreDataScreen) ---
+  
   Future<bool> _validarEncargadoEnBackend(String cedula) async {
     // Simulación de llamada al API
     // En producción: return await tiendaService.validarEncargado(cedula);
@@ -254,7 +254,7 @@ class _NewCreditStoreScreenState extends State<NewCreditStoreScreen> {
           ),
         );
       }
-      return; // ⛔ DETENER EL PROCESO
+      return; //  DETENER EL PROCESO
     }
 
     // 2. Crear DTO Tienda (Con los nuevos campos)
@@ -274,7 +274,7 @@ class _NewCreditStoreScreenState extends State<NewCreditStoreScreen> {
 
       // Refrescar lista de tiendas (opcional si se usa en el home)
       await tiendaServicio.getTienda(forceRefresh: true);
-      debugPrint("🟠 [NEW Tienda] guardada ID: ${tiendaCreada.id}");
+      debugPrint(" [NEW Tienda] guardada ID: ${tiendaCreada.id}");
 
       if (mounted) {
         setState(() => _isLoading = false);
@@ -308,9 +308,9 @@ class _NewCreditStoreScreenState extends State<NewCreditStoreScreen> {
               FadeInLeft(child: const Text('Validación del Vendedor', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold))),
               const SizedBox(height: 20),
 
-              // --- CAMPO CÉDULA ---
+              
               CustomTextField(
-                label: 'Cédula del Encargado/Vendedor',
+                label: 'Cédula del encargado/Vendedor',
                 controller: _cedulaEncargadoCtrl,
                 icon: Icons.badge,
                 keyboardType: TextInputType.number,
@@ -324,8 +324,8 @@ class _NewCreditStoreScreenState extends State<NewCreditStoreScreen> {
 
               const SizedBox(height: 25),
 
-              // --- DROPDOWN COMISIÓN ---
-              const Text('Estado de la Comisión', style: TextStyle(fontWeight: FontWeight.bold)),
+              
+              const Text('Estado de la comisión', style: TextStyle(fontWeight: FontWeight.bold)),
               const SizedBox(height: 10),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -360,7 +360,7 @@ class _NewCreditStoreScreenState extends State<NewCreditStoreScreen> {
               ),
               const Padding(
                 padding: EdgeInsets.only(top: 5, left: 5),
-                child: Text('Indique el estado de la comisión.', style: TextStyle(fontSize: 12, color: Colors.grey)),
+                child: Text('Indique el Estado de la comisión.', style: TextStyle(fontSize: 12, color: Colors.grey)),
               ),
 
               const SizedBox(height: 40),

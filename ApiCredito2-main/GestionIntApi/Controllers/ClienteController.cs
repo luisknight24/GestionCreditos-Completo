@@ -122,7 +122,7 @@ namespace GestionIntApi.Controllers
 
         [HttpGet("ClienteApp")]
 
-        [Authorize] // 🔒 Protegido con JWT
+        [Authorize] //  Protegido con JWT
         public async Task<ActionResult<ClienteMostrarAppDTO>> GetByIdCreditoActivoApp()
         {
             try
@@ -169,3 +169,4 @@ namespace GestionIntApi.Controllers
 
     }
 }
+

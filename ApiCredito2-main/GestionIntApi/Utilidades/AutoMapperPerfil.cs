@@ -245,12 +245,12 @@ namespace GestionIntApi.Utilidades
 
             // Mapeo de la tabla RegistrosPagos al DTO de historial
             CreateMap<RegistrarPago, PagoRealizadoDTO>()
-             // 1. Mapeamos la fecha a String con formato legible
+             // Mapeamos la fecha a String con formato legible
              .ForMember(destino =>
                  destino.FechaPagoStr,
                  opt => opt.MapFrom(origen => origen.FechaPago.ToString("dd/MM/yyyy HH:mm"))
              )
-             // 2. Mapeamos el nombre del cliente con protección de nulos
+             // Mapeamos el nombre del cliente con protección de nulos
              .ForMember(destino =>
                  destino.NombreCliente,
                  opt => opt.MapFrom(origen =>
@@ -274,3 +274,4 @@ namespace GestionIntApi.Utilidades
 
     }
 }
+

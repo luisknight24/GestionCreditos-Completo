@@ -24,28 +24,34 @@ class NotificationsScreenState extends State<NotificationsScreen> {
     setState(() => _isLoading = true);
     try {
       final notificaciones = await _notificacionService.getNotificaciones();
+      notificaciones.sort((a, b) => b.fecha.compareTo(a.fecha));
       _notificacionService.notificacionesNotifier.value = notificaciones;
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error al cargar notificaciones: $e')),
+          SnackBar(
+            content: Text('Error al cargar notificaciones: $e'),
+            backgroundColor: const Color(0xFFEF4444),
+          ),
         );
       }
     } finally {
-      setState(() => _isLoading = false);
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
     }
   }
 
   Future<void> _marcarComoLeida(NotificacionDTO notificacion) async {
-    if (notificacion.leida) return; // Ya está leída
+    if (notificacion.leida) return;
 
     try {
       await _notificacionService.marcarComoLeida(notificacion.id);
-      
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Notificación marcada como leída'),
+            backgroundColor: Color(0xFF10B981),
             duration: Duration(seconds: 1),
           ),
         );
@@ -53,7 +59,10 @@ class NotificationsScreenState extends State<NotificationsScreen> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error: $e')),
+          SnackBar(
+            content: Text('Error: $e'),
+            backgroundColor: const Color(0xFFEF4444),
+          ),
         );
       }
     }
@@ -62,17 +71,23 @@ class NotificationsScreenState extends State<NotificationsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color(0xFF090D16),
       appBar: AppBar(
         title: const Text(
-          'Mis Notificaciones',
-          style: TextStyle(color: Colors.black),
+          'Mis notificaciones',
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+            letterSpacing: -0.3,
+          ),
         ),
-        backgroundColor: Colors.white,
-        elevation: 1,
-        iconTheme: const IconThemeData(color: Colors.black),
+        backgroundColor: const Color(0xFF0F172A),
+        elevation: 0,
+        iconTheme: const IconThemeData(color: Colors.white),
         actions: [
           IconButton(
-            icon: const Icon(Icons.refresh),
+            icon: const Icon(Icons.refresh_rounded, color: Color(0xFF10B981)),
             onPressed: () => _cargarNotificaciones(),
             tooltip: 'Actualizar',
           ),
@@ -81,75 +96,189 @@ class NotificationsScreenState extends State<NotificationsScreen> {
       body: ValueListenableBuilder<List<NotificacionDTO>?>(
         valueListenable: _notificacionService.notificacionesNotifier,
         builder: (context, notificaciones, child) {
-          // Estado de carga
           if (_isLoading && notificaciones == null) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(
+              child: CircularProgressIndicator(color: Color(0xFF10B981)),
+            );
           }
 
-          // Sin datos
           if (notificaciones == null || notificaciones.isEmpty) {
-            return const Center(
-              child: Text("No tienes notificaciones nuevas"),
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(20),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF1E293B),
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.white.withOpacity(0.1)),
+                    ),
+                    child: const Icon(
+                      Icons.notifications_off_outlined,
+                      size: 48,
+                      color: Color(0xFF94A3B8),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    "No tienes notificaciones nuevas",
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  const Text(
+                    "Te avisaremos cuando haya novedades en tus créditos.",
+                    style: TextStyle(
+                      color: Color(0xFF94A3B8),
+                      fontSize: 13,
+                    ),
+                  ),
+                ],
+              ),
             );
           }
 
           return RefreshIndicator(
+            color: const Color(0xFF10B981),
+            backgroundColor: const Color(0xFF1E293B),
             onRefresh: _cargarNotificaciones,
             child: ListView.builder(
               itemCount: notificaciones.length,
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
               itemBuilder: (context, index) {
                 final noti = notificaciones[index];
-                return Card(
-                  elevation: noti.leida ? 0 : 3,
-                  color: noti.leida ? Colors.white : Colors.blue[50],
-                  margin: const EdgeInsets.symmetric(vertical: 8),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: _getColorPorTipo(noti.tipo),
-                      child: Icon(
-                        _getIconPorTipo(noti.tipo),
-                        color: Colors.white,
-                        size: 20,
-                      ),
+                final color = _getColorPorTipo(noti.tipo);
+                final icon = _getIconPorTipo(noti.tipo);
+                final titulo = _getTituloPorTipo(noti.tipo);
+
+                return Container(
+                  margin: const EdgeInsets.only(bottom: 12),
+                  decoration: BoxDecoration(
+                    color: noti.leida
+                        ? const Color(0x660F172A)
+                        : const Color(0xFF1E293B),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: noti.leida
+                          ? Colors.white.withOpacity(0.06)
+                          : color.withOpacity(0.4),
+                      width: noti.leida ? 1 : 1.5,
                     ),
-                    title: Text(
-                      noti.tipo,
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: noti.leida ? Colors.grey : Colors.black,
-                      ),
-                    ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: 5),
-                        Text(noti.mensaje),
-                        const SizedBox(height: 5),
-                        Text(
-                          DateFormat('dd/MM/yyyy HH:mm').format(noti.fecha),
-                          style: TextStyle(
-                            fontSize: 10,
-                            color: Colors.grey[600],
-                          ),
-                        ),
-                      ],
-                    ),
-                    trailing: !noti.leida
-                        ? IconButton(
-                            icon: const Icon(
-                              Icons.mark_email_read,
-                              color: Colors.blue,
+                    boxShadow: noti.leida
+                        ? []
+                        : [
+                            BoxShadow(
+                              color: color.withOpacity(0.12),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
                             ),
-                            onPressed: () => _marcarComoLeida(noti),
-                            tooltip: 'Marcar como leída',
-                          )
-                        : const Icon(
-                            Icons.check_circle,
-                            color: Colors.green,
-                            size: 20,
-                          ),
-                    onTap: () => _marcarComoLeida(noti),
+                          ],
+                  ),
+                  child: Material(
+                    color: Colors.transparent,
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(16),
+                      onTap: () => _marcarComoLeida(noti),
+                      child: Padding(
+                        padding: const EdgeInsets.all(14),
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: color.withOpacity(0.15),
+                                shape: BoxShape.circle,
+                                border: Border.all(color: color.withOpacity(0.3)),
+                              ),
+                              child: Icon(
+                                icon,
+                                color: color,
+                                size: 22,
+                              ),
+                            ),
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text(
+                                        titulo,
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 14.5,
+                                          color: noti.leida
+                                              ? const Color(0xFFCBD5E1)
+                                              : Colors.white,
+                                        ),
+                                      ),
+                                      if (!noti.leida)
+                                        Container(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 8, vertical: 2),
+                                          decoration: BoxDecoration(
+                                            color: color.withOpacity(0.2),
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            border: Border.all(
+                                                color: color.withOpacity(0.5)),
+                                          ),
+                                          child: const Text(
+                                            'Nueva',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 10,
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 6),
+                                  Text(
+                                    noti.mensaje,
+                                    style: TextStyle(
+                                      color: noti.leida
+                                          ? const Color(0xFF94A3B8)
+                                          : const Color(0xFFE2E8F0),
+                                      fontSize: 13,
+                                      height: 1.35,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.access_time_rounded,
+                                        size: 13,
+                                        color: Colors.white.withOpacity(0.4),
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        DateFormat('dd/MM/yyyy HH:mm')
+                                            .format(noti.fecha),
+                                        style: TextStyle(
+                                          fontSize: 11,
+                                          color: Colors.white.withOpacity(0.4),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                 );
               },
@@ -162,33 +291,68 @@ class NotificationsScreenState extends State<NotificationsScreen> {
 
   Color _getColorPorTipo(String tipo) {
     switch (tipo) {
+      case "PagoRealizado":
       case "Pago":
-        return Colors.green;
-      case "Aviso":
-        return Colors.orange;
+        return const Color(0xFF10B981); // Verde Esmeralda
+      case "Recordatorio5Dias":
+        return const Color(0xFF0284C7); // Azul Cielo
+      case "Recordatorio3Dias":
+        return const Color(0xFFF59E0B); // Ámbar
+      case "Recordatorio2Dias":
+        return const Color(0xFFF97316); // Naranja
+      case "PagoHoy":
+      case "PagoMañana":
+        return const Color(0xFFFACC15); // Amarillo
+      case "Moroso":
       case "Mora":
-        return Colors.red;
+        return const Color(0xFFEF4444); // Rojo
       default:
-        return Colors.blue;
+        return const Color(0xFF38BDF8); // Azul
     }
   }
 
   IconData _getIconPorTipo(String tipo) {
     switch (tipo) {
+      case "PagoRealizado":
       case "Pago":
-        return Icons.check_circle_outline;
-      case "Aviso":
-        return Icons.notifications_active_outlined;
+        return Icons.check_circle_rounded;
+      case "Recordatorio5Dias":
+        return Icons.calendar_today_rounded;
+      case "Recordatorio3Dias":
+        return Icons.notifications_active_rounded;
+      case "Recordatorio2Dias":
+        return Icons.access_time_filled_rounded;
+      case "PagoHoy":
+      case "PagoMañana":
+        return Icons.alarm_on_rounded;
+      case "Moroso":
       case "Mora":
         return Icons.warning_amber_rounded;
       default:
-        return Icons.info_outline;
+        return Icons.info_outline_rounded;
     }
   }
 
-  @override
-  void dispose() {
-    // No cerrar el servicio aquí si se usa globalmente
-    super.dispose();
+  String _getTituloPorTipo(String tipo) {
+    switch (tipo) {
+      case "PagoRealizado":
+      case "Pago":
+        return "Pago confirmado";
+      case "Recordatorio5Dias":
+        return "Recordatorio (5 días)";
+      case "Recordatorio3Dias":
+        return "Recordatorio (3 días)";
+      case "Recordatorio2Dias":
+        return "Próximo vencimiento (2 días)";
+      case "PagoHoy":
+        return "¡Hoy vence tu cuota!";
+      case "PagoMañana":
+        return "Pago mañana";
+      case "Moroso":
+      case "Mora":
+        return "Atraso en cuota";
+      default:
+        return "Notificación";
+    }
   }
 }

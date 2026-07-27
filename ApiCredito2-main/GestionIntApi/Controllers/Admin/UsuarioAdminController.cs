@@ -69,7 +69,7 @@ namespace GestionIntApi.Controllers.Admin
 
                 //  var newUser = await _UsuarioServicios.crearUsuario(usuario);
 
-                // 2. Generar Código
+                // Generar Código
                 var codigo = new Random().Next(100000, 999999).ToString();
 
                 var datos = new RegistroTemporalAdmin
@@ -78,10 +78,10 @@ namespace GestionIntApi.Controllers.Admin
                     Codigo = codigo
                 };
 
-                // 3. Guardar el código temporal asociado al correo del usuario
+                // Guardar el código temporal asociado al correo del usuario
                 //  _codigoService.GuardarCodigo(usuario.Correo, codigo);
                 _registroTemporal.GuardarRegistro(usuarioAdmin.Correo, datos);
-                // 4. Enviar correo
+                // Enviar correo
                 await _emailService.SendEmailAsync(
                     usuarioAdmin.Correo,
                     "Código de verificación",
@@ -109,7 +109,7 @@ namespace GestionIntApi.Controllers.Admin
             var rsp = new Response<UsuarioAdminDTO>();
             try
             {
-                // 1. Verificar si el correo ya existe
+                // Verificar si el correo ya existe
                 var existe = await _UsuarioAdminServicios.ExisteCorreoAdmin(usuarioAdmin.Correo);
                 if (existe)
                 {
@@ -118,7 +118,7 @@ namespace GestionIntApi.Controllers.Admin
                     return BadRequest(rsp);
                 }
 
-                // 2. Registrar directamente en la base de datos
+                // Registrar directamente en la base de datos
                 // Usamos el servicio de creación de usuario directamente
                 var usuarioCreado = await _UsuarioAdminServicios.crearUsuario(usuarioAdmin);
 
@@ -221,3 +221,4 @@ namespace GestionIntApi.Controllers.Admin
 
     }
 }
+

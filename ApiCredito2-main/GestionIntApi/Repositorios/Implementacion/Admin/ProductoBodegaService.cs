@@ -26,7 +26,7 @@ namespace GestionIntApi.Repositorios.Implementacion.Admin
             _movimientoRepository = movimientoRepository;
         }
 
-        // 1. LISTAR PRODUCTOS
+        // LISTAR PRODUCTOS
         public async Task<List<ProductoBodegaDTO>> listaProductos()
         {
             try
@@ -45,10 +45,10 @@ namespace GestionIntApi.Repositorios.Implementacion.Admin
         {
             try
             {
-                // 1. Mapeamos el DTO al Modelo
+                // Mapeamos el DTO al Modelo
                 var producto = _mapper.Map<Producto>(modelo);
 
-                // 2. Generamos el Código Automático
+                // Generamos el Código Automático
                 var consulta = await _productoRepository.Consultar();
                 int ultimoId = consulta.Any() ? await consulta.MaxAsync(p => p.Id) : 0;
 
@@ -58,14 +58,14 @@ namespace GestionIntApi.Repositorios.Implementacion.Admin
 
                 producto.Codigo = $"{prefijo}-{DateTime.Now.Year}-{(ultimoId + 1).ToString("D4")}";
 
-                // 3. IMPORTANTE: Si TiendaActualId viene en 0 desde el DTO, lo ponemos en null
+                // IMPORTANTE: Si TiendaActualId viene en 0 desde el DTO, lo ponemos en null
                 // para que no intente buscar una tienda con Id 0 que no existe.
                 if (producto.TiendaId == 0) producto.TiendaId = null;
 
-                // 4. Forzamos la fecha de registro
+                // Forzamos la fecha de registro
                 producto.FechaRegistro = DateTime.UtcNow;
 
-                // 5. Intentamos guardar
+                // Intentamos guardar
                 var creado = await _productoRepository.Crear(producto);
 
                 if (creado.Id == 0)
@@ -91,7 +91,7 @@ namespace GestionIntApi.Repositorios.Implementacion.Admin
             }
         }
 
-        // 3. EDITAR PRODUCTO
+        // EDITAR PRODUCTO
         public async Task<bool> editarProducto(ProductoBodegaDTO modelo)
         {
             try
@@ -127,7 +127,7 @@ namespace GestionIntApi.Repositorios.Implementacion.Admin
             }
         }
 
-        // 4. ELIMINAR PRODUCTO
+        // ELIMINAR PRODUCTO
         public async Task<bool> eliminarProducto(int id)
         {
             try
@@ -145,7 +145,7 @@ namespace GestionIntApi.Repositorios.Implementacion.Admin
             }
         }
 
-        // 5. OBTENER POR ID
+        // OBTENER POR ID
         public async Task<ProductoBodegaDTO> obtenerPorIdProducto(int id)
         {
             try
@@ -164,3 +164,4 @@ namespace GestionIntApi.Repositorios.Implementacion.Admin
         }
     }
 }
+

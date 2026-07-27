@@ -1,4 +1,4 @@
-using AutoMapper;
+﻿using AutoMapper;
 using BCrypt.Net;
 using GestionIntApi.DTO;
 using GestionIntApi.DTO.Admin;
@@ -204,12 +204,12 @@ namespace GestionIntApi.Repositorios.Implementacion
                 
                 
    
-                // 2. Guardar DetalleCliente
+                // Guardar DetalleCliente
                 var detalle = await _DetalleRepositorio.Crear(
                     _mapper.Map<DetalleCliente>(modelo.Cliente.DetalleCliente)
                 );
 
-                // 3. Guardar Cliente
+                // Guardar Cliente
                 var cliente = new Cliente
                 {
                     UsuarioId = UsuarioCreado.Id,
@@ -224,7 +224,7 @@ namespace GestionIntApi.Repositorios.Implementacion
                 {
                     foreach (var t in modelo.Cliente.TiendaApps)
                     {
-                        // 🔥 CAMBIO: Ahora TiendaApp necesita TiendaId
+                        //  CAMBIO: Ahora TiendaApp necesita TiendaId
                         // Primero debes buscar o crear la Tienda real
 
                         var tiendaExistente = await _context.Tiendas
@@ -241,8 +241,8 @@ namespace GestionIntApi.Repositorios.Implementacion
                         // Crear TiendaApp (la relación intermedia)
                         var TiendaApps = new TiendaApp
                         {
-                            TiendaId = tiendaExistente.Id,  // ✅ FK a Tiendas
-                            ClienteId = cliente.Id,          // ✅ FK a Clientes
+                            TiendaId = tiendaExistente.Id,  //  FK a Tiendas
+                            ClienteId = cliente.Id,          //  FK a Clientes
                             CedulaEncargado = t.CedulaEncargado,
                             EstadoDeComision = "Pendiente",  // O el valor que necesites
                             FechaRegistro = DateTime.UtcNow
@@ -255,7 +255,7 @@ namespace GestionIntApi.Repositorios.Implementacion
                     }
                 }
 
-                // 5. Guardar créditos
+                // Guardar créditos
                 foreach (var c in modelo.Cliente.Creditos)
                 {
                     c.ClienteId = cliente.Id;
@@ -288,7 +288,7 @@ namespace GestionIntApi.Repositorios.Implementacion
                 var correo = (modelo.Correo ?? "").Trim().ToLower();
                 var cedula = modelo.Cliente?.DetalleCliente?.NumeroCedula;
 
-                // 1. Verificar si el correo ya existe en BD
+                // Verificar si el correo ya existe en BD
                 var usuarioExistente = await _context.Usuarios
                     .FirstOrDefaultAsync(u => u.Correo.ToLower() == correo);
 
@@ -297,7 +297,7 @@ namespace GestionIntApi.Repositorios.Implementacion
                     throw new TaskCanceledException($"El correo '{correo}' ya se encuentra registrado y asociado a una cuenta de crédito.");
                 }
 
-                // 2. Verificar si la cédula ya existe en BD
+                // Verificar si la cédula ya existe en BD
                 if (!string.IsNullOrWhiteSpace(cedula))
                 {
                     var cedulaExistente = await _context.DetallesCliente
@@ -315,7 +315,7 @@ namespace GestionIntApi.Repositorios.Implementacion
                 if (modelo.Cliente.Creditos == null) modelo.Cliente.Creditos = new List<CreditoDTO>();
                 if (modelo.Cliente.TiendaApps == null) modelo.Cliente.TiendaApps = new List<TiendaAppDTO>();
 
-                // 🔥 PASO 1: VALIDAR / REGISTRAR TIENDAS DINÁMICAMENTE
+                //: VALIDAR / REGISTRAR TIENDAS DINÁMICAMENTE
                 if (modelo.Cliente?.TiendaApps != null && modelo.Cliente.TiendaApps.Any())
                 {
                     foreach (var t in modelo.Cliente.TiendaApps)
@@ -325,7 +325,7 @@ namespace GestionIntApi.Repositorios.Implementacion
 
                         if (tiendaExistente == null)
                         {
-                            Console.WriteLine($"⚠️ La tienda con encargado {t.CedulaEncargado} no existe. Creándola dinámicamente...");
+                            Console.WriteLine($" La tienda con encargado {t.CedulaEncargado} no existe. Creándola dinámicamente...");
                             tiendaExistente = new Tienda
                             {
                                 NombreTienda = $"Tienda Encargado {t.CedulaEncargado}",
@@ -338,14 +338,14 @@ namespace GestionIntApi.Repositorios.Implementacion
                             };
                             await _context.Tiendas.AddAsync(tiendaExistente);
                             await _context.SaveChangesAsync();
-                            Console.WriteLine($"✅ Tienda con encargado {t.CedulaEncargado} creada dinámicamente.");
+                            Console.WriteLine($" Tienda con encargado {t.CedulaEncargado} creada dinámicamente.");
                         }
                     }
                 }
 
-                // ✅ PASO 2: Si pasó todas las validaciones, ahora sí guardamos
+                //: Si pasó todas las validaciones, ahora sí guardamos
 
-                // 1. Encripta la contraseña de forma segura si no está encriptada
+                // Encripta la contraseña de forma segura si no está encriptada
                 if (!string.IsNullOrWhiteSpace(modelo.Clave) && !modelo.Clave.StartsWith("$2a$") && !modelo.Clave.StartsWith("$2b$"))
                 {
                     modelo.Clave = BCrypt.Net.BCrypt.HashPassword(modelo.Clave);
@@ -353,12 +353,12 @@ namespace GestionIntApi.Repositorios.Implementacion
 
                 var UsuarioCreado = await _UsuarioRepositorio.Crear(_mapper.Map<Usuario>(modelo));
 
-                // 2. Guardar DetalleCliente
+                // Guardar DetalleCliente
                 var detalle = await _DetalleRepositorio.Crear(
                     _mapper.Map<DetalleCliente>(modelo.Cliente.DetalleCliente)
                 );
 
-                // 3. Guardar Cliente
+                // Guardar Cliente
                 var cliente = new Cliente
                 {
                     UsuarioId = UsuarioCreado.Id,
@@ -366,7 +366,7 @@ namespace GestionIntApi.Repositorios.Implementacion
                 };
                 cliente = await _ClienteRepositorio.Crear(cliente);
 
-                // 4. Crear TiendaApps (ya validamos que todas existen)
+                // Crear TiendaApps (ya validamos que todas existen)
                 var tiendasCreadas = new List<TiendaApp>();
                 if (modelo.Cliente.TiendaApps != null)
                 {
@@ -442,7 +442,7 @@ namespace GestionIntApi.Repositorios.Implementacion
         {
             try
             {
-                // 1. Consultamos TODOS los usuarios con sus relaciones
+                // Consultamos TODOS los usuarios con sus relaciones
                 var usuarios = await _context.Usuarios
                     .Include(u => u.Rol)
                     .Include(u => u.Cliente)
@@ -456,7 +456,7 @@ namespace GestionIntApi.Repositorios.Implementacion
                 {
                     var dto = _mapper.Map<UsuarioCompletoDto>(usuario);
 
-                    // 2. Buscamos el ÚLTIMO crédito para cada usuario
+                    // Buscamos el ÚLTIMO crédito para cada usuario
                     if (usuario.Cliente != null)
                     {
                         var ultimoCredito = await _context.Creditos
@@ -490,7 +490,7 @@ namespace GestionIntApi.Repositorios.Implementacion
         {
             try
             {
-                // 1. Consultamos el usuario con su cliente y detalle
+                // Consultamos el usuario con su cliente y detalle
                 var usuario = await _context.Usuarios
                     .Include(u => u.Rol)
                     .Include(u => u.Cliente)
@@ -502,7 +502,7 @@ namespace GestionIntApi.Repositorios.Implementacion
 
                 var dto = _mapper.Map<UsuarioCompletoDto>(usuario);
 
-                // 2. Buscamos el ÚLTIMO crédito manualmente con su TiendaApp
+                // Buscamos el ÚLTIMO crédito manualmente con su TiendaApp
                 if (usuario.Cliente != null)
                 {
                     var ultimoCredito = await _context.Creditos
@@ -536,7 +536,7 @@ namespace GestionIntApi.Repositorios.Implementacion
         {
             try
             {
-                // 1. Cargamos todo el objeto con sus hijos en una sola consulta
+                // Cargamos todo el objeto con sus hijos en una sola consulta
                 var usuarioDb = await _context.Usuarios
                     .Include(u => u.Cliente)
                         .ThenInclude(c => c.DetalleCliente)
@@ -548,13 +548,13 @@ namespace GestionIntApi.Repositorios.Implementacion
 
                 if (usuarioDb == null) return false;
 
-                // 2. Actualizamos el Usuario
+                // Actualizamos el Usuario
                 usuarioDb.NombreApellidos = modelo.NombreApellidos;
                 usuarioDb.Correo = modelo.Correo;
                // usuarioDb.Clave = modelo.Clave;
                 usuarioDb.RolId = modelo.RolId;
                 usuarioDb.EsActivo = modelo.EsActivo == 1;
-                // 🔥 LÓGICA DE CONTRASEÑA SEGURA
+                //  LÓGICA DE CONTRASEÑA SEGURA
                 if (!string.IsNullOrWhiteSpace(modelo.Clave))
                 {
                     string nuevaClave = modelo.Clave.Trim(); // Elimina espacios accidentales
@@ -573,7 +573,7 @@ namespace GestionIntApi.Repositorios.Implementacion
                     // Si es un hash, no hacemos nada (mantenemos el valor que ya tenía el usuarioDb)
                 }
 
-                // 3. Actualizamos el Detalle del Cliente
+                // Actualizamos el Detalle del Cliente
                 if (usuarioDb.Cliente?.DetalleCliente != null && modelo.Cliente?.DetalleCliente != null)
                 {
                     var detDb = usuarioDb.Cliente.DetalleCliente;
@@ -585,7 +585,7 @@ namespace GestionIntApi.Repositorios.Implementacion
                   //  detDb.NombrePropietario = detMod.NombrePropietario;
                 }
 
-                // 4. Actualizamos TiendaApp y el Crédito específico
+                // Actualizamos TiendaApp y el Crédito específico
                 var creditoMod = modelo.Cliente?.Creditos?.FirstOrDefault();
                 var tiendaAppMod = modelo.Cliente?.TiendaApps?.FirstOrDefault();
 
@@ -617,7 +617,7 @@ namespace GestionIntApi.Repositorios.Implementacion
                     }
                 }
 
-                // 5. Un solo SaveChangesAsync() garantiza que todo sea una sola operación en Postgres
+                // Un solo SaveChangesAsync() garantiza que todo sea una sola operación en Postgres
                 // Si algo falla aquí, no se guarda nada de lo anterior.
                 await _context.SaveChangesAsync();
 
@@ -659,3 +659,4 @@ namespace GestionIntApi.Repositorios.Implementacion
       
     }
 }
+

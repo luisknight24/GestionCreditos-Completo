@@ -194,7 +194,7 @@ final NotificacionService notificacionService = NotificacionService();
     }
   }
 
-  // 🧹 Limpiar caché
+  //  Limpiar caché
   void clearCache() {
     _cacheCliente = null;
   }
@@ -226,7 +226,7 @@ Future<bool> actualizarDetalleClienteFotos(
     final decoded = jsonDecode(response.body);
 
     if (decoded['status'] == true) {
-      // 🔄 Limpia caché del cliente porque cambió su info
+      //  Limpia caché del cliente porque cambió su info
       clearCache();
       return true;
     } else {
@@ -239,9 +239,9 @@ Future<bool> actualizarDetalleClienteFotos(
 }
 
 
-/// 🔐 LOGOUT REAL
+///  LOGOUT REAL
 Future<void> logout() async {
-  print("🚪 Logout iniciado");
+  print(" Logout iniciado");
 
   // 1️⃣ Borrar credenciales
   await storage.deleteAll();
@@ -255,7 +255,7 @@ Future<void> logout() async {
 
    await historialService.limpiar();
    await notificacionService.limpiar();
-  print("✅ Logout completo");
+  print(" Logout completo");
 }
 
 

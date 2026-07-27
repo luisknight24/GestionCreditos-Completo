@@ -1,4 +1,4 @@
-/*
+﻿/*
 import 'package:flutter/material.dart';
 import '../../models/CreditoMostrarDTO.dart';
 
@@ -67,12 +67,12 @@ class CreditSummaryCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _InfoItem(
-                label: 'Valor Cuota',
+                label: 'Valor cuota',
                 value: '\$${credito.valorPorCuota.toStringAsFixed(2)}',
                 icon: Icons.monetization_on_outlined,
               ),
               _InfoItem(
-                label: 'Próximo Pago',
+                label: 'Próximo pago',
                 value: credito.proximaCuotaStr,
                 icon: Icons.calendar_month_outlined,
                 alignRight: true,
@@ -253,19 +253,19 @@ class CreditSummaryCard extends StatelessWidget {
         : 0.0;
 
     return Container(
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(22),
       decoration: BoxDecoration(
-        // Gradiente elegante para destacar la tarjeta
-        gradient: LinearGradient(
-          colors: [Colors.blue.shade900, Colors.blue.shade600],
+        gradient: const LinearGradient(
+          colors: [Color(0xFF0F172A), Color(0xFF1E293B)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: Colors.white.withOpacity(0.1)),
         boxShadow: [
           BoxShadow(
-            color: Colors.blue.withOpacity(0.3),
-            blurRadius: 15,
+            color: const Color(0xFF0F172A).withOpacity(0.35),
+            blurRadius: 18,
             offset: const Offset(0, 8),
           ),
         ],
@@ -273,7 +273,7 @@ class CreditSummaryCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 1. CABECERA: Marca/Modelo y Estado General
+          // 1. CABECERA: Fecha de venta y Dispositivo
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -282,36 +282,30 @@ class CreditSummaryCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
-                      const Text('FECHA DE VENTA', style: TextStyle(color: Colors.white70, fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1)),
+                    const Text('FECHA DE VENTA', style: TextStyle(color: Color(0xFF94A3B8), fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 0.8)),
                     const SizedBox(height: 2),
                     Text(
-                      '${credito.fechaCreditoStr}',
-                      style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                      credito.fechaCreditoStr ?? '',
+                      style: const TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.bold),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-
-                    const Text('TU DISPOSITIVO', style: TextStyle(color: Colors.white70, fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1)),
+                    const SizedBox(height: 10),
+                    const Text('TU DISPOSITIVO', style: TextStyle(color: Color(0xFF94A3B8), fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 0.8)),
                     const SizedBox(height: 2),
                     Text(
                       '${credito.marca} ${credito.modelo}',
-                      style: const TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
+                      style: const TextStyle(color: Colors.white, fontSize: 17, fontWeight: FontWeight.bold),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                     ),
-
-
-                                      // 🎯 SOLO AGREGAR ESTO
-                  const SizedBox(height: 4),
-                  const Text('Cuotas pagadas/Total de cuotas', style: TextStyle(color: Colors.white70, fontSize: 10, fontWeight: FontWeight.bold, letterSpacing: 1)),
-                    
-                    
+                    const SizedBox(height: 8),
+                    const Text('Cuotas pagadas / Total cuotas', style: TextStyle(color: Color(0xFF94A3B8), fontSize: 10, fontWeight: FontWeight.w700, letterSpacing: 0.8)),
                     const SizedBox(height: 2),
-                  Text(
-                    credito.progresoCuotas, // "2/12"
-                    style: const TextStyle(color: Colors.white70, fontSize: 14, fontWeight: FontWeight.w600),
-                  ),
+                    Text(
+                      credito.progresoCuotas,
+                      style: const TextStyle(color: Color(0xFF38BDF8), fontSize: 15, fontWeight: FontWeight.w700),
+                    ),
                   ],
                 ),
               ),
@@ -319,19 +313,21 @@ class CreditSummaryCard extends StatelessWidget {
             ],
           ),
 
-          const SizedBox(height: 20),
+          const SizedBox(height: 18),
+          Divider(color: Colors.white.withOpacity(0.1)),
+          const SizedBox(height: 12),
 
-          // 2. FILA 1: Valor Cuota y Vencimiento
+          // 2. FILA: Valor cuota y Próximo pago
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _InfoItem(
-                label: 'Valor Cuota',
+                label: 'Valor cuota',
                 value: '\$${credito.valorPorCuota.toStringAsFixed(2)}',
                 icon: Icons.monetization_on_outlined,
               ),
               _InfoItem(
-                label: 'Próximo Pago',
+                label: 'Próximo pago',
                 value: credito.proximaCuotaStr,
                 icon: Icons.calendar_month_outlined,
                 alignRight: true,
@@ -339,92 +335,27 @@ class CreditSummaryCard extends StatelessWidget {
             ],
           ),
 
-          /*
-          const SizedBox(height: 15),
+          const SizedBox(height: 18),
 
-          // 3. FILA 2: Abonado a Cuota y Estado Cuota (NUEVO)
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _InfoItem(
-                label: 'Abonado Cuota',
-                value: '\$${credito.abonadoCuota.toStringAsFixed(2)}',
-                icon: Icons.price_check, // Icono diferente para distinguir
-              ),
-             /* Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  const Text('Estado Cuota', style: TextStyle(color: Colors.white70, fontSize: 11)),
-                  Text(
-                    credito.estadoCuota.toUpperCase(),
-                    style: TextStyle(
-                        color: _getColorEstadoCuota(credito.estadoCuota),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w800
-                    ),
-                  ),
-                ],
-              ),*/
-            ],
-          ),
-        */
-          /*
-          const SizedBox(height: 15),
-          Divider(color: Colors.white.withOpacity(0.2)),
-          const SizedBox(height: 10),
-
-          // 4. FILA 3: GLOBAL (Abonado Total y Monto Pendiente)
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text('Abonado Total', style: TextStyle(color: Colors.white70, fontSize: 11)),
-                  Text(
-                    '\$${credito.abonadoTotal.toStringAsFixed(2)}',
-                    style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-              // --- NUEVO CAMPO: Monto Pendiente ---
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  const Text('Monto Pendiente', style: TextStyle(color: Colors.white70, fontSize: 11)),
-                  Text(
-                    '\$${credito.montoPendiente.toStringAsFixed(2)}',
-                    style: const TextStyle(color: Colors.white, fontSize: 15, fontWeight: FontWeight.bold),
-                  ),
-                ],
-              ),
-            ],
-          ),
-
-
-           */
-
-          const SizedBox(height: 15),
-
-          // 5. BARRA DE PROGRESO
+          // 3. BARRA DE PROGRESO DE CRÉDITO
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('Progreso del crédito', style: TextStyle(color: Colors.white.withOpacity(0.8), fontSize: 10)),
-                  Text('${(porcentajePagado * 100).toInt()}%', style: const TextStyle(color: Colors.greenAccent, fontSize: 10, fontWeight: FontWeight.bold)),
+                  Text('Progreso del crédito', style: TextStyle(color: Colors.white.withOpacity(0.7), fontSize: 11)),
+                  Text('${(porcentajePagado * 100).toInt()}%', style: const TextStyle(color: Color(0xFF10B981), fontSize: 11, fontWeight: FontWeight.bold)),
                 ],
               ),
-              const SizedBox(height: 5),
+              const SizedBox(height: 6),
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: LinearProgressIndicator(
                   value: porcentajePagado,
-                  backgroundColor: Colors.black26,
-                  color: Colors.greenAccent,
-                  minHeight: 6,
+                  backgroundColor: Colors.white.withOpacity(0.1),
+                  color: const Color(0xFF10B981),
+                  minHeight: 7,
                 ),
               ),
             ],

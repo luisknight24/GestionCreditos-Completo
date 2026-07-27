@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+﻿import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import '../../services/usuario_service.dart';
 import '../../models/ClienteMostrarDTO.dart';
@@ -125,7 +125,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               // Campos de Texto (Usando TextFormField estándar o tu CustomTextField)
               _buildTextField("Nombre Completo", _nombreController, Icons.person),
               const SizedBox(height: 15),
-              _buildTextField("Correo Electrónico", _correoController, Icons.email, readOnly: true), // Correo usualmente no se edita fácil
+              _buildTextField("Correo electrónico", _correoController, Icons.email, readOnly: true), // Correo usualmente no se edita fácil
               const SizedBox(height: 15),
               _buildTextField("Teléfono", _telefonoController, Icons.phone, inputType: TextInputType.phone),
               const SizedBox(height: 15),

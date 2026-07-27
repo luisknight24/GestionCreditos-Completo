@@ -13,15 +13,15 @@ namespace GestionIntApi.Models.Admin
 
         public DateTime FechaMovimiento { get; set; } = DateTime.Now;
 
-        // 🔥 Producto involucrado
+        //  Producto involucrado
         public int ProductoId { get; set; }
         public Producto Producto { get; set; }
 
-        // 🔥 Tienda de ORIGEN (nullable para entradas)
+        //  Tienda de ORIGEN (nullable para entradas)
         public int? TiendaOrigenId { get; set; }
         public Tienda? TiendaOrigen { get; set; }
 
-        // 🔥 Tienda de DESTINO (nullable para salidas/ventas)
+        //  Tienda de DESTINO (nullable para salidas/ventas)
         public int? TiendaDestinoId { get; set; }
         public Tienda? TiendaDestino { get; set; }
 
@@ -34,3 +34,4 @@ namespace GestionIntApi.Models.Admin
         public decimal? MontoVenta { get; set; } // Solo si es VENTA
     }
 }
+

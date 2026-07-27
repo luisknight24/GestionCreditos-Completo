@@ -66,9 +66,9 @@ namespace GestionIntApi.Controllers
 
             try
             {
-                // 1. Validar correo
+                // Validar correo
 
-                // 2. Registrar usuario directamente
+                // Registrar usuario directamente
                 var nuevoCredito = await _detalleClienteServicios.CreateDetalle(credito);
 
                 rsp.status = true;
@@ -165,3 +165,4 @@ namespace GestionIntApi.Controllers
 
     }
 }
+

@@ -31,7 +31,7 @@ class SideMenu extends StatelessWidget {
           ),
 
           /*
-          // --- OPCIÓN MI PERFIL ---
+          
           ListTile(
             leading: const Icon(Icons.person_outline),
             title: const Text('Mi Perfil'),
@@ -41,7 +41,7 @@ class SideMenu extends StatelessWidget {
             },
           ),
 
-          // --- OPCIÓN CONFIGURACIÓN ---
+          
           ListTile(
             leading: const Icon(Icons.settings_outlined),
             title: const Text('Configuración'),
@@ -53,17 +53,17 @@ class SideMenu extends StatelessWidget {
         */
           const Divider(),
 
-          // --- OPCIÓN CERRAR SESIÓN ---
+          
           ListTile(
             leading: const Icon(Icons.logout, color: Colors.red),
-            title: const Text('Cerrar Sesión', style: TextStyle(color: Colors.red)),
+            title: const Text('Cerrar sesión', style: TextStyle(color: Colors.red)),
             onTap: () async {
               final usuarioService = UsuarioService();
 
               // Cierra el drawer antes de salir
               Navigator.pop(context);
 
-              await usuarioService.logout(); // 🔥 Limpia storage/tokens
+              await usuarioService.logout(); //  Limpia storage/tokens
 
               if (context.mounted) {
                 context.go('/login'); // Redirige al login borrando el historial
@@ -93,63 +93,79 @@ class SideMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Definimos colores del tema localmente o los tomas de Theme.of(context)
-    final primaryColor = Theme.of(context).primaryColor;
-    final primaryDark = const Color(0xFF1A237E); // Tu azul original
-
     return Drawer(
-      elevation: 0, // Quitamos la sombra por defecto para un look más plano
+      backgroundColor: const Color(0xFF090D16),
+      elevation: 16,
       child: Column(
         children: [
-          // 1. HEADER CON DEGRADADO
+          // 1. HEADER CON GRADIENTE OSCURO ELEGANTE
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.only(top: 50, bottom: 20, left: 20, right: 20),
+            padding: const EdgeInsets.only(top: 55, bottom: 25, left: 24, right: 24),
             decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [primaryDark, primaryColor], // Degradado elegante
+              gradient: const LinearGradient(
+                colors: [Color(0xFF0F172A), Color(0xFF1E293B)],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
               ),
               borderRadius: const BorderRadius.only(
-                bottomRight: Radius.circular(30), // Curva moderna
+                bottomRight: Radius.circular(32),
               ),
+              border: Border(
+                bottom: BorderSide(color: Colors.white.withOpacity(0.08)),
+              ),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.4),
+                  blurRadius: 15,
+                  offset: const Offset(0, 5),
+                ),
+              ],
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Avatar con borde
+                // Avatar con anillo verde esmeralda
                 Container(
                   padding: const EdgeInsets.all(3),
                   decoration: BoxDecoration(
-                    color: Colors.white.withOpacity(0.3),
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF10B981), Color(0xFF0284C7)],
+                    ),
                     shape: BoxShape.circle,
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFF10B981).withOpacity(0.4),
+                        blurRadius: 10,
+                      ),
+                    ],
                   ),
                   child: const CircleAvatar(
-                    radius: 35,
-                    backgroundColor: Colors.white,
-                    child: Icon(Icons.person, size: 40, color: Color(0xFF1A237E)),
+                    radius: 34,
+                    backgroundColor: Color(0xFF0F172A),
+                    child: Icon(Icons.person_rounded, size: 38, color: Colors.white),
                   ),
                 ),
-                const SizedBox(height: 15),
+                const SizedBox(height: 16),
                 // Nombre
                 Text(
                   userName,
                   style: const TextStyle(
                     color: Colors.white,
                     fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    letterSpacing: 0.5,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: -0.3,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                 ),
+                const SizedBox(height: 3),
                 // Correo
                 Text(
                   userEmail,
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.8),
-                    fontSize: 14,
+                    color: Colors.white.withOpacity(0.65),
+                    fontSize: 13,
                   ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
@@ -160,63 +176,39 @@ class SideMenu extends StatelessWidget {
 
           const SizedBox(height: 20),
 
-          // 2. LISTA DE OPCIONES (Navegación)
-          // Usamos Expanded para que ocupe el espacio disponible
+          // 2. LISTA DE OPCIONES DE NAVEGACIÓN
           Expanded(
             child: ListView(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 14),
               children: [
-
-                // Ejemplo de cómo se vería un item activo (Home)
                 _DrawerTile(
-                  icon: Icons.dashboard_outlined,
+                  icon: Icons.dashboard_rounded,
                   title: 'Inicio',
-                  isActive: true, // Puedes controlar esto según la ruta actual
-                  onTap: () => Navigator.pop(context), // Ya estás en home
+                  isActive: true,
+                  onTap: () => Navigator.pop(context),
                 ),
-
-                // --- TUS OPCIONES COMENTADAS (Ahora con el nuevo diseño) ---
-                /*
-                _DrawerTile(
-                  icon: Icons.person_outline,
-                  title: 'Mi Perfil',
-                  onTap: () {
-                    Navigator.pop(context);
-                    context.push('/profile');
-                  },
-                ),
-
-                _DrawerTile(
-                  icon: Icons.settings_outlined,
-                  title: 'Configuración',
-                  onTap: () {
-                    Navigator.pop(context);
-                    context.push('/settings');
-                  },
-                ),
-                */
               ],
             ),
           ),
 
           // 3. FOOTER (Cerrar Sesión)
           Padding(
-            padding: const EdgeInsets.only(bottom: 20, left: 10, right: 10),
+            padding: const EdgeInsets.only(bottom: 24, left: 14, right: 14),
             child: Column(
               children: [
-                const Divider(), // Línea separadora sutil
+                Divider(color: Colors.white.withOpacity(0.08)),
+                const SizedBox(height: 8),
                 _DrawerTile(
-                  icon: Icons.logout,
-                  title: 'Cerrar Sesión',
-                  isLogout: true, // Estilo especial para logout
+                  icon: Icons.logout_rounded,
+                  title: 'Cerrar sesión',
+                  isLogout: true,
                   onTap: () async {
                     final usuarioService = UsuarioService();
 
-                    // Mostrar diálogo de confirmación (Opcional pero recomendado)
                     bool confirm = await _mostrarDialogoConfirmacion(context);
                     if (!confirm) return;
 
-                    if(context.mounted) Navigator.pop(context); // Cerrar drawer
+                    if (context.mounted) Navigator.pop(context);
 
                     await usuarioService.logout();
 
@@ -225,11 +217,11 @@ class SideMenu extends StatelessWidget {
                     }
                   },
                 ),
-                const SizedBox(height: 10),
+                const SizedBox(height: 12),
                 Text(
                   "Versión 1.0.0",
-                  style: TextStyle(color: Colors.grey[400], fontSize: 12),
-                )
+                  style: TextStyle(color: Colors.white.withOpacity(0.35), fontSize: 11),
+                ),
               ],
             ),
           ),
@@ -238,25 +230,47 @@ class SideMenu extends StatelessWidget {
     );
   }
 
-  // Función auxiliar para confirmar salida
   Future<bool> _mostrarDialogoConfirmacion(BuildContext context) async {
     return await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('¿Cerrar sesión?'),
-        content: const Text('Tendrás que ingresar tus credenciales nuevamente.'),
-        actions: [
-          TextButton(onPressed: () => Navigator.of(context).pop(false), child: const Text('Cancelar')),
-          TextButton(onPressed: () => Navigator.of(context).pop(true), child: const Text('Salir', style: TextStyle(color: Colors.red))),
-        ],
-      ),
-    ) ?? false;
+          context: context,
+          builder: (context) => AlertDialog(
+            backgroundColor: const Color(0xFF0F172A),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(20),
+              side: BorderSide(color: Colors.white.withOpacity(0.1)),
+            ),
+            title: const Row(
+              children: [
+                Icon(Icons.logout_rounded, color: Color(0xFFEF4444)),
+                SizedBox(width: 10),
+                Text('¿Cerrar sesión?', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 18)),
+              ],
+            ),
+            content: const Text(
+              'Tendrás que ingresar tus credenciales nuevamente.',
+              style: TextStyle(color: Color(0xFFCBD5E1), fontSize: 14),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(context).pop(false),
+                child: const Text('Cancelar', style: TextStyle(color: Color(0xFF94A3B8))),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFEF4444),
+                  foregroundColor: Colors.white,
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                ),
+                onPressed: () => Navigator.of(context).pop(true),
+                child: const Text('Salir', style: TextStyle(fontWeight: FontWeight.bold)),
+              ),
+            ],
+          ),
+        ) ??
+        false;
   }
 }
 
-// --------------------------------------------------------------------------
-// WIDGET AUXILIAR PARA LOS ITEMS DEL MENÚ (Para no repetir código)
-// --------------------------------------------------------------------------
 class _DrawerTile extends StatelessWidget {
   final IconData icon;
   final String title;
@@ -274,30 +288,37 @@ class _DrawerTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    // Colores dinámicos
-    final colorIcon = isLogout ? Colors.redAccent : (isActive ? theme.primaryColor : Colors.grey[600]);
-    final colorText = isLogout ? Colors.redAccent : (isActive ? theme.primaryColor : Colors.grey[800]);
-    final colorBg   = isLogout ? Colors.red.withOpacity(0.05) : (isActive ? theme.primaryColor.withOpacity(0.1) : Colors.transparent);
+    final colorIcon = isLogout
+        ? const Color(0xFFF87171)
+        : (isActive ? const Color(0xFF10B981) : const Color(0xFF94A3B8));
+    final colorText = isLogout
+        ? const Color(0xFFF87171)
+        : (isActive ? Colors.white : const Color(0xFFCBD5E1));
+    final colorBg = isLogout
+        ? const Color(0xFFEF4444).withOpacity(0.12)
+        : (isActive ? const Color(0xFF10B981).withOpacity(0.15) : Colors.transparent);
 
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 4), // Espacio entre botones
+      margin: const EdgeInsets.symmetric(vertical: 4),
       decoration: BoxDecoration(
         color: colorBg,
-        borderRadius: BorderRadius.circular(10), // Bordes redondeados modernos
+        borderRadius: BorderRadius.circular(14),
+        border: isActive
+            ? Border.all(color: const Color(0xFF10B981).withOpacity(0.3))
+            : (isLogout ? Border.all(color: const Color(0xFFEF4444).withOpacity(0.3)) : null),
       ),
       child: ListTile(
-        leading: Icon(icon, color: colorIcon),
+        leading: Icon(icon, color: colorIcon, size: 22),
         title: Text(
           title,
           style: TextStyle(
             color: colorText,
             fontWeight: isActive ? FontWeight.bold : FontWeight.w500,
+            fontSize: 14.5,
           ),
         ),
         onTap: onTap,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
       ),
     );
   }

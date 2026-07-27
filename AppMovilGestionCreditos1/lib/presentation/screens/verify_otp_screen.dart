@@ -56,7 +56,7 @@ void _verificarCodigo() async {
       return; // Detener si el código es inválido
     }
 
-    // ✅ Código correcto: el usuario ya se creó en la API, solo mostramos éxito
+    //  Código correcto: el usuario ya se creó en la API, solo mostramos éxito
     _showSuccessDialog();
 
   } catch (e) {
@@ -114,7 +114,7 @@ void _verificarCodigo() async {
           ],
         ),
         content: const Text(
-          'Tu registro se ha completado con éxito. Ahora puedes iniciar sesión con tu correo y contraseña.',
+          'Tu registro se ha completado con éxito. Ahora puedes iniciar sesión con tu correo y Contraseña.',
           textAlign: TextAlign.center,
         ),
         actions: [
@@ -133,98 +133,207 @@ void _verificarCodigo() async {
 
   @override
   Widget build(BuildContext context) {
-    final theme = Theme.of(context);
+    final size = MediaQuery.of(context).size;
 
     // Estilos para los cuadritos del PIN
     final defaultPinTheme = PinTheme(
-      width: 56, height: 56,
-      textStyle: const TextStyle(fontSize: 20, color: Color.fromARGB(255, 30, 60, 87), fontWeight: FontWeight.w600),
+      width: 50,
+      height: 58,
+      textStyle: const TextStyle(fontSize: 22, color: Colors.white, fontWeight: FontWeight.bold),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey.shade300),
-        borderRadius: BorderRadius.circular(12),
-        color: Colors.white,
+        color: const Color(0x991E293B),
+        borderRadius: BorderRadius.circular(14),
+        border: Border.all(color: Colors.white.withOpacity(0.12)),
       ),
     );
 
     final focusedPinTheme = defaultPinTheme.copyDecorationWith(
-      border: Border.all(color: theme.primaryColor, width: 2),
-      borderRadius: BorderRadius.circular(12),
+      border: Border.all(color: const Color(0xFF10B981), width: 2),
+      borderRadius: BorderRadius.circular(14),
     );
 
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.black),
-          onPressed: () => context.pop(),
-        ),
-      ),
+      backgroundColor: const Color(0xFF090D16),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              const SizedBox(height: 30),
-              FadeInDown(
-                child: Container(
-                  padding: const EdgeInsets.all(20),
-                  decoration: BoxDecoration(color: theme.primaryColor.withOpacity(0.1), shape: BoxShape.circle),
-                  child: Icon(Icons.mark_email_read, size: 60, color: theme.primaryColor),
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minHeight: size.height),
+          child: IntrinsicHeight(
+            child: Stack(
+              children: [
+                // FONDO SECCIONADO CON GRADIENTES RADIALES
+                Positioned.fill(
+                  child: Container(color: const Color(0xFF090D16)),
                 ),
-              ),
-              const SizedBox(height: 30),
-
-              FadeInDown(
-                child: Text('Verificación', style: theme.textTheme.headlineSmall?.copyWith(fontWeight: FontWeight.bold)),
-              ),
-              const SizedBox(height: 10),
-              FadeInDown(
-                child: Text(
-                  'Ingresa el código enviado a:\n${widget.email}',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: Colors.grey[600], fontSize: 16),
-                ),
-              ),
-
-              const SizedBox(height: 40),
-
-              FadeInUp(
-                child: Pinput(
-                  length: 6,
-                  controller: _pinController,
-                  defaultPinTheme: defaultPinTheme,
-                  focusedPinTheme: focusedPinTheme,
-                  pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
-                  showCursor: true,
-                  onCompleted: (pin) => _verificarCodigo(), // Intenta verificar al terminar de escribir
-                ),
-              ),
-
-              const SizedBox(height: 40),
-
-              FadeInUp(
-                delay: const Duration(milliseconds: 200),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 55,
-                  child: ElevatedButton(
-                    onPressed: _isLoading ? null : _verificarCodigo,
-                    child: _isLoading
-                        ? const CircularProgressIndicator(color: Colors.white)
-                        : const Text('VERIFICAR', style: TextStyle(fontSize: 18)),
+                Positioned.fill(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: RadialGradient(
+                        center: const Alignment(-0.95, -0.95),
+                        radius: 0.85,
+                        colors: [
+                          const Color(0xFF0284C7).withOpacity(0.35),
+                          Colors.transparent,
+                        ],
+                      ),
+                    ),
                   ),
                 ),
-              ),
+                Positioned.fill(
+                  child: Container(
+                    decoration: BoxDecoration(
+                      gradient: RadialGradient(
+                        center: const Alignment(0.95, 0.2),
+                        radius: 1.55,
+                        colors: [
+                          const Color(0xFFFACC15).withOpacity(0.35),
+                          Colors.transparent,
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
 
-              const SizedBox(height: 20),
-              // Botón de reenvío (Por ahora solo visual o simulado)
-              TextButton(
-                onPressed: _isLoading ? null : _reenviarCodigo,
-                child: const Text("¿No recibiste el código? Reenviar"),
-              )
-            ],
+                SafeArea(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        IconButton(
+                          icon: const Icon(Icons.arrow_back_ios_new_rounded, color: Colors.white),
+                          onPressed: () => context.pop(),
+                        ),
+                        const SizedBox(height: 20),
+
+                        Center(
+                          child: Column(
+                            children: [
+                              FadeInDown(
+                                child: Container(
+                                  padding: const EdgeInsets.all(22),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xEE0F172A),
+                                    shape: BoxShape.circle,
+                                    border: Border.all(color: const Color(0xFF10B981).withOpacity(0.4)),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: const Color(0xFF10B981).withOpacity(0.2),
+                                        blurRadius: 20,
+                                      ),
+                                    ],
+                                  ),
+                                  child: const Icon(Icons.mark_email_read_rounded, size: 55, color: Color(0xFF10B981)),
+                                ),
+                              ),
+                              const SizedBox(height: 24),
+
+                              FadeInDown(
+                                delay: const Duration(milliseconds: 200),
+                                child: const Text(
+                                  'Verificación de código',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 26,
+                                    fontWeight: FontWeight.w800,
+                                    letterSpacing: -0.5,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              FadeInDown(
+                                delay: const Duration(milliseconds: 300),
+                                child: Text(
+                                  'Ingresa el código enviado a:\n${widget.email}',
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(color: Color(0xFFCBD5E1), fontSize: 14, height: 1.4),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        const SizedBox(height: 36),
+
+                        FadeInUp(
+                          child: Container(
+                            padding: const EdgeInsets.all(24),
+                            decoration: BoxDecoration(
+                              color: const Color(0xEE0F172A),
+                              borderRadius: BorderRadius.circular(24),
+                              border: Border.all(color: Colors.white.withOpacity(0.12)),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.5),
+                                  blurRadius: 25,
+                                  offset: const Offset(0, 10),
+                                ),
+                              ],
+                            ),
+                            child: Column(
+                              children: [
+                                Pinput(
+                                  length: 6,
+                                  controller: _pinController,
+                                  defaultPinTheme: defaultPinTheme,
+                                  focusedPinTheme: focusedPinTheme,
+                                  pinputAutovalidateMode: PinputAutovalidateMode.onSubmit,
+                                  showCursor: true,
+                                  onCompleted: (pin) => _verificarCodigo(),
+                                ),
+                                const SizedBox(height: 30),
+
+                                SizedBox(
+                                  width: double.infinity,
+                                  height: 52,
+                                  child: ElevatedButton(
+                                    onPressed: _isLoading ? null : _verificarCodigo,
+                                    style: ElevatedButton.styleFrom(
+                                      backgroundColor: const Color(0xFF10B981),
+                                      foregroundColor: Colors.white,
+                                      elevation: 6,
+                                      shadowColor: const Color(0xFF10B981).withOpacity(0.35),
+                                      shape: RoundedRectangleBorder(
+                                        borderRadius: BorderRadius.circular(14),
+                                      ),
+                                    ),
+                                    child: _isLoading
+                                        ? const SizedBox(
+                                            height: 22,
+                                            width: 22,
+                                            child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                                          )
+                                        : const Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                'VERIFICAR Y ACTIVAR',
+                                                style: TextStyle(fontSize: 14.5, fontWeight: FontWeight.w800, letterSpacing: 0.5),
+                                              ),
+                                              SizedBox(width: 8),
+                                              Icon(Icons.check_circle_outline_rounded, size: 20),
+                                            ],
+                                          ),
+                                  ),
+                                ),
+                                const SizedBox(height: 16),
+
+                                TextButton(
+                                  onPressed: _isLoading ? null : _reenviarCodigo,
+                                  child: const Text(
+                                    "¿No recibiste el código? Reenviar",
+                                    style: TextStyle(color: Color(0xFF10B981), fontWeight: FontWeight.w600, fontSize: 13.5),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

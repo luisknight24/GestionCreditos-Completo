@@ -94,7 +94,7 @@ namespace GestionIntApi.Repositorios.Implementacion.Admin
                 FechaMovimiento = DateTime.UtcNow
             };
 
-            // 🔥 ACTUALIZAR UBICACIÓN DEL PRODUCTO (lo más importante)
+            //  ACTUALIZAR UBICACIÓN DEL PRODUCTO (lo más importante)
             producto.TiendaId = tiendaDestinoId;
             await _productoRepository.Editar(producto);
 
@@ -279,3 +279,4 @@ namespace GestionIntApi.Repositorios.Implementacion.Admin
  
 
 }
+

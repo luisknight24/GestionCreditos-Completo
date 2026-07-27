@@ -16,7 +16,7 @@ class TiendaCrearDTO {
     this.fechaRegistro
   });
 
-// ------------------- FROM JSON -------------------
+
   factory TiendaCrearDTO.fromJson(Map<String, dynamic> json) {
     DateTime parseDate(dynamic date) {
       if (date is String) return DateTime.parse(date);
@@ -34,7 +34,7 @@ class TiendaCrearDTO {
     );
   }
 
-  // ------------------- TO JSON -------------------
+  
   Map<String, dynamic> toJson() => {
         'Id': id,
         'NombreTienda': nombreTienda,

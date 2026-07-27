@@ -43,7 +43,7 @@ class CreditoMostrarDTO {
 
 
 
-  // 🎯 GETTERS CALCULADOS PARA CUOTAS
+  //  GETTERS CALCULADOS PARA CUOTAS
   
   /// Calcula cuántas cuotas completas se han pagado
 /// Calcula el dinero que se ha pagado EXCLUSIVAMENTE en cuotas (sin la entrada)
@@ -90,7 +90,7 @@ class CreditoMostrarDTO {
     estado: json["estado"] ?? "",
     clienteId: (json["clienteId"] ?? 0).toInt(),
     tiendaId: (json["tiendaAppId"]?? 0).toInt(),
-      // 🔥 AQUÍ está la clave
+      //  AQUÍ está la clave
       tienda: json['tiendaApp'] != null
           ? TiendaMostrarAppVentaDTO.fromJson(json['tiendaApp'])
           : null,
@@ -105,7 +105,7 @@ class CreditoMostrarDTO {
 }
 
 
-  // 🔑 Método copyWith para actualizaciones parciales
+  //  Método copyWith para actualizaciones parciales
   CreditoMostrarDTO copyWith({
     double? montoPendiente,
     String? proximaCuotaStr,

@@ -1,4 +1,4 @@
-﻿using GestionIntApi.DTO;
+using GestionIntApi.DTO;
 using GestionIntApi.Repositorios.Contrato;
 using GestionIntApi.Repositorios.Implementacion;
 using GestionIntApi.Repositorios.Interfaces;
@@ -39,7 +39,6 @@ namespace GestionIntApi.Controllers
         }
 
 
-        // Endpoint para obtener todas las notificaciones
         [HttpGet("GetAll")]
         public async Task<ActionResult<List<NotificacionDTO>>> GetNotificaciones()
         {
@@ -54,7 +53,6 @@ namespace GestionIntApi.Controllers
             }
         }
 
-        // Opcional: obtener notificaciones de un cliente específico
         [HttpGet("{id}")]
         public async Task<ActionResult<List<NotificacionDTO>>> GetNotificacionesPorCliente(int clienteId)
         {
@@ -73,39 +71,34 @@ namespace GestionIntApi.Controllers
 
 
         [HttpGet("pendientesNotApp")]
-        [Authorize] // 🔒 Protegido con JWT
+        [Authorize] 
         public async Task<ActionResult<List<NotificacionDTO>>> GetNotificacionesClienteApp()
         {
             try
             {
-                // Obtener ClienteId del token
                 var clienteIdClaim = User.FindFirst("ClienteId")?.Value;
                 if (string.IsNullOrEmpty(clienteIdClaim))
                     return Unauthorized("Token inválido o ClienteId no encontrado");
 
                 int clienteId = int.Parse(clienteIdClaim);
 
-                // Obtener todas las notificaciones
                 var allNotificaciones = await _NotificacionServicios.GetNotificaciones();
-
-                // Filtrar solo las del cliente logeado
                 var notificacionesCliente = allNotificaciones.FindAll(n => n.ClienteId == clienteId);
 
                 return Ok(notificacionesCliente);
             }
             catch (Exception ex)
             {
-                Console.WriteLine(ex); // o usar ILogger
+                Console.WriteLine(ex); 
                 return StatusCode(500, $"Error al obtener las notificaciones: {ex.Message}");
             }
         }
 
 
         [HttpPost("marcar-leida/{id}")]
-        [Authorize] // 🔒 Protegido con JWT
+        [Authorize] 
         public async Task<IActionResult> MarcarLeida(int id)
         {
-            // Obtener ClienteId del token
             var clienteIdClaim = User.FindFirst("ClienteId")?.Value;
             if (string.IsNullOrEmpty(clienteIdClaim))
                 return Unauthorized("Token inválido o ClienteId no encontrado");

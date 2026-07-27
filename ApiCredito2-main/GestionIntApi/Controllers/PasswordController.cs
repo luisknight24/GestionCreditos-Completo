@@ -62,14 +62,14 @@ namespace GestionIntApi.Controllers
       
 
         // ---------------------------
-        // 2. Restablecer contraseña
+        // Restablecer contraseña
         // ---------------------------
         [HttpPost("reset-password")]
         public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDTO dto)
         {
             string codigoLimpio = dto.Token?.Trim();
 
-            // 2. Obtener la hora actual en UTC de forma precisa
+            // Obtener la hora actual en UTC de forma precisa
             DateTime ahoraUtc = DateTime.UtcNow;
 
             var usuario = await _db.Usuarios
@@ -157,4 +157,5 @@ namespace GestionIntApi.Controllers
         }
     }
 }
+
 

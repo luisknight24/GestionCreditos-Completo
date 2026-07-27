@@ -19,7 +19,7 @@ namespace GestionIntApi.Controllers.Admin
 
         // ==================== TRASLADOS ====================
 
-        // 1. Usamos el DTO para el traslado individual
+        // Usamos el DTO para el traslado individual
         [HttpPost("RegistrarTraslado")]
         public async Task<IActionResult> RegistrarTraslado([FromBody] TrasladoProductoDTO request)
         {
@@ -42,7 +42,7 @@ namespace GestionIntApi.Controllers.Admin
                 rsp.msg = ex.Message;
             }
             return Ok(rsp);
-            // 2. Creamos otro DTO similar para Múltiples o usamos una lista
+            // Creamos otro DTO similar para Múltiples o usamos una lista
 
         }
             // ==================== ENTRADAS ====================

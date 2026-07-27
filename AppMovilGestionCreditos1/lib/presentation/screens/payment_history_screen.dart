@@ -20,7 +20,7 @@ class _PaymentHistoryScreenState extends State<PaymentHistoryScreen> {
   @override
   void initState() {
     super.initState();
-debugPrint("🔄 [HISTORIAL] Cargando para Crédito ID: ${widget.creditoId}");
+debugPrint(" [HISTORIAL] Cargando para Crédito ID: ${widget.creditoId}");
     _historialService.historialNotifier.value = null;
    _historialService.getHistorialPagos(creditoId: widget.creditoId);
 
@@ -33,7 +33,7 @@ debugPrint("🔄 [HISTORIAL] Cargando para Crédito ID: ${widget.creditoId}");
   }
   @override
 void dispose() {
-  // 🔴 IMPORTANTE: Desconectar SignalR al salir
+  //  IMPORTANTE: Desconectar SignalR al salir
  // _historialService.disconnectSignalR();
   super.dispose();
 }
@@ -43,7 +43,7 @@ void dispose() {
     return Scaffold(
       backgroundColor: Colors.white, // Fondo más limpio para lista
       appBar: AppBar(
-        title: const Text('Historial de Pagos',
+        title: const Text('Historial de pagos',
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         backgroundColor: Theme.of(context).primaryColor,
         iconTheme: const IconThemeData(color: Colors.white),
@@ -51,7 +51,7 @@ void dispose() {
       ),
       body: Column(
         children: [
-          // --- ENCABEZADO DE LA LISTA ---
+          
           Container(
             padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
             color: Colors.grey[100],
@@ -66,7 +66,7 @@ void dispose() {
           ),
           const Divider(height: 1, thickness: 1),
 
-          // --- LISTA DE DATOS ---
+          
           Expanded(
             child: ValueListenableBuilder<bool>(
               valueListenable: _historialService.cargandoNotifier,
@@ -234,20 +234,26 @@ class _PaymentHistoryScreenState extends State<PaymentHistoryScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white, // Fondo más limpio para lista
+      backgroundColor: const Color(0xFF090D16),
       appBar: AppBar(
-        title: const Text('Historial de Pagos',
-            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-        backgroundColor: Theme.of(context).primaryColor,
+        title: const Text(
+          'Historial de pagos',
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.w800, fontSize: 18, letterSpacing: -0.3),
+        ),
+        backgroundColor: const Color(0xFF0F172A),
         iconTheme: const IconThemeData(color: Colors.white),
         elevation: 0,
+        centerTitle: false,
       ),
       body: Column(
         children: [
-          // --- ENCABEZADO DE LA LISTA ---
+          
           Container(
-            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-            color: Colors.grey[100],
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+            decoration: BoxDecoration(
+              color: const Color(0xFF1E293B),
+              border: Border(bottom: BorderSide(color: Colors.white.withOpacity(0.08))),
+            ),
             child: Row(
               children: [
                 Expanded(flex: 3, child: _HeaderTitle("FECHA")),
@@ -257,15 +263,16 @@ class _PaymentHistoryScreenState extends State<PaymentHistoryScreen> {
               ],
             ),
           ),
-          const Divider(height: 1, thickness: 1),
 
-          // --- LISTA DE DATOS ---
+          
           Expanded(
             child: ValueListenableBuilder<bool>(
               valueListenable: _historialService.cargandoNotifier,
               builder: (context, isLoading, _) {
                 if (isLoading) {
-                  return const Center(child: CircularProgressIndicator());
+                  return const Center(
+                    child: CircularProgressIndicator(color: Color(0xFF10B981)),
+                  );
                 }
 
                 return ValueListenableBuilder<List<HistoriaAppDTO>?>(
@@ -276,12 +283,20 @@ class _PaymentHistoryScreenState extends State<PaymentHistoryScreen> {
                         child: Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Icon(Icons.history_toggle_off,
-                                size: 80, color: Colors.grey[300]),
-                            const SizedBox(height: 15),
-                            Text("No hay historial registrado",
-                                style: TextStyle(
-                                    color: Colors.grey[600], fontSize: 16)),
+                            Container(
+                              padding: const EdgeInsets.all(20),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFF0F172A),
+                                shape: BoxShape.circle,
+                                border: Border.all(color: Colors.white.withOpacity(0.08)),
+                              ),
+                              child: const Icon(Icons.history_toggle_off_rounded, size: 60, color: Color(0xFF64748B)),
+                            ),
+                            const SizedBox(height: 16),
+                            const Text(
+                              "No hay historial registrado",
+                              style: TextStyle(color: Color(0xFF94A3B8), fontSize: 15, fontWeight: FontWeight.w500),
+                            ),
                           ],
                         ),
                       );
@@ -311,10 +326,11 @@ class _PaymentHistoryScreenState extends State<PaymentHistoryScreen> {
     return Text(
       text,
       textAlign: align,
-      style: TextStyle(
-        fontSize: 12,
+      style: const TextStyle(
+        fontSize: 11.5,
         fontWeight: FontWeight.bold,
-        color: Colors.grey[700],
+        color: Color(0xFF94A3B8),
+        letterSpacing: 0.5,
       ),
     );
   }
@@ -328,25 +344,29 @@ class _HistoryRowItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Configuración de estilo según estado
     Color statusColor;
+    Color statusBgColor;
     String estadoTexto = pago.estadoCuota.toUpperCase();
 
     if (estadoTexto.contains("PAGADO") || estadoTexto.contains("COMPLETO")) {
-      statusColor = Colors.green;
-    } else if (estadoTexto.contains("VENCIDA") ||
-        estadoTexto.contains("ATRASO")) {
-      statusColor = Colors.red;
+      statusColor = const Color(0xFF10B981);
+      statusBgColor = const Color(0xFF10B981).withOpacity(0.15);
+    } else if (estadoTexto.contains("VENCIDA") || estadoTexto.contains("ATRASO")) {
+      statusColor = const Color(0xFFEF4444);
+      statusBgColor = const Color(0xFFEF4444).withOpacity(0.15);
     } else {
-      statusColor = Colors.orange;
+      statusColor = const Color(0xFFF59E0B);
+      statusBgColor = const Color(0xFFF59E0B).withOpacity(0.15);
     }
 
-    // Color alternado para las filas (efecto cebra sutil)
-    Color rowColor = (index % 2 == 0) ? Colors.white : Colors.grey[50]!;
+    Color rowColor = (index % 2 == 0) ? const Color(0xFF0F172A) : const Color(0xFF1E293B).withOpacity(0.6);
 
     return Container(
-      color: rowColor,
-      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 12),
+      decoration: BoxDecoration(
+        color: rowColor,
+        border: Border(bottom: BorderSide(color: Colors.white.withOpacity(0.04))),
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       child: Row(
         children: [
           // 1. FECHA
@@ -355,22 +375,36 @@ class _HistoryRowItem extends StatelessWidget {
             child: Text(
               pago.proximaCuotaStr,
               style: const TextStyle(
-                  fontSize: 13, fontWeight: FontWeight.w500, color: Colors.black87),
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: Colors.white,
+              ),
             ),
           ),
 
-          // 2. ESTADO
+          // 2. ESTADO BADGE
           Expanded(
             flex: 3,
-            child: Text(
-              estadoTexto,
-              style: TextStyle(
-                fontSize: 11,
-                fontWeight: FontWeight.bold,
-                color: statusColor,
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: statusBgColor,
+                  borderRadius: BorderRadius.circular(6),
+                  border: Border.all(color: statusColor.withOpacity(0.3)),
+                ),
+                child: Text(
+                  estadoTexto,
+                  style: TextStyle(
+                    fontSize: 10.5,
+                    fontWeight: FontWeight.w800,
+                    color: statusColor,
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
-              maxLines: 1,
-              overflow: TextOverflow.ellipsis,
             ),
           ),
 
@@ -381,7 +415,10 @@ class _HistoryRowItem extends StatelessWidget {
               "\$${pago.abonadoCuota.toStringAsFixed(2)}",
               textAlign: TextAlign.end,
               style: const TextStyle(
-                  fontSize: 13, fontWeight: FontWeight.w600, color: Colors.black87),
+                fontSize: 13,
+                fontWeight: FontWeight.bold,
+                color: Color(0xFF10B981),
+              ),
             ),
           ),
 
@@ -391,8 +428,11 @@ class _HistoryRowItem extends StatelessWidget {
             child: Text(
               "\$${pago.montoPendiente.toStringAsFixed(2)}",
               textAlign: TextAlign.end,
-              style: TextStyle(
-                  fontSize: 13, fontWeight: FontWeight.w400, color: Colors.grey[600]),
+              style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+                color: Color(0xFF94A3B8),
+              ),
             ),
           ),
         ],

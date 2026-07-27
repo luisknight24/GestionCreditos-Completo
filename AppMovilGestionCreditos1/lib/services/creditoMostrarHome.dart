@@ -18,15 +18,15 @@ class creditoMostrarHome {
   // WebSocket
   late HubConnection _connection;
   final isLoadingNotifier = ValueNotifier<bool>(false);
-  // 🟢 CACHÉ EN MEMORIA
+  //  CACHÉ EN MEMORIA
   List<CreditoMostrarDTO>? _cacheCreditos;
-  // 🟢 Notificador para UI
+  //  Notificador para UI
  // final creditosNotifier = ValueNotifier<List<CreditoMostrarDTO>>([]);
   final mensajeNotifier = ValueNotifier<String>("");
 final creditosNotifier = ValueNotifier<List<CreditoMostrarDTO>?>(null);
 final cargandoNotifier = ValueNotifier<bool>(false);
  creditoMostrarHome._internal() {
-    debugPrint("🟣 [creditoMostrarHome] instancia creada → hash: $hashCode");
+    debugPrint(" [creditoMostrarHome] instancia creada → hash: $hashCode");
   }
 
   static final creditoMostrarHome _instance = creditoMostrarHome._internal();
@@ -36,12 +36,12 @@ final cargandoNotifier = ValueNotifier<bool>(false);
     return _instance;
     
   }Future<void> connectSignalR() async {
-  debugPrint("🟡 Iniciando conexión SignalR");
+  debugPrint(" Iniciando conexión SignalR");
 
   final token = await storage.read(key: 'jwt_token');
 
   if (token == null || token.isEmpty) {
-    debugPrint("❌ TOKEN NULL O VACÍO");
+    debugPrint(" TOKEN NULL O VACÍO");
     return;
   }
 
@@ -56,9 +56,9 @@ final cargandoNotifier = ValueNotifier<bool>(false);
       )
       .build();
 
-  // 📡 Evento crédito actualizado
+  //  Evento crédito actualizado
   _connection.on('CreditoActualizado', (args) {
-    debugPrint("📩 Evento CreditoActualizado recibido: $args");
+    debugPrint(" Evento CreditoActualizado recibido: $args");
 
     if (args == null || args.isEmpty) return;
 
@@ -69,129 +69,129 @@ final cargandoNotifier = ValueNotifier<bool>(false);
       // Inicializar caché si es null
       _cacheCreditos ??= [];
 
-      // ✅ Aquí llamamos al método que creamos
+      //  Aquí llamamos al método que creamos
       _actualizarCreditoDesdeEvento(credito);
 
       mensajeNotifier.value = "Crédito actualizado";
-      debugPrint("✅ Evento procesado | cache size: ${_cacheCreditos!.length}");
+      debugPrint(" Evento procesado | cache size: ${_cacheCreditos!.length}");
     } catch (e, s) {
-      debugPrint("❌ Error procesando evento: $e");
-      debugPrint("📛 Stack: $s");
+      debugPrint(" Error procesando evento: $e");
+      debugPrint(" Stack: $s");
     }
   });
 
-  // 🔌 Ciclo de vida de conexión
-  _connection.onclose((e) => debugPrint("⚡ SignalR cerrado | $e"));
-  _connection.onreconnecting((e) => debugPrint("🔄 SignalR reconectando | $e"));
+  //  Ciclo de vida de conexión
+  _connection.onclose((e) => debugPrint(" SignalR cerrado | $e"));
+  _connection.onreconnecting((e) => debugPrint(" SignalR reconectando | $e"));
   _connection.onreconnected((id) =>
-      debugPrint("✅ SignalR reconectado - ConnectionId: $id"));
+      debugPrint(" SignalR reconectado - ConnectionId: $id"));
 
   try {
-    debugPrint("🚀 Intentando conectar SignalR...");
+    debugPrint(" Intentando conectar SignalR...");
     await _connection.start();
-    debugPrint("✅ SignalR CONECTADO | ConnectionId: ${_connection.connectionId}");
+    debugPrint(" SignalR CONECTADO | ConnectionId: ${_connection.connectionId}");
   } catch (e, s) {
-    debugPrint("❌ ERROR AL CONECTAR SIGNALR | $e");
-    debugPrint("📛 Stack: $s");
+    debugPrint(" ERROR AL CONECTAR SIGNALR | $e");
+    debugPrint(" Stack: $s");
   }
 }
 
 
 
 Future<void> connectSignalR1() async {
-  debugPrint("🟡 Iniciando conexión SignalR");
+  debugPrint(" Iniciando conexión SignalR");
 
   final token = await storage.read(key: 'jwt_token');
 
-  // 🔐 Verificar token
+  //  Verificar token
   if (token == null || token.isEmpty) {
-    debugPrint("❌ TOKEN NULL O VACÍO");
+    debugPrint(" TOKEN NULL O VACÍO");
     return;
   }
-  debugPrint("🔐 Token OK: ${token.substring(0, 15)}...");
+  debugPrint(" Token OK: ${token.substring(0, 15)}...");
 
   final hubUrl = '$baseUrl1/adminhub';
-  debugPrint("🌐 URL SignalR: $hubUrl");
+  debugPrint(" URL SignalR: $hubUrl");
 
   _connection = HubConnectionBuilder()
       .withUrl(
         hubUrl,
         HttpConnectionOptions(
           accessTokenFactory: () async {
-            debugPrint("🔁 SignalR solicitó token");
+            debugPrint(" SignalR solicitó token");
             return token;
           },
         ),
       )
       .build();
 
-  // 📡 Evento crédito actualizado
+  //  Evento crédito actualizado
   _connection.on('CreditoActualizado', (args) {
-    debugPrint("📩 Evento CreditoActualizado recibido");
-    debugPrint("📦 Args: $args");
+    debugPrint(" Evento CreditoActualizado recibido");
+    debugPrint(" Args: $args");
 
     if (args == null || args.isEmpty) {
-      debugPrint("⚠️ Args vacíos");
+      debugPrint("️ Args vacíos");
       return;
     }
 
     try {
       final data = Map<String, dynamic>.from(args.first);
-      debugPrint("📄 Data parseada: $data");
+      debugPrint(" Data parseada: $data");
 
       final credito = CreditoMostrarDTO.fromJson(data);
 
       final cache = _cacheCreditos ??= [];
 
       final index = cache.indexWhere((c) => c.id == credito.id);
-      debugPrint("🔎 Índice encontrado: $index");
+      debugPrint(" Índice encontrado: $index");
 
       if (index >= 0) {
         cache[index] = credito;
-        debugPrint("✏️ Crédito actualizado en caché");
+        debugPrint("️ Crédito actualizado en caché");
       } else {
         cache.add(credito);
-        debugPrint("➕ Crédito agregado a caché");
+        debugPrint(" Crédito agregado a caché");
       }
 
       creditosNotifier.value = List.unmodifiable(cache);
       mensajeNotifier.value = "Crédito actualizado";
 
-      debugPrint("✅ Notificadores actualizados");
+      debugPrint(" Notificadores actualizados");
     } catch (e, s) {
-      debugPrint("❌ Error procesando evento: $e");
-      debugPrint("📛 Stack: $s");
+      debugPrint(" Error procesando evento: $e");
+      debugPrint(" Stack: $s");
     }
   });
 
-  // 🔌 Ciclo de vida de conexión
+  //  Ciclo de vida de conexión
   _connection.onclose((e) {
-    debugPrint("⚡ SignalR cerrado");
-    debugPrint("📛 Error: $e");
+    debugPrint(" SignalR cerrado");
+    debugPrint(" Error: $e");
   });
 
   _connection.onreconnecting((e) {
-    debugPrint("🔄 SignalR reconectando");
-    debugPrint("📛 Error: $e");
+    debugPrint(" SignalR reconectando");
+    debugPrint(" Error: $e");
   });
 
   _connection.onreconnected((id) {
-    debugPrint("✅ SignalR reconectado - ConnectionId: $id");
+    debugPrint(" SignalR reconectado - ConnectionId: $id");
   });
 
   try {
-    debugPrint("🚀 Intentando conectar SignalR...");
+    debugPrint(" Intentando conectar SignalR...");
     await _connection.start();
-    debugPrint("✅ SignalR CONECTADO CORRECTAMENTE");
+    debugPrint(" SignalR CONECTADO CORRECTAMENTE");
     debugPrint("🆔 ConnectionId: ${_connection.connectionId}");
   } catch (e, s) {
-    debugPrint("❌ ERROR AL CONECTAR SIGNALR");
-    debugPrint("📛 Error: $e");
-    debugPrint("📛 Stack: $s");
+    debugPrint(" ERROR AL CONECTAR SIGNALR");
+    debugPrint(" Error: $e");
+    debugPrint(" Stack: $s");
   }
 }
 
-  /// 🔌 Desconectar
+  ///  Desconectar
   Future<void> disconnectSignalR() async {
     await _connection.stop();
   }
@@ -199,7 +199,7 @@ Future<void> connectSignalR1() async {
   Future<List<CreditoMostrarDTO>> getCreditos1({
     bool forceRefresh = false,
   }) async {
-    debugPrint("🟡 getCreditos() llamado | forceRefresh: $forceRefresh");
+    debugPrint(" getCreditos() llamado | forceRefresh: $forceRefresh");
     isLoadingNotifier.value = true;
 
     try {
@@ -271,8 +271,8 @@ Future<void> connectSignalR1() async {
 
 Future<void> getCreditos({bool forceRefresh = false}) async {
 
-   debugPrint("🔵 [getCreditos] llamado | forceRefresh=$forceRefresh");
-  debugPrint("🔵 [getCreditos] cache actual: ${_cacheCreditos?.length}");
+   debugPrint(" [getCreditos] llamado | forceRefresh=$forceRefresh");
+  debugPrint(" [getCreditos] cache actual: ${_cacheCreditos?.length}");
   cargandoNotifier.value = true;
 
   try {
@@ -300,7 +300,7 @@ Future<void> getCreditos({bool forceRefresh = false}) async {
 
     } else if (response.statusCode == 401) {
       // 5️⃣ Token expirado o inválido
-      print('⚠️ Token expirado. Redirigiendo a login...');
+      print('️ Token expirado. Redirigiendo a login...');
       // Limpiar token guardado
       await storage.delete(key: 'jwt_token');
       // Notificar al usuario o forzar login de nuevo
@@ -315,11 +315,11 @@ Future<void> getCreditos({bool forceRefresh = false}) async {
     rethrow; // opcional, para manejar en UI
   } finally {
     cargandoNotifier.value = false;
-    debugPrint("🟢 [getCreditos] créditos cargados: ${creditosNotifier.value?.length}");
+    debugPrint(" [getCreditos] créditos cargados: ${creditosNotifier.value?.length}");
   }
 }
 
-  // 🧹 Limpiar caché
+  //  Limpiar caché
   void clearCache() {
     _cacheCreditos = null;
   }
@@ -351,7 +351,7 @@ Future<CreditoDTO> guardarCredito(CreditoDTO tienda) async {
     final decoded = jsonDecode(response.body);
  print("DEBUG: JSON value = ${decoded['value']}");
     if (decoded['status'] == true) {
-      // 🔄 Limpiamos caché para que al listar se refresque
+      //  Limpiamos caché para que al listar se refresque
       clearCache();
 
       return CreditoDTO.fromJson(decoded['value']);
@@ -377,17 +377,17 @@ void _actualizarCreditoDesdeEvento(CreditoMostrarDTO nuevo) {
 _cacheCreditos![index] = nuevo;
 
   creditosNotifier.value = List.from(_cacheCreditos!);
-   debugPrint("✅ Crédito actualizado | id: ${nuevo.id} | montoPendiente: ${nuevo.montoPendiente} | proximaCuotaStr: ${_cacheCreditos![index].proximaCuotaStr}");
+   debugPrint(" Crédito actualizado | id: ${nuevo.id} | montoPendiente: ${nuevo.montoPendiente} | proximaCuotaStr: ${_cacheCreditos![index].proximaCuotaStr}");
 }
-/// 🧹 LIMPIAR ESTADO AL CAMBIAR DE USUARIO
+///  LIMPIAR ESTADO AL CAMBIAR DE USUARIO
 Future<void> limpiar() async {
-  debugPrint("🧹 [creditoMostrarHome] limpiando estado");
+  debugPrint(" [creditoMostrarHome] limpiando estado");
 
   // 1️⃣ Detener SignalR
   try {
     if (_connection.state == HubConnectionState.connected) {
       await _connection.stop();
-      debugPrint("🔌 SignalR detenido");
+      debugPrint(" SignalR detenido");
     }
   } catch (_) {}
 
@@ -401,6 +401,6 @@ Future<void> limpiar() async {
   isLoadingNotifier.value = false;
 }
 
-// ✅ INSTANCIA GLOBAL ÚNICA
+//  INSTANCIA GLOBAL ÚNICA
 //final creditoMostrarHome creditoHomeService = creditoMostrarHome();
 }

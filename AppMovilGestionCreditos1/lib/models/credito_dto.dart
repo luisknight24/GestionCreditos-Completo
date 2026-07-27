@@ -19,7 +19,7 @@ class CreditoDTO {
   int? tiendaId; 
   DateTime? fechaCreacion;
 
-  // --- NUEVOS CAMPOS ---
+  
   String? fotoContratoUrl;
   String? fotoCelularUrl;
 
@@ -55,7 +55,7 @@ class CreditoDTO {
 
   });
 
-  // ------------------- FROM JSON -------------------
+  
   factory CreditoDTO.fromJson(Map<String, dynamic> json) {
     DateTime parseDate(dynamic date) {
       if (date is String) return DateTime.parse(date);
@@ -88,7 +88,7 @@ class CreditoDTO {
   );
   }
 
-  // ------------------- TO JSON -------------------
+  
   Map<String, dynamic> toJson() => {
 
        'Id': id,
@@ -137,7 +137,7 @@ class CreditoDTO {
   int? tiendaAppId;
   DateTime? fechaCreacion;
 
-  // --- NUEVOS CAMPOS ---
+  
   String? fotoContratoUrl;
   String? fotoCelularUrl;
 
@@ -155,7 +155,7 @@ class CreditoDTO {
 
   CreditoDTO({
     this.id = 0,
-    this.esVentaContado = false, // 🔥 Inicializar en false
+    this.esVentaContado = false, //  Inicializar en false
     this.metodoPago,
     required this.montoTotal,
     this.entrada = 0.0,
@@ -184,7 +184,7 @@ class CreditoDTO {
     this.capacidad,
   });
 
-  // ------------------- FROM JSON -------------------
+  
   factory CreditoDTO.fromJson(Map<String, dynamic> json) {
     DateTime parseDate(dynamic date) {
       if (date is String) return DateTime.parse(date);
@@ -194,7 +194,7 @@ class CreditoDTO {
 
     return CreditoDTO(
       id: json['id'] ?? 0,
-      esVentaContado: json['esVentaContado'] ?? false, // 🔥 Mapeo
+      esVentaContado: json['esVentaContado'] ?? false, //  Mapeo
       metodoPago: json['metodoPago'],
       montoTotal: (json['montoTotal'] ?? 0).toDouble(),
       entrada: (json['entrada'] ?? 0).toDouble(),
@@ -225,10 +225,10 @@ class CreditoDTO {
     );
   }
 
-  // ------------------- TO JSON -------------------
+  
   Map<String, dynamic> toJson() => {
     'Id': id,
-    'EsVentaContado': esVentaContado, // 🔥 Serialización
+    'EsVentaContado': esVentaContado, //  Serialización
     'MetodoPago': metodoPago,
     'Entrada': entrada,
     'MontoTotal': montoTotal,

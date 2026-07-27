@@ -24,7 +24,7 @@ namespace GestionIntApi.Controllers
 
         [HttpGet("tiendasApp")]
 
-        [Authorize] // 🔒 Protegido con JWT
+        [Authorize] //  Protegido con JWT
         public async Task<ActionResult<List<TiendaMostrarAppVentaDTO>>> GetCreditosPendientesApp()
         {
             try
@@ -113,7 +113,7 @@ namespace GestionIntApi.Controllers
 
             try
             {
-                // 1️⃣ Obtener ClienteId desde el JWT
+                //  Obtener ClienteId desde el JWT
                 var clienteIdClaim = User.Claims.FirstOrDefault(c => c.Type == "ClienteId");
                 if (clienteIdClaim == null)
                 {
@@ -124,7 +124,7 @@ namespace GestionIntApi.Controllers
 
               tienda.ClienteId = int.Parse(clienteIdClaim.Value);
 
-                // 2️⃣ Crear el crédito usando el servicio
+                //  Crear el crédito usando el servicio
                 var tiendaNueva = await _TiendaServicios.AsociarTiendaCliente(tienda);
 
                 // LOG PARA VERIFICAR EL ID GENERADO
@@ -156,7 +156,7 @@ namespace GestionIntApi.Controllers
 
         [HttpGet("tiendasAppFechaV")]
 
-        [Authorize] // 🔒 Protegido con JWT
+        [Authorize] //  Protegido con JWT
         public async Task<ActionResult<List<TiendaMostrarAppVentaDTO>>> GetFechaVenta()
         {
             try
@@ -184,7 +184,7 @@ namespace GestionIntApi.Controllers
         }
         [HttpGet("tiendasAppFechaVSinJWT/{id}")]
 
-    // 🔒 Protegido con JWT
+    //  Protegido con JWT
         public async Task<ActionResult<List<TiendaMostrarAppVentaDTO>>> GetFechaVentaSINJWT(int id)
         {
             try
@@ -207,3 +207,4 @@ namespace GestionIntApi.Controllers
 
     }
 }
+

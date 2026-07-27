@@ -15,7 +15,7 @@ class LocationService {
         await _sendToApiPost(position);
       }
     } catch (e) {
-      print("⚠️ Error en servicio de ubicación: $e");
+      print("️ Error en servicio de ubicación: $e");
       // Aquí podrías manejar lógica si el usuario niega permisos (ej. cerrar sesión)
     }
   }
@@ -52,7 +52,7 @@ class LocationService {
         desiredAccuracy: LocationAccuracy.high,
       );
     } catch (e) {
-      print('⚠️ Excepción capturada en servicio de ubicación: $e');
+      print('️ Excepción capturada en servicio de ubicación: $e');
       return null;
     }
   }
@@ -69,7 +69,7 @@ class LocationService {
     );
 
     try {
-      print("📍 Enviando ubicación: ${position.latitude}, ${position.longitude}");
+      print(" Enviando ubicación: ${position.latitude}, ${position.longitude}");
 
       final response = await http.post(
         url,
@@ -80,19 +80,19 @@ class LocationService {
       );
 
       if (response.statusCode == 200) {
-        print("✅ Ubicación registrada exitosamente en el servidor.");
+        print(" Ubicación registrada exitosamente en el servidor.");
       } else {
-        print("❌ Error al registrar ubicación: ${response.statusCode}");
+        print(" Error al registrar ubicación: ${response.statusCode}");
       }
     } catch (e) {
-      print("❌ Error de conexión al enviar ubicación: $e");
+      print(" Error de conexión al enviar ubicación: $e");
     }
   }
 
    Future<void> _sendToApiPost(Position position) async {
     final token = await storage.read(key: 'jwt_token');
     if (token == null) {
-      print("❌ Token no encontrado");
+      print(" Token no encontrado");
       return;
     }
 
@@ -104,7 +104,7 @@ class LocationService {
     };
 
     try {
-      print("📍 Enviando ubicación: ${position.latitude}, ${position.longitude}");
+      print(" Enviando ubicación: ${position.latitude}, ${position.longitude}");
 
       final response = await http.post(
         url,
@@ -116,13 +116,13 @@ class LocationService {
       );
 
       if (response.statusCode == 200) {
-        print("✅ Ubicación guardada correctamente");
+        print(" Ubicación guardada correctamente");
       } else {
-        print("❌ Error al guardar ubicación: ${response.statusCode}");
+        print(" Error al guardar ubicación: ${response.statusCode}");
         print(response.body);
       }
     } catch (e) {
-      print("❌ Error de conexión: $e");
+      print(" Error de conexión: $e");
     }
   }
 }

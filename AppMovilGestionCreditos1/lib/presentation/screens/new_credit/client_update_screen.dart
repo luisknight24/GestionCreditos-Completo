@@ -1,4 +1,4 @@
-/*
+﻿/*
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -28,7 +28,7 @@ class _ClientUpdateScreenState extends State<ClientUpdateScreen> {
   final _telefonoCtrl = TextEditingController();
   final _direccionCtrl = TextEditingController();
 
-  // File? _fotoCliente; // 📸 COMENTADO
+  // File? _fotoCliente; //  COMENTADO
   bool _isLoading = false;
 
   // Servicio para cargar datos
@@ -71,7 +71,7 @@ class _ClientUpdateScreenState extends State<ClientUpdateScreen> {
   void _actualizarDatos() async {
     if (!_formKey.currentState!.validate()) return;
 
-    /* 📸 VALIDACIÓN DE FOTO COMENTADA
+    /*  VALIDACIÓN DE FOTO COMENTADA
     if (_fotoCliente == null) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           content: Text('Debes subir tu Foto (Selfie) actualizada'),
@@ -104,9 +104,9 @@ class _ClientUpdateScreenState extends State<ClientUpdateScreen> {
     );
 
     try {
-      // final firebaseService = FirebaseService(); // 📸 COMENTADO
+      // final firebaseService = FirebaseService(); //  COMENTADO
       // 1. SUBIR FOTO
-      // String? urlCliente = await firebaseService.uploadImage(_fotoCliente!, 'clientes'); // 📸 COMENTADO
+      // String? urlCliente = await firebaseService.uploadImage(_fotoCliente!, 'clientes'); //  COMENTADO
 
       // Simulación de tiempo si es necesario
       await Future.delayed(const Duration(seconds: 1));
@@ -119,7 +119,7 @@ class _ClientUpdateScreenState extends State<ClientUpdateScreen> {
         nombreApellidos: _nombreCtrl.text,
         telefono: _telefonoCtrl.text,
         direccion: _direccionCtrl.text,
-        fotoClienteUrl: null, // urlCliente, // 📸 URL COMENTADA, PASAMOS NULL
+        fotoClienteUrl: null, // urlCliente, //  URL COMENTADA, PASAMOS NULL
       );
 
       // 3. ACTUALIZAR
@@ -151,13 +151,13 @@ class _ClientUpdateScreenState extends State<ClientUpdateScreen> {
               FadeInDown(child: const Text('Información Personal', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey))),
               const SizedBox(height: 20),
 
-              // --- CAMPOS BLOQUEADOS ---
+              
               CustomTextField(
                 label: 'Cédula',
                 controller: _cedulaCtrl,
                 keyboardType: TextInputType.number,
                 //readOnly: true,
-                // ✅ VALIDACIÓN AGREGADA
+                //  VALIDACIÓN AGREGADA
                 validator: (value) {
                   if (value == null || value.isEmpty) return 'Requerido';
                   if (value.length != 10) return 'Debe tener 10 dígitos';
@@ -174,13 +174,13 @@ class _ClientUpdateScreenState extends State<ClientUpdateScreen> {
               ),
               const SizedBox(height: 15),
 
-              // --- CAMPOS EDITABLES ---
+              
               CustomTextField(
                 label: 'Teléfono',
                 controller: _telefonoCtrl,
                 keyboardType: TextInputType.phone,
                 icon: Icons.phone,
-                // ✅ VALIDACIÓN AGREGADA
+                //  VALIDACIÓN AGREGADA
                 validator: (value) {
                   if (value == null || value.isEmpty) return 'Requerido';
                   if (value.length != 10) return 'Debe tener 10 dígitos';
@@ -190,7 +190,7 @@ class _ClientUpdateScreenState extends State<ClientUpdateScreen> {
               const SizedBox(height: 15),
               CustomTextField(label: 'Dirección', controller: _direccionCtrl, icon: Icons.location_on),
 
-              /* 📸 SECCIÓN FOTO COMENTADA
+              /*  SECCIÓN FOTO COMENTADA
               const SizedBox(height: 30),
               FadeInDown(child: const Text('Evidencia de Identidad', style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.grey))),
               const SizedBox(height: 15),
@@ -208,7 +208,7 @@ class _ClientUpdateScreenState extends State<ClientUpdateScreen> {
                 width: double.infinity, height: 55,
                 child: ElevatedButton(
                   onPressed: _isLoading ? null : _actualizarDatos,
-                  child: const Text('SIGUIENTE: DATOS TIENDA'),
+                  child: const Text('Siguiente: datos tienda'),
                 ),
               ),
             ],
@@ -250,7 +250,7 @@ class _ClientUpdateScreenState extends State<ClientUpdateScreen> {
   // NUEVO: Controlador
   //final _propietarioCreditoCtrl = TextEditingController();
 
-  // File? _fotoCliente; // 📸 COMENTADO
+  // File? _fotoCliente; //  COMENTADO
   bool _isLoading = false;
 
   // Servicio para cargar datos
@@ -367,13 +367,13 @@ class _ClientUpdateScreenState extends State<ClientUpdateScreen> {
 
               // NUEVO: Campo de texto
               //CustomTextField(
-              //  label: 'Propietario del Crédito',
+              //  label: 'Propietario del crédito',
               //  controller: _propietarioCreditoCtrl,
               //  icon: Icons.assignment_ind,
               //),
               //const SizedBox(height: 15),
 
-              // --- CAMPOS BLOQUEADOS ---
+              
               CustomTextField(
                 label: 'Cédula',
                 controller: _cedulaCtrl,
@@ -394,7 +394,7 @@ class _ClientUpdateScreenState extends State<ClientUpdateScreen> {
               ),
               const SizedBox(height: 15),
 
-              // --- CAMPOS EDITABLES ---
+              
               CustomTextField(
                 label: 'Teléfono',
                 controller: _telefonoCtrl,
@@ -416,7 +416,7 @@ class _ClientUpdateScreenState extends State<ClientUpdateScreen> {
                 width: double.infinity, height: 55,
                 child: ElevatedButton(
                   onPressed: _isLoading ? null : _actualizarDatos,
-                  child: const Text('SIGUIENTE: DATOS TIENDA'),
+                  child: const Text('Siguiente: datos tienda'),
                 ),
               ),
             ],

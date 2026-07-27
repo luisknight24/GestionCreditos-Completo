@@ -55,7 +55,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  // 🔵 NUEVA PALETA DE COLORES (Estilo "Royal Blue" Fintech)
+  //  NUEVA PALETA DE COLORES (Estilo "Royal Blue" Fintech)
 
   // Azul vibrante y sólido (reemplaza al morado/indigo).
   // Similar a Colors.blue.shade800, transmite confianza y tecnología.

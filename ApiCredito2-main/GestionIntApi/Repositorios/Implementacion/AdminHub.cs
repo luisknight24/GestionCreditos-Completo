@@ -14,7 +14,7 @@ namespace GestionIntApi.Repositorios.Implementacion
         public async Task EnviarMensajeAlCliente(string clienteId, string mensaje)
         {
             await Clients.User(clienteId).SendAsync("RecibirMensaje", mensaje);
-            Console.WriteLine("✅ Evento SignalR enviado correctamente");
+            Console.WriteLine(" Evento SignalR enviado correctamente");
         }
 
         // Puedes sobrescribir métodos de conexión si quieres controlar la conexión
@@ -23,7 +23,7 @@ namespace GestionIntApi.Repositorios.Implementacion
             // Opcional: log de conexión
             var clienteId = Context.User?.FindFirst("ClienteId")?.Value;
             Console.WriteLine($"🔌 Cliente conectado | ConnectionId: {Context.ConnectionId}");
-            Console.WriteLine($"🔑 ClienteId del token: {clienteId}");
+            Console.WriteLine($" ClienteId del token: {clienteId}");
             if (!string.IsNullOrEmpty(clienteId))
             {
                 await Groups.AddToGroupAsync(
@@ -35,7 +35,7 @@ namespace GestionIntApi.Repositorios.Implementacion
             else
             {
 
-                Console.WriteLine("⚠️ ClienteId NULL → NO agregado a grupo");
+                Console.WriteLine(" ClienteId NULL → NO agregado a grupo");
 
             }
     
@@ -57,3 +57,4 @@ namespace GestionIntApi.Repositorios.Implementacion
 
 
 }
+

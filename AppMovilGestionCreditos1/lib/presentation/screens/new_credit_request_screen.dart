@@ -19,22 +19,22 @@ class NewCreditRequestScreen extends StatefulWidget {
 class _NewCreditRequestScreenState extends State<NewCreditRequestScreen> {
   final _formKey = GlobalKey<FormState>();
 
-  // --- CONTROLADORES CRÉDITO ---
+  
   final _montoCtrl = TextEditingController();
   final _entradaCtrl = TextEditingController();
   final _plazoCtrl = TextEditingController();
 
-  // --- CONTROLADORES TIENDA (Datos para el nuevo crédito) ---
+  
   final _nombreTiendaCtrl = TextEditingController();
   final _codigoTiendaCtrl = TextEditingController();
   final _encargadoCtrl = TextEditingController();
 
-  // --- VARIABLES DE ESTADO ---
+  
   String? _frecuenciaSeleccionada;
   bool _isLoading = false;
   final List<String> _frecuencias = ['Semanal', 'Quincenal', 'Mensual'];
 
-  // --- VARIABLES PARA FOTOS ---
+  
   File? _fotoContrato;
   File? _fotoCelular;
   File? _fotoCliente; // Opcional si quieres validar identidad de nuevo
@@ -55,7 +55,7 @@ class _NewCreditRequestScreenState extends State<NewCreditRequestScreen> {
     if (!_formKey.currentState!.validate()) return;
 
     if (_frecuenciaSeleccionada == null) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Selecciona una frecuencia de pago')));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Selecciona una Frecuencia de pago')));
       return;
     }
 
@@ -84,7 +84,7 @@ class _NewCreditRequestScreenState extends State<NewCreditRequestScreen> {
 
       // NOTA PARA IMPLEMENTACIÓN DEL BACKEND:
       // Aquí tienes dos opciones:
-      // A. Tu endpoint 'CrearCredito' acepta solo CreditoDTO. En ese caso, las fotos y datos de tienda
+      // A. Tu endpoint 'CrearCredito' acepta solo CreditoDTO. En ese caso, las fotos y Datos de tienda
       //    deben ir en otro endpoint o el CreditoDTO necesita actualizarse.
       // B. Creas un objeto anónimo aquí con todo para enviar al backend:
 
@@ -165,7 +165,7 @@ class _NewCreditRequestScreenState extends State<NewCreditRequestScreen> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              // --- SECCIÓN 1: DATOS FINANCIEROS ---
+              
               _buildSectionTitle(theme, '1. Configuración del Crédito', Icons.calculate),
               const SizedBox(height: 20),
 
@@ -190,7 +190,7 @@ class _NewCreditRequestScreenState extends State<NewCreditRequestScreen> {
                 children: [
                   Expanded(
                     child: CustomTextField(
-                      label: 'Plazo (Cuotas)',
+                      label: 'Plazo (cuotas)',
                       controller: _plazoCtrl,
                       icon: Icons.calendar_today,
                       keyboardType: TextInputType.number,
@@ -216,7 +216,7 @@ class _NewCreditRequestScreenState extends State<NewCreditRequestScreen> {
 
               const SizedBox(height: 35),
 
-              // --- SECCIÓN 2: DATOS DE LA TIENDA ---
+              
               _buildSectionTitle(theme, '2. Datos de la Tienda', Icons.store),
               const SizedBox(height: 10),
               const Text('Indica dónde estás realizando esta nueva compra.', style: TextStyle(color: Colors.grey, fontSize: 12)),
@@ -254,7 +254,7 @@ class _NewCreditRequestScreenState extends State<NewCreditRequestScreen> {
 
               const SizedBox(height: 35),
 
-              // --- SECCIÓN 3: EVIDENCIA DIGITAL ---
+              
               _buildSectionTitle(theme, '3. Evidencia Digital', Icons.camera_alt),
               const SizedBox(height: 10),
               const Text('Sube las fotos del nuevo equipo y contrato.', style: TextStyle(color: Colors.grey, fontSize: 12)),
@@ -292,7 +292,7 @@ class _NewCreditRequestScreenState extends State<NewCreditRequestScreen> {
 
               const SizedBox(height: 50),
 
-              // --- BOTÓN DE ENVÍO ---
+              
               FadeInUp(
                 duration: const Duration(milliseconds: 500),
                 child: SizedBox(

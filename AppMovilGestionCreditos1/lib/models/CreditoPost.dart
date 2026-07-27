@@ -35,7 +35,7 @@ class CreditoDTO {
     this.fechaCreacion,
   });
 
- // ------------------- FROM JSON -------------------
+ 
   factory CreditoDTO.fromJson(Map<String, dynamic> json) {
     DateTime parseDate(dynamic date) {
       if (date is String) return DateTime.parse(date);
@@ -60,7 +60,7 @@ class CreditoDTO {
     );
   }
 
-  // ------------------- TO JSON -------------------
+  
   Map<String, dynamic> toJson() => {
        'Id': id,
       'Entrada': entrada,

@@ -33,7 +33,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             value: _notificacionesEnabled,
             onChanged: (val) {
               setState(() => _notificacionesEnabled = val);
-              // TODO: Conectar endpoint de preferencias
+              
             },
             icon: Icons.notifications_active,
           ),
@@ -44,7 +44,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             title: 'Cambiar Contraseña',
             icon: Icons.lock_outline,
             onTap: () {
-              // Navegar a pantalla de cambio de contraseña o reset
+              // Navegar a pantalla de cambio de Contraseña o reset
               context.push('/forgot-password');
             },
           ),
@@ -54,7 +54,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
             value: _biometriaEnabled,
             onChanged: (val) {
               setState(() => _biometriaEnabled = val);
-              // TODO: Implementar lógica local_auth
+              
             },
             icon: Icons.fingerprint,
           ),

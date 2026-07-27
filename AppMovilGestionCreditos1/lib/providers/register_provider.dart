@@ -7,7 +7,7 @@ import '../models/tienda_crear_dto.dart';
 import '../models/credito_dto.dart';
 import '../models/credito_dto.dart';
 class RegisterProvider extends ChangeNotifier {
-  // --- OBJETOS DTO TEMPORALES ---
+  
   // Guardamos las piezas por separado hasta el final
 
   final UsuarioDTO _usuarioData = UsuarioDTO(rolId: 2, esActivo: 1); // Rol 2 por defecto
@@ -47,7 +47,7 @@ CreditoDTO? get credito => _creditoData;
     notifyListeners();
   }
 
-  // --- EL GRAN FINAL: ARMAR EL JSON GIGANTE ---
+  
   // Esta función la llamaremos cuando estemos listos para enviar todo a la API
   Map<String, dynamic> armarJsonRegistroCompleto() {
 
