@@ -16,11 +16,9 @@ Sistema multiplataforma diseñado para la administración descentralizada de sol
 
 ### Datos de prueba para demostración (Sandbox)
 
-Para realizar pruebas completas de registro de usuarios e inicio de sesión en la aplicación móvil y panel web:
+Para realizar la validación en el Registro de la App Móvil (Sección 3):
 
-- **Cédula del encargado de tienda válida (Requerida en Registro App Móvil - Sección 3):** `0912345675`
-- **Cédula de cliente de prueba (Sandbox):** `0952345676`
-- **Cuenta de administrador (Panel Web):** `admin@correo.com`
+- **Cédula del encargado de tienda válida:** `0928374651`
 
 > [!NOTE]
 > **Aviso de entorno de pruebas (Sandbox / Demostración):**
