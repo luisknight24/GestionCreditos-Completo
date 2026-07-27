@@ -12,7 +12,11 @@ Sistema multiplataforma diseñado para la administración descentralizada de sol
 
 ## Disponibilidad y demostración
 
-- **Aplicación móvil (Flutter Web):** [https://luisknight24.github.io/GestionCreditos-Completo/](https://luisknight24.github.io/GestionCreditos-Completo/)
+- **Aplicación móvil (Flutter Web - Entorno Demo):** [https://luisknight24.github.io/GestionCreditos-Completo/](https://luisknight24.github.io/GestionCreditos-Completo/)
+
+> [!NOTE]
+> **Aviso de entorno de pruebas (Sandbox / Demostración):**
+> Este repositorio y su despliegue público corresponden a un entorno de pruebas interactivo (*Staging / Sandbox*) configurado exclusivamente para demostración y evaluación funcional. Los usuarios pueden interactuar libremente, registrando información y comprobando la funcionalidad e interactividad. La versión de producción opera sobre infraestructura independiente, dominios dedicados y políticas estrictas de cumplimiento normativo.
 
 ## Arquitectura del sistema
 
