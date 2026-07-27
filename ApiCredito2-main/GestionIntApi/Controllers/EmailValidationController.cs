@@ -1,4 +1,4 @@
-﻿using GestionIntApi.DTO;
+using GestionIntApi.DTO;
 using GestionIntApi.DTO.Admin;
 using GestionIntApi.Models;
 using GestionIntApi.Models.Admin;
@@ -127,8 +127,7 @@ namespace GestionIntApi.Controllers
                 }
             });
 
-            Console.WriteLine($" [OTP GENERADO]: {codigo} para {correo}");
-            return Ok(new { status = true, msg = "Código enviado", codigo = codigo });
+            return Ok(new { status = true, msg = "Código enviado a tu correo electrónico." });
         }
 
 

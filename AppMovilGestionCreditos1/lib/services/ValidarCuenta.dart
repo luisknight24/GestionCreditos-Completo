@@ -113,9 +113,6 @@ Future<EnviarCodigoDTO?> enviarCodigo(EnviarCodigoDTO dto) async {
 
 Future<Map<String, dynamic>> enviarCodigoCompleto(UsuarioDTO dto) async {
   final url = Uri.parse('$baseUrl/EmailValidation/EnviarCodigo1');
-  print('--- ENVIAR CÓDIGO COMPLETO ---');
-  print('URL: $url');
-  print('Datos enviados: ${jsonEncode(dto.toJson())}');
 
   try {
     final response = await http.post(
@@ -124,25 +121,18 @@ Future<Map<String, dynamic>> enviarCodigoCompleto(UsuarioDTO dto) async {
       body: jsonEncode(dto.toJson()),
     ).timeout(const Duration(seconds: 60));
 
-    print('Código de respuesta: ${response.statusCode}');
-    print('Cuerpo de respuesta: ${response.body}');
-
     Map<String, dynamic> data = {};
     try {
       data = jsonDecode(response.body);
     } catch (_) {}
 
     if (response.statusCode == 200 && data['status'] == true) {
-      if (data['codigo'] != null) {
-        print(' [DEBUG OTP CÓDIGO GENERADO]: ${data['codigo']}');
-      }
-      return {'exito': true, 'msg': data['msg'] ?? 'Código enviado'};
+      return {'exito': true, 'msg': data['msg'] ?? 'Código enviado a tu correo electrónico.'};
     } else {
       final msg = data['msg'] ?? 'El correo o número de cédula ya se encuentra registrado.';
       return {'exito': false, 'msg': msg};
     }
   } catch (e) {
-    print('Excepción en enviarCodigoCompleto: $e');
     return {'exito': false, 'msg': 'Error de conexión con el servidor.'};
   }
 }
