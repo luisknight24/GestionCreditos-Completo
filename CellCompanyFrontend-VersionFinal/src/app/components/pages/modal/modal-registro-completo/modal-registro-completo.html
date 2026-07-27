@@ -139,7 +139,7 @@
     <div class="form-section">
       <div class="section-header">
         <mat-icon>account_circle</mat-icon>
-        <h3>Datos de Cuenta</h3>
+        <h3>Datos de cuenta</h3>
       </div>
       <form [formGroup]="formUsuario" class="form-grid">
         <mat-form-field appearance="outline">
@@ -161,7 +161,7 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-label>Rol de Usuario</mat-label>
+          <mat-label>Rol de usuario</mat-label>
           <mat-select formControlName="rolId">
             <mat-option [value]="2">Cliente</mat-option>
           </mat-select>
@@ -290,7 +290,7 @@
       [disabled]="isLoading || formUsuario.invalid || formCliente.invalid || formCredito.invalid">
       <mat-icon *ngIf="!isLoading">save</mat-icon>
       <mat-spinner *ngIf="isLoading" diameter="20" class="spinner-white"></mat-spinner>
-      <span>{{ isLoading ? 'Guardando...' : 'Finalizar Registro' }}</span>
+      <span>{{ isLoading ? 'Guardando...' : 'Finalizar registro' }}</span>
     </button>
   </mat-dialog-actions>
 

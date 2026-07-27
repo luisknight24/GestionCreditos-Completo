@@ -182,7 +182,7 @@ generarGraficoRadar1(): void {
     data: {
       labels: Object.keys(mesesOrdenados),
       datasets: [{
-        label: 'Créditos Dados por Mes',
+        label: 'Créditos dados por mes',
         data: Object.values(mesesOrdenados),
         fill: true,
         backgroundColor: 'rgba(23, 120, 158, 0.2)', // Color de tu sistema
@@ -314,7 +314,7 @@ generarGraficoLineasCreditos(): void {
     data: {
       labels: Object.keys(mesesOrdenados),
       datasets: [{
-        label: 'Créditos Dados por Mes',
+        label: 'Créditos dados por mes',
         data: Object.values(mesesOrdenados),
         borderColor: '#17789e',
         backgroundColor: 'rgba(23, 120, 158, 0.1)',

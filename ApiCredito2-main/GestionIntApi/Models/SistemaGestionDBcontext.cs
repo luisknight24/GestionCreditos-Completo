@@ -1,4 +1,4 @@
-﻿using GestionIntApi.Models.Admin;
+using GestionIntApi.Models.Admin;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System;
@@ -108,13 +108,13 @@ namespace GestionIntApi.Models
             // Seed MenuAdmin (Panel Web)
             modelBuilder.Entity<MenuAdmin>().HasData(
                 new MenuAdmin { Id = 1, Nombre = "Dashboard", Icono = "dashboard", Url = "panel-control" },
-                new MenuAdmin { Id = 2, Nombre = "Usuarios Admin", Icono = "admin_panel_settings", Url = "gestion-administradores" },
-                new MenuAdmin { Id = 3, Nombre = "Registro App Móvil", Icono = "how_to_reg", Url = "registro-usuarios-app/nuevo" },
+                new MenuAdmin { Id = 2, Nombre = "Usuarios admin", Icono = "admin_panel_settings", Url = "gestion-administradores" },
+                new MenuAdmin { Id = 3, Nombre = "Registro app móvil", Icono = "how_to_reg", Url = "registro-usuarios-app/nuevo" },
                 new MenuAdmin { Id = 4, Nombre = "Pagos", Icono = "payments", Url = "gestion-pagos" },
                 new MenuAdmin { Id = 5, Nombre = "Ubicación", Icono = "location_on", Url = "geolocalizacion-tiendas" },
-                new MenuAdmin { Id = 6, Nombre = "Registrar Bodega", Icono = "inventory", Url = "inventario/registro-bodega" },
-                new MenuAdmin { Id = 7, Nombre = "Editar Bodega", Icono = "edit_attributes", Url = "inventario/configuracion-bodega" },
-                new MenuAdmin { Id = 8, Nombre = "Registrar Tienda", Icono = "storefront", Url = "gestion-tiendas/nueva-sucursal" },
+                new MenuAdmin { Id = 6, Nombre = "Registrar bodega", Icono = "inventory", Url = "inventario/registro-bodega" },
+                new MenuAdmin { Id = 7, Nombre = "Editar bodega", Icono = "edit_attributes", Url = "inventario/configuracion-bodega" },
+                new MenuAdmin { Id = 8, Nombre = "Registrar tienda", Icono = "storefront", Url = "gestion-tiendas/nueva-sucursal" },
                 new MenuAdmin { Id = 9, Nombre = "Movimientos", Icono = "history", Url = "historial-movimientos" },
                 new MenuAdmin { Id = 10, Nombre = "Reportes", Icono = "assessment", Url = "reportes-generales" }
             );
