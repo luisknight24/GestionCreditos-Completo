@@ -16,6 +16,10 @@ Sistema multiplataforma diseñado para la administración descentralizada de sol
 
 ### Datos de prueba para demostración (Sandbox)
 
+- **Credenciales de acceso para cuenta de prueba en la app:**
+  - **Correo:** `luisknight1111@gmail.com`
+  - **Contraseña:** `Gestioncreditos1`
+
 Para realizar la validación en el Registro de la App Móvil (Sección 3):
 
 - **Cédula del encargado de tienda válida:** `0928374651`
