@@ -1,138 +1,138 @@
-/* components/pages/modal/comprobante-pago/comprobante-pago.css */
+/* components/pages/modal/modal-comprobante/modal-comprobante.css */
 .comprobante-container {
-  padding: 10px;
-  max-width: 700px;
+  padding: 16px;
+  max-width: 680px;
   margin: 0 auto;
   max-height: 90vh;
   overflow-y: auto;
 }
 
 .comprobante-content {
-  background: white;
-  padding: 25px;
-  border: 2px solid #1976d2;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  background: #ffffff;
+  padding: 32px 36px;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+  font-family: 'Outfit', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #0f172a;
 }
 
-/* --- ENCABEZADO PRINCIPAL --- */
+/* --- ENCABEZADO CORPORATIVO --- */
 .header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  /* Alineación vertical centrada */
-  margin-bottom: 20px;
-  padding-bottom: 15px;
-  border-bottom: 2px solid #1976d2;
-  /* Línea separadora integrada en el header */
+  align-items: flex-start;
+  gap: 20px;
+  padding-bottom: 22px;
+  margin-bottom: 24px;
+  border-bottom: 2px solid #2563eb;
 }
 
-/* Contenedor de Logo + Texto */
 .brand-section {
   display: flex;
   align-items: center;
-  gap: 15px;
-  /* Espacio entre logo y texto */
+  gap: 16px;
 }
 
-/* --- ESTILO DEL LOGO (Imagen) --- */
 .receipt-logo {
-  width: 65px;
-  /* Tamaño balanceado para documentos */
-  height: 65px;
+  width: 62px;
+  height: 62px;
   border-radius: 50%;
-  /* Circular */
   object-fit: cover;
-  border: 2px solid #e0e0e0;
-  /* Borde sutil gris para definir el límite en papel blanco */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  border: 2px solid #e2e8f0;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
 }
 
-/* Textos de la marca */
 .brand-titles {
   display: flex;
   flex-direction: column;
-  justify-content: center;
 }
 
 .company-name {
   margin: 0;
-  color: #1976d2;
-  /* Azul corporativo */
-  font-size: 22px;
-  /* Tamaño destacado */
+  color: #1e3a8a;
+  font-size: 24px;
   font-weight: 800;
-  /* Extra negrita */
-  letter-spacing: 0.5px;
+  letter-spacing: -0.3px;
   line-height: 1.1;
 }
 
 .doc-title {
-  margin: 0;
-  color: #555;
-  /* Gris oscuro para el subtítulo */
-  font-size: 14px;
+  margin: 4px 0 0 0;
+  color: #64748b;
+  font-size: 13px;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  margin-top: 4px;
+  letter-spacing: 0.5px;
 }
 
-/* Datos a la derecha (Número y Fecha) */
+/* Número de comprobante y Fecha */
 .numero-comprobante {
-  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
 }
 
-.num-label {
-  margin: 0;
-  font-size: 16px;
-  color: #333;
+.badge-comprobante {
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 13.5px;
+  white-space: nowrap;
+  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.08);
 }
 
 .fecha {
-  margin: 4px 0 0 0;
-  color: #666;
-  font-size: 12px;
+  margin: 0;
+  color: #64748b;
+  font-size: 12.5px;
+  font-weight: 500;
+  white-space: nowrap;
 }
 
-/* --- ELIMINAR EL DIVIDER ANTIGUO --- */
-/* Como agregamos el borde al .header, puedes quitar o comentar la clase .divider antigua si quieres ahorrar espacio */
-.divider {
-  display: none;
+/* --- SECCIONES DE INFORMACIÓN --- */
+.seccion-card {
+  background: #f8fafc;
+  border: 1px solid #f1f5f9;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
 }
 
-.divider {
-  border: none;
-  border-top: 2px solid #1976d2;
-  margin: 15px 0;
-}
-
-/* Secciones */
-.seccion {
-  margin-bottom: 15px;
-}
-
-.seccion h3 {
+.seccion-header {
   display: flex;
   align-items: center;
-  gap: 6px;
-  color: #1976d2;
-  font-size: 14px;
-  margin-bottom: 10px;
-  padding-bottom: 5px;
-  border-bottom: 1px solid #e0e0e0;
+  gap: 8px;
+  margin-bottom: 14px;
 }
 
-.seccion h3 mat-icon {
-  font-size: 18px;
-  width: 18px;
-  height: 18px;
+.sec-icon {
+  color: #2563eb;
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+}
+
+.sec-icon.green {
+  color: #16a34a;
+}
+
+.seccion-header h3 {
+  margin: 0;
+  font-size: 13px;
+  font-weight: 700;
+  color: #334155;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
 }
 
 .info-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+  gap: 16px 24px;
 }
 
 .info-item {
@@ -140,116 +140,141 @@
   flex-direction: column;
 }
 
+.info-item.full-width {
+  grid-column: span 2;
+}
+
 .label {
-  font-size: 11px;
-  color: #666;
+  font-size: 12px;
+  color: #64748b;
   font-weight: 500;
   margin-bottom: 3px;
 }
 
 .value {
-  font-size: 13px;
-  color: #333;
-  font-weight: 600;
+  font-size: 14.5px;
+  color: #0f172a;
+  font-weight: 700;
 }
 
-/* Sección de Pago */
-.seccion-pago {
-  background-color: #f5f5f5;
-  padding: 15px;
-  border-radius: 8px;
-  margin: 15px 0;
+.code-badge {
+  color: #2563eb;
+  font-family: monospace;
+  font-size: 15px;
 }
 
-.seccion-pago h3 {
-  border-bottom: none;
-  margin-bottom: 12px;
+/* --- SECCIÓN HIGHLIGHT PAGO --- */
+.seccion-pago-highlight {
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 14px;
+  padding: 22px;
+  margin-bottom: 24px;
 }
 
-.pago-info {
+.pago-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.pago-box {
+  background: #ffffff;
+  padding: 14px 18px;
+  border-radius: 10px;
+  border: 1px solid #dcfce7;
   display: flex;
   flex-direction: column;
-  gap: 10px;
 }
 
-.pago-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px;
-  background: white;
-  border-radius: 6px;
-}
-
-.value-grande {
-  font-size: 14px;
-  font-weight: 600;
-  color: #333;
+.value-metodo {
+  font-size: 15px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-top: 2px;
 }
 
 .value-monto {
-  font-size: 20px;
-  font-weight: bold;
-  color: #388e3c;
+  font-size: 24px;
+  font-weight: 800;
+  color: #16a34a;
+  margin-top: 2px;
 }
 
-.value-pendiente {
-  font-size: 16px;
-  font-weight: 600;
-  color: #f57c00;
-}
-
-/* Firma */
+/* --- FIRMA DEL CLIENTE --- */
 .firma-section {
-  margin-top: 30px;
+  margin: 40px auto 28px;
   text-align: center;
+  max-width: 260px;
 }
 
 .firma-linea {
-  width: 250px;
-  height: 1px;
-  background-color: #333;
-  margin: 0 auto 8px;
+  border-top: 1.5px dashed #94a3b8;
+  margin-bottom: 8px;
 }
 
 .firma-texto {
-  font-size: 12px;
-  color: #666;
+  font-size: 12.5px;
+  color: #64748b;
+  font-weight: 500;
   margin: 0;
 }
 
-/* Footer */
-.footer {
-  margin-top: 20px;
+/* --- PIE DE PÁGINA --- */
+.footer-section {
   text-align: center;
-  padding-top: 15px;
-  border-top: 1px dashed #ccc;
+  padding-top: 18px;
+  border-top: 1px dashed #cbd5e1;
 }
 
-.footer p {
-  margin: 4px 0;
+.footer-title {
+  margin: 0 0 4px 0;
+  font-size: 12px;
+  font-weight: 600;
+  color: #475569;
+}
+
+.footer-note {
+  margin: 0 0 10px 0;
   font-size: 11px;
-  color: #666;
-}
-
-.nota {
+  color: #94a3b8;
   font-style: italic;
-  color: #999;
 }
 
-/* Botones */
+.support-info {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #f1f5f9;
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 11.5px;
+  color: #475569;
+  font-weight: 600;
+}
+
+.small-icon {
+  font-size: 15px;
+  width: 15px;
+  height: 15px;
+  color: #2563eb;
+}
+
+/* --- ACCIONES --- */
 .acciones {
   display: flex;
   justify-content: center;
-  gap: 15px;
-  margin-top: 20px;
+  gap: 16px;
+  margin-top: 22px;
 }
 
-.acciones button {
-  min-width: 140px;
+.btn-action {
+  min-width: 130px;
+  border-radius: 10px !important;
+  font-weight: 700 !important;
 }
 
-/* Estilos de impresión */
+/* --- IMPRESIÓN --- */
 @media print {
   .no-print {
     display: none !important;
@@ -273,32 +298,27 @@
   }
 }
 
-/* Responsive para pantallas pequeñas */
-@media screen and (max-width: 768px) {
-  .comprobante-container {
-    max-width: 100%;
-    padding: 5px;
-  }
-
+/* --- RESPONSIVE --- */
+@media screen and (max-width: 600px) {
   .comprobante-content {
-    padding: 15px;
-  }
-
-  .logo-section h1 {
-    font-size: 16px;
-  }
-
-  .info-grid {
-    grid-template-columns: 1fr;
+    padding: 20px 18px;
   }
 
   .header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 10px;
+    gap: 14px;
   }
 
   .numero-comprobante {
-    text-align: left;
+    align-items: flex-start;
+  }
+
+  .info-grid, .pago-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .info-item.full-width {
+    grid-column: span 1;
   }
 }
